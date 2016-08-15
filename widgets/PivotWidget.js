@@ -1,104 +1,110 @@
 (function($) {
-
-	AjaxSolr.PivotWidget = AjaxSolr.AbstractFacetWidget
-			.extend({
-				afterRequest : function() {
-					var f = this.field;
-
-					var topcategory = this.id;
-					f = "topcategory,endpointcategory,effectendpoint,unit";
-					if (this.manager.response.facet_counts.facet_pivot[f] === undefined) {
-						$(this.target).html(
-								'no items found in current selection');
-						return;
+	var pivot_fields = "topcategory,endpointcategory,effectendpoint,unit",
+	    bottom_field = "effectendpoint", top_field = "topcategory", stats_field = "loValue",
+	    
+			buildValueRange = function (facet, suffix) {
+				var stats = facet.stats.stats_fields;
+				return 	" = " + (stats.loValue.min == null ? "-&#x221E;" :  stats.loValue.min) +
+								"&#x2026;" + (stats.loValue.max == null ? "&#x221E;" : stats.loValue.max) +
+								" " + (suffix == null ? facet.value : suffix);
+			},
+			
+			buildFacetDom = function (facet, colorMap, renderer) {
+        var elements = [], root;
+				
+				if (facet.pivot == null || !facet.pivot.length) // no separate pivots - nothing to declare
+					;
+				else {
+					for (var i = 0, fl = facet.pivot.length, f;i < fl; ++i) {
+						f = facet.pivot[i];
+						f.parent = facet;
+						elements.push(f.field == bottom_field ? renderer(f).addClass(colorMap[f.field]) : buildFacetDom(f, colorMap, renderer)[0]);
 					}
-
-					// console.log(
-					// this.manager.response.facet_counts.facet_pivot);
-					var maxCount = 0;
-					var objectedItems = [];
-					for ( var facet in this.manager.response.facet_counts.facet_pivot[f]) {
-
-						var topcategory = this.manager.response.facet_counts.facet_pivot[f][facet];
-						if (((topcategory.value + "_endpointcategory") == this.id)
-								|| ((topcategory.value + "_effectendpoint") == this.id)) {
-
-							var count = parseInt(topcategory.count);
-							if (count > maxCount) {
-								maxCount = count;
-							}
-							$("#" + topcategory.value + "_header").text(
-									topcategory.value + " (" + count + ")");
-							for ( var endpointcategory in topcategory.pivot) try {
-								if ((topcategory.value + "_endpointcategory") == this.id) {
-									objectedItems
-											.push({
-												id : "#" + this.id,
-												facet : topcategory.pivot[endpointcategory].value,
-												count : topcategory.pivot[endpointcategory].count,
-												hint : " "
-											});
-								}
-								if ((topcategory.value + "_effectendpoint") == this.id)
-									for ( var endpoint in topcategory.pivot[endpointcategory].pivot) {
-
-										var msg = " ";
-										if (topcategory.pivot[endpointcategory].pivot[endpoint].pivot == undefined) {
-											var stats = topcategory.pivot[endpointcategory].pivot[endpoint].stats.stats_fields;
-											var u = topcategory.pivot[endpointcategory].pivot[endpoint];
-											u = u == undefined ? "" : u.value;
-											msg += "(" + stats.loValue.min
-													+ " , " + stats.loValue.max
-													+ ") " + u + " ";
-										} else
-											for ( var unit in topcategory.pivot[endpointcategory].pivot[endpoint].pivot) {
-												var stats = topcategory.pivot[endpointcategory].pivot[endpoint].pivot[unit].stats.stats_fields;
-												var u = topcategory.pivot[endpointcategory].pivot[endpoint].pivot[unit];
-												u = u == undefined ? ""
-														: u.value;
-												msg += "(" + stats.loValue.min
-														+ " , "
-														+ stats.loValue.max
-														+ ") " + u + " ";
-											}
-										objectedItems
-												.push({
-													id : "#" + this.id,
-													facet : topcategory.pivot[endpointcategory].pivot[endpoint].value,
-													count : topcategory.pivot[endpointcategory].pivot[endpoint].count,
-													hint : " " + msg
-												});
-
-									}
-							} catch (err) {
-								console.log(err);
-							}
-						}
+		
+					if (elements.length > 0 && facet.field != top_field) {
+						root = jT.getFillTemplate($("#tag-facet"), facet);
+						
+						// we need to add outselves as main tag
+						if (facet.field != bottom_field)
+  				    root.append(renderer(facet).addClass("category title").addClass(colorMap[facet.field]));
+						
+						root.append(elements);
+						elements = [root];
 					}
-					/*
-					 * objectedItems.sort(function(a, b) { return a.facet <
-					 * b.facet ? -1 : 1; });
-					 */
-
-					$(this.target).empty();
-					for (var i = 0, l = objectedItems.length; i < l; i++) {
-						var facet = objectedItems[i].facet;
-						var view = lookup[facet];
-						if (view === undefined)
-							view = facet;
-
-						$(this.target).append(
-								$(
-										'<li><a href="#" class="tag" title="'
-												+ facet + objectedItems[i].hint
-												+ '">' + view + ' <span>'
-												+ objectedItems[i].count
-												+ '</span></a></li>').addClass(
-										'tagcloud_size_1').click(
-										this.clickHandler(facet)));
-					}
-
 				}
-			});
+				
+				return elements;
+			};
+	
+	AjaxSolr.PivotWidget = AjaxSolr.BaseFacetWidget.extend({
+    init: function () {
+      AjaxSolr.BaseFacetWidget.__super__.init.call(this);
+      var loc = { stats: this.id };
+      if (this.multivalue)
+        loc.ex = this.id;
 
+      this.manager.store.addByValue('facet.pivot', pivot_fields, loc);
+      this.manager.store.addByValue('stats.field', stats_field, { tag: this.id, min: true, max: true });
+    },
+    
+    afterChangeSelection: function () {
+      this.doRequest()
+    },
+    
+		afterRequest : function() {
+			var self = this,
+					root = this.manager.response.facet_counts.facet_pivot[pivot_fields],
+					refresh = this.target.data("refreshPanel");
+					
+			if (root === undefined) {
+				this.target.html('No items found in current selection');
+				return;
+			}
+
+      // some cleanup...
+      $(".dynamic-tab", self.target.parent()[0]).each(function () {
+  			var hdr = getHeaderText($(this).closest(".widget-root").prev());
+  			
+        hdr.textContent = jT.ui.updateCounter(hdr.textContent, 0);
+        $("ul", this).remove();
+      });
+      
+			for (var i = 0, fl = root.length; i < fl; ++i) {
+				var facet = root[i], target;
+				
+				// we need to check if we have that accordion element created.
+				if (facet.field == top_field) {
+  				target = $("#" + facet.value);
+  				
+  				if (target.length > 0) {
+    				var hdr = getHeaderText(target.closest(".widget-root").prev());
+            hdr.textContent = jT.ui.updateCounter(hdr.textContent, facet.count);
+    		  }
+  				else {
+    				self.target.before(target = jT.getFillTemplate($("#tab-topcategory"), facet));
+    				target = $(target.last()).addClass("dynamic-tab");
+    				self.tabsRefresher();
+  				}
+				}
+				
+				target.append(buildFacetDom(facet, self.colorMap, function (facet) {
+					var msg = "";
+					
+					if (facet.pivot == undefined) 
+						msg = buildValueRange(facet, "");
+					else for ( var j = 0, ul = facet.pivot.length; j < ul; ++j ) { 
+						if (j > 0)
+							msg += ", ";
+							
+						msg += buildValueRange(facet.pivot[j]);
+					}
+					
+					return self.renderTag( facet.value, facet.count, msg, self.clickHandler(facet.value, facet.field));
+				}));
+			}
+			
+			if (!!refresh)
+				refresh.call();
+		}
+	});
 })(jQuery);
