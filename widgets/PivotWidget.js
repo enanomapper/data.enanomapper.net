@@ -1,5 +1,5 @@
 (function($) {
-	var pivot_fields = "topcategory,endpointcategory,effectendpoint,unit",
+	var pivot_fields = "params.og,params.gene,effectendpoint,unit",
 	    bottom_field = "effectendpoint", top_field = "topcategory", stats_field = "loValue", category_field = "endpointcategory", unit_field = "unit",
 	    
 			buildValueRange = function (facet, suffix) {
