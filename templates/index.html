@@ -8,7 +8,7 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<title> | Data templates</title>
+		<title> | Data templates for nanomaterial characterisation and bioassays</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content="" />
 		<meta http-equiv="content-language" content="en" />
@@ -71,7 +71,7 @@
 							<li ><a href="templates_invitro.html" title="In-vitro">In-vitro</a></li>
 							<li ><a href="templates_invivo.html" title="In-vivo">In-vivo</a></li>
 							<li ><a href="convertor.html" title="Usage">Usage</a></li>
-							<li ><a href="https://search.data.enanomapper.net" title="Search database" class="externalLink">Search database</a></li>
+							<li ><a href="https://search.data.enanomapper.net" title="Database search" class="externalLink">Database search</a></li>
 						</ul>
 					</div><!--/.nav-collapse -->
 				</div>
@@ -89,7 +89,7 @@
 			<div class="span12">
 				<div class="pull-left">
 					<div id="bannerLeft"><h1></h1></div>
-					<p class="lead"></p>
+					<p class="lead">Nanomaterial characterisation and bioassays data entry templates</p>
 				</div>
 				<div class="pull-right">
 					<a href="" id="bannerRight"><h1>Data templates</h1></a>
@@ -104,19 +104,19 @@
 		<div class="span8">
 			<div class="body-content">
 				<div class="section"> 
- <h2 id="Data_templates_for_nanomaterial_characterisation_and_bioassays">Data templates for nanomaterial characterisation and bioassays</h2> 
+ <h2 id="eNanoMapper_data_templates_release">eNanoMapper data templates release</h2> 
  <div class="section"> 
   <h3 id="Physicochemical_characterisation"><a href="templates_pchem.html">Physicochemical characterisation</a></h3> 
-  <p><img src="images/templates_pchem.png" alt="Templates: phys-chem" /></p> 
+  <p><img src="images/templates_PCHEM.png" alt="Templates: phys-chem" /></p> 
  </div> 
  <div class="section"> 
   <h3 id="In-vitro_assays"><a href="templates_invitro.html">In-vitro assays</a></h3> 
-  <p><img src="images/templates_invitro.png" alt="Templates: in vitro" /></p> 
+  <p><img src="./images/templates_INVITRO.png" alt="Templates: in vitro" /></p> 
  </div> 
  <div class="section"> 
   <h3 id="In-vivo_assays"><a href="templates_invivo.html">In-vivo assays</a></h3> 
-  <p><img src="images/templates_invivo.png" alt="Templates: in vivo" /></p>  
- </div>  
+  <p><img src="./images/templates_INVIVO.png" alt="Templates: in vivo" /></p>  
+ </div>   
 </div>
 			</div>
 		</div>
@@ -124,7 +124,7 @@
 			<div class="well sidebar">
 	<h3 id="About">About</h3>
 <p>The Excel templates are automatically regenerated based on fields defined in the <a class="externalLink" href="http://www.nanoreg.eu/media-and-downloads/templates"><b>NANoREG templates</b></a>. The generation process includes cleaning of the JRC fields and facilitates the automatic generation of <a href="jsonconfig.html">JSON configuration files</a>, necessary to enable import into an <a class="externalLink" href="https://data.enanomapper.net">eNanoMapper database instance</a></p>
-<p>While not strictly following the <a class="externalLink" href="http://isa-tools.org/">ISA-TAB</a> and <a class="externalLink" href="https://wiki.nci.nih.gov/display/icr/isa-tab-nano">ISA-TAB-Nano</a> formats, the templates have been designed around <tt>ISA-Tab-logic</tt>, i.e. structuring the data in investigation-study-assay related groups.</p>
+<p>While not strictly following the <a class="externalLink" href="http://isa-tools.org/">ISA-TAB</a> and <a class="externalLink" href="https://wiki.nci.nih.gov/display/icr/isa-tab-nano">ISA-TAB-Nano</a> formats, the NANoREG templates have been designed around <tt>ISA-Tab-logic</tt>, i.e. structuring the data in investigation-study-assay related groups.</p>
 <p>See more about </p>
 <ul> 
  <li> <p>ISA-TAB and the new ISA-JSON <a href="isa.html">here</a></p></li> 
@@ -133,6 +133,9 @@
  <li> <p><a href="database.html">How to import</a> into <a class="externalLink" href="http://ambit.sourceforge.net/enanomapper.html">eNanoMapper database</a> instance.</p></li> 
  <li> <p><a href="parser.html">How this works</a></p></li> 
 </ul>
+<blockquote> 
+ <p>UNDER DEVELOPMENT &lt;</p> 
+</blockquote>
 			</div>
 		</div>
 	</div>
@@ -140,11 +143,38 @@
 		<div class="span8">
 			<div class="body-content">
 				<div class="section"> 
- <h2 id="Using_the_templates">Using the templates</h2> 
- <ul> 
-  <li> <p>Conversion between formats <a href="convertor.html">DataConvertor</a></p></li> 
-  <li> <p>Database <a href="database.html">import</a></p></li> 
- </ul>  
+ <h3 id="NANoREG_templates_structure">NANoREG templates structure</h3> 
+ <p>The NANoREG templates are developed by JRC with collaboration with <a class="externalLink" href="http://www.nanoreg.eu/">FP7 NANoREG</a> project partners and released under open license at <a class="externalLink" href="http://www.nanoreg.eu/media-and-downloads/templates">http://www.nanoreg.eu/media-and-downloads/templates</a>.</p> 
+ <p>Within eNanoMapper project (WP3 Database) the templates are analysed, cleaned and <a href="jsonconfig">JSON configuration</a> files created.</p> 
+ <p>The NANoREG templates are organized as one spreadsheet per assay, multiple NM can be entered as rows. One Excel file may contain more than one assay, measuring the same endpoint. The metadata is organised in several groups:</p> 
+ <div class="section"> 
+  <h4 id="Sample_information.">Sample information.</h4> 
+  <p>Contains information about the NM (including names, ID, supplier, vial number and replicate number, as well as dispersant). The reporting organisation, operator and date of the experiment are also in this section.</p> 
+ </div> 
+ <div class="section"> 
+  <h4 id="Unnamed_group_listing_the_module_the_endpoint_and_the_assay_name">Unnamed group listing the module, the endpoint, and the assay name</h4> 
+  <ul> 
+   <li> <p>module (phys-chem, in-vitro or in-vivo),</p></li> 
+   <li> <p>endpoint (e.g. cell viability)</p></li> 
+   <li> <p>assay name (e.g. “Alamar blue”).</p></li> 
+  </ul> 
+ </div> 
+ <div class="section"> 
+  <h4 id="Method_and_instrument_information">Method and instrument information</h4> 
+  <ul> 
+   <li> <p>A subgroup “size distribution” , providing placeholders for size distribution measured for the sample (including details on the dispersion protocol and dispersion medium). These fields are (almost) constant across all templates.</p></li> 
+   <li> <p>Any parameter describing the experiment, including cell lines, instrument, controls, time points, concentratons. These differ widely across different experiments.</p></li> 
+  </ul> 
+ </div> 
+ <div class="section"> 
+  <h4 id="Results">Results</h4> 
+  <ul> 
+   <li>Several columns to specify measurement outcomes, along with uncertaintly.</li> 
+  </ul> 
+ </div> 
+ <div class="section"> 
+  <h4 id="SOP_reference_to_the_protocol">SOP (reference to the protocol)</h4>  
+ </div> 
 </div>
 				<hr />
 				
@@ -196,6 +226,9 @@
 						</li>
 						<li >
 							<a href="isa.html" title="ISA-JSON">ISA-JSON</a>
+						</li>
+						<li >
+							<a href="isa.html" title="ISA-JSON Nano extension">ISA-JSON Nano extension</a>
 						</li>
 					</ul>
 				</div>
