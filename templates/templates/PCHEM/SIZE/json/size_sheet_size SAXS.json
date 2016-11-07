@@ -1,0 +1,234 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "P-Chem. Size. Sheet: size SAXS",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 5,
+        "START_ROW": 3,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 2,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+	
+	"SUBSTANCE_RECORD": {
+		
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+				
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+        },
+		
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+		
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+        },
+		
+		
+        "EXTERNAL_IDENTIFIERS": [
+            {
+                 "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 2
+                },
+				
+                "ID": {
+                    "ITERATION": "ROW_SINGLE",
+					"COLUMN_INDEX": "B"
+                }
+            }
+        ],
+		
+        "COMPOSITION": [
+            {
+                "STRUCTURE_RELATION": "HAS_CORE",
+				
+				"NAME": {
+                    "COLUMN_INDEX": "C"
+                },
+				
+				"CAS RN": {
+					"COLUMN_INDEX": "D"
+				}
+                
+            }            
+        ]
+	
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+        
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"COLUMN_INDEX": "O"	
+			},
+			
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "size SAXS"
+			},
+			
+			"PROTOCOL_CATEGORY_CODE": {
+                "COLUMN_INDEX": "P"
+            },
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "Q"
+                }
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "AG"
+			},
+			
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+			
+            "PARAMETERS": {
+			
+				"Replicate number":{
+					"COLUMN_INDEX": "A"
+				},
+				
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+				
+				"Use of dispersant": {
+                    "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference": {
+                    "COLUMN_INDEX": "I"
+                },
+				
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+				
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+				
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+				
+				"Protocol REF = SOP": {
+					"COLUMN_INDEX": "R"
+				},
+				
+				"Date of acquisition": {
+					"COLUMN_INDEX": "S"
+				},
+				
+				"Source": {
+					"COLUMN_INDEX": "T"
+				},
+				
+				"Geometry": {
+					"COLUMN_INDEX": "U"
+				},
+				
+				"Detector": {
+					"COLUMN_INDEX": "V"
+				},
+				
+				"Sample-detector distance": {
+					"COLUMN_INDEX": "W"
+				},
+				
+				"Optics": {
+					"COLUMN_INDEX": "X"
+				},
+				
+				"Three pinhole camera diameters": {
+					"COLUMN_INDEX": "Y"
+				},
+				
+				"Capillary diameter": {
+					"COLUMN_INDEX": "Z"
+				},
+				
+				"q range": {
+					"COLUMN_INDEX": "AA"
+				},
+				
+				"Wavelength": {
+					"COLUMN_INDEX": "AB",
+					"UNIT": "nm"
+				}
+				
+            },
+				
+			
+            "EFFECTS": [
+         
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Mean particle size"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AC"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AD",
+					"ROW_INDEX": 2
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AD"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Mean Crystallite size"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AE"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AF",
+					"ROW_INDEX": 2
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AF"
+					}
+                }
+				
+			]
+		}
+	]
+}

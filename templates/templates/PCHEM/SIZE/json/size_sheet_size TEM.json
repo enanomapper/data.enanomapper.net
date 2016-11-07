@@ -1,0 +1,665 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "P-Chem. Size. Sheet: size TEM",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 2,
+        "START_ROW": 5,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 4,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+	
+	"SUBSTANCE_RECORD": {
+		
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+				
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+        },
+		
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+		
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+        },
+		
+		
+        "EXTERNAL_IDENTIFIERS": [
+            {
+                 "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 2
+                },
+				
+                "ID": {
+                    "ITERATION": "ROW_SINGLE",
+					"COLUMN_INDEX": "B"
+                }
+            }
+        ],
+		
+        "COMPOSITION": [
+            {
+                "STRUCTURE_RELATION": "HAS_CORE",
+				
+				"NAME": {
+                    "COLUMN_INDEX": "C"
+                },
+				
+				"CAS RN": {
+					"COLUMN_INDEX": "D"
+				}
+                
+            }            
+        ]
+	
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+        
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"COLUMN_INDEX": "O"	
+			},
+			
+			"PROTOCOL_ENDPOINT": {
+				"JSON_VALUE": "size TEM",
+				"ITERATION": "JSON_VALUE"
+			},
+			
+			"PROTOCOL_CATEGORY_CODE": {
+                "COLUMN_INDEX": "P"
+            },
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "Q"
+                }
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "CE"
+			},
+			
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+			
+            "PARAMETERS": {
+			
+				"Replicate number":{
+					"COLUMN_INDEX": "A"
+				},
+				
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+				
+				"Use of dispersant": {
+                    "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference": {
+                    "COLUMN_INDEX": "I"
+                },
+				
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+				
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+				
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+				
+				"Sample volume intake": {
+					"COLUMN_INDEX": "R"
+				},
+				
+				"Sample preparation/drying": {
+					"COLUMN_INDEX": "S"
+				},
+				
+				"Sample grid/sample holder": {
+					"COLUMN_INDEX": "T"
+				},
+				
+				"Make and type of the electron microscope": {
+					"COLUMN_INDEX": "U"
+				},
+				
+				"Frame size camera": {
+					"COLUMN_INDEX": "V",
+					"UNIT": "pixels"
+				},
+				
+				"Description of the image magnification calibration procedure": {
+					"COLUMN_INDEX": "W"
+				},
+				
+				"Calibration uncertainty": {
+					"COLUMN_INDEX": "X"
+				},
+				
+				"magnifications": {
+					"COLUMN_INDEX": "Y"
+				},
+				
+				"CCD camera": {
+					"COLUMN_INDEX": "Z"
+				},
+				
+				"nominal camera length": {
+					"COLUMN_INDEX": "AA"
+				},
+				
+				"acceleration voltage": {
+					"COLUMN_INDEX": "AB"
+				},
+				
+				"tilt angle": {
+					"COLUMN_INDEX": "AC"
+				},
+				
+				"spot size": {
+					"COLUMN_INDEX": "AD"
+				},
+				
+				"aperture": {
+					"COLUMN_INDEX": "AE"
+				},
+				
+				"others": {
+					"COLUMN_INDEX": "AF"
+				},
+				
+				"Micrographs used for analysis": {
+					"COLUMN_INDEX": "AG"
+				},
+				
+				"Identification number of the view fields": {
+					"COLUMN_INDEX": "AH"
+				},
+				
+				"Pixel size": {
+					"COLUMN_INDEX": "AI",
+					"UNIT": "nm"
+				},
+				
+				"Micrograph size": {
+					"COLUMN_INDEX": "AJ",
+					"UNIT": "µm"
+				},
+				
+				"Total area sampled per sample": {
+					"COLUMN_INDEX": "AK",
+					"UNIT": "µm2"
+				},
+				
+				"Counting procedure: Treatment of particles cut by the measurement frame(ISO 13322-1:2004)": {
+					"COLUMN_INDEX": "AL"
+				},
+				
+				"Counting procedure: Exclude border particles": {
+					"COLUMN_INDEX": "AM",
+					"UNIT": "y/n"
+				},
+				
+				"Counting procedure: include 50%": {
+					"COLUMN_INDEX": "AN"
+				},
+				
+				"Counting procedure: Others": {
+					"COLUMN_INDEX": "AO"
+				},
+				
+				"Estimation of the measurement uncertainty": {
+					"COLUMN_INDEX": "AP"
+				},
+				
+				"image software package": {
+					"COLUMN_INDEX": "CA"
+				},
+				
+				"adjustment of contrast, brightness, greyscale threshold": {
+					"COLUMN_INDEX": "CB"
+				},
+				
+				"usage of image filters": {
+					"COLUMN_INDEX": "CC"
+				},
+				
+				"touching particles": {
+					"COLUMN_INDEX": "CD"
+				}
+				
+            },
+				
+			
+            "EFFECTS": [
+         
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. ECD median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AQ"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AQ",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AR"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. ECD mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AS"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AS",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AT"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. ECD mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AU"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AU",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AV"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. Feret min. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AW"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AW",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AX"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. Feret min. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AY"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AY",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AZ"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size. Feret min. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BA"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BA",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BB"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Aspect ratio. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BC"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BC",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BD"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Aspect ratio. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BE"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BE",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BF"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Aspect ratio. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BG"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BG",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BH"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Circularity. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BI"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BI",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BJ"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Circularity. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BK"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BK",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BL"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Shape. Circularity. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BM"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BM",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BN"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Roundness. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BO"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BO",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BP"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Roundness. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BQ"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BQ",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BR"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Roundness. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BS"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BS",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BT"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Solidity. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BU"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BU",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BV"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Solidity. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BW"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BW",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BX"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Surface topology. Solidity. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "BY"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "BY",
+					"ROW_INDEX": 4
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "BZ"
+					}
+                }
+			]
+		}
+	]
+}

@@ -1,0 +1,387 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "Mammalian toxicology – in vivo. In_vitro_Genotoxicity Sheet: COMET",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 1,
+        "START_ROW": 6,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 5,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+	
+	"SUBSTANCE_RECORD": {
+		
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+				
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+        },
+		
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+		
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+        },
+		
+		
+        "EXTERNAL_IDENTIFIERS": [
+            {
+                 "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 2
+                },
+				
+                "ID": {
+                    "ITERATION": "ROW_SINGLE",
+					"COLUMN_INDEX": "B"
+                }
+            }
+        ],
+		
+		"COMPOSITION": [{
+			"STRUCTURE_RELATION": "HAS_CORE",
+			"PROPERTIES": {
+				"NAME": {
+					"COLUMN_INDEX": "C"
+				},
+				"CASRN": {
+					"COLUMN_INDEX": "D"
+				}
+			}
+		}]
+	
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+        
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "TOX"
+			},
+			
+
+			"PROTOCOL_ENDPOINT": {
+				"COLUMN_INDEX": "P"
+			},
+			
+			"PROTOCOL_CATEGORY_CODE": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "BAO_0002167_SECTION"
+			},
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "AT"
+                }
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "Q"
+			},
+			
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+			
+            "PARAMETERS": {
+				"Test method": {
+					"COLUMN_INDEX": "Q"
+				},
+				
+				"Replicate number":{
+					"COLUMN_INDEX": "A"
+				},
+				
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+				
+				"Use of dispersant": {
+                    "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference": {
+                    "COLUMN_INDEX": "I"
+                },
+				
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+				
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+				
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+				
+				"Cell type": {
+					"COLUMN_INDEX": "AB"
+				},
+				
+				"Cell Reference": {
+					"COLUMN_INDEX": "AC"
+				},
+				
+				"Cell pass": {
+					"COLUMN_INDEX": "AD"
+				},
+				
+				"Seeding": {
+					"COLUMN_INDEX": "AE"
+				},
+				
+				"Exposure time": {
+					"COLUMN_INDEX": "AF",
+					"UNIT": "h"
+				},
+				
+				"NM concentration": {
+					"COLUMN_INDEX": "AG",
+					"UNIT": "µg/mL"
+				},
+				
+				"Format of gels": {
+					"COLUMN_INDEX": "AE"
+				},
+				
+				"FPG incubation time": {
+					"COLUMN_INDEX": "AI",
+					"UNIT": "min"
+				},
+				
+				"Alkaline unwinding time": {
+					"COLUMN_INDEX": "AJ",
+					"UNIT": "min"
+				},
+				
+				"Electrophoresis time": {
+					"COLUMN_INDEX": "AK",
+					"UNIT": "min"
+				},
+				
+				"Electrophoresis voltage gradient": {
+					"COLUMN_INDEX": "AL",
+					"UNIT": "V/cm"
+				},
+				
+				"Any deviations from standard protocol": {
+					"COLUMN_INDEX": "AM"
+				}
+				
+            },
+				
+			
+            "EFFECTS": [
+         
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "DNA in tail"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AN"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "%"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "DNA in tail - mean or median"
+                    },
+                    "VALUE": {
+                        "COLUMN_INDEX": "AO"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Lysis only - strand breaks"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AP"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "% tail"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Buffer incubation"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AQ"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "% tail"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "FPG incubation"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AR"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "% tail"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Net FPG sites"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AS"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "% tail"
+                    }
+                }
+				
+			]
+		},
+		
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "P-CHEM"
+			},
+			"PROTOCOL_CATEGORY_CODE": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "PC_GRANULOMETRY_SECTION"
+			},
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "Size Distribution"
+			},
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "T"
+                }
+			},
+			
+			"PARAMETERS": {
+			
+				"Dispersion protocol": {
+					"COLUMN_INDEX": "R"
+				},
+				
+				"Dispersion medium": {
+					"COLUMN_INDEX": "U"
+				},
+				
+				"Concentration": {
+					"COLUMN_INDEX": "V",
+					"UNIT": "mg/mL"
+				}, 
+				
+				"Incubation time": {
+					"COLUMN_INDEX": "W",
+					"UNIT": "h"
+				}
+			
+			},
+			
+			"EFFECTS": [
+				{
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Size Distribution"
+                    },
+                    
+                    "TEXT_VALUE": {
+                        "COLUMN_INDEX": "S"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Mean Hydrodynamic diameter"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "X"
+                    },
+					
+					"UNIT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "Y",
+					"ROW_INDEX": 3
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "Y"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "PDI"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "Z"
+                    },
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AA",
+					"ROW_INDEX": 3
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AA"
+					}
+                }
+			]
+		
+		}
+	]
+}

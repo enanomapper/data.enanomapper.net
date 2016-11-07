@@ -1,0 +1,318 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "P-Chem. Size. Sheet: size PTA",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 3,
+        "START_ROW": 5,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 4,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+	
+	"SUBSTANCE_RECORD": {
+		
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+				
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+        },
+		
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+		
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+        },
+		
+		
+        "EXTERNAL_IDENTIFIERS": [
+            {
+                 "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 2
+                },
+				
+                "ID": {
+                    "ITERATION": "ROW_SINGLE",
+					"COLUMN_INDEX": "B"
+                }
+            }
+        ],
+		
+        "COMPOSITION": [
+            {
+                "STRUCTURE_RELATION": "HAS_CORE",
+				
+				"NAME": {
+                    "COLUMN_INDEX": "C"
+                },
+				
+				"CAS RN": {
+					"COLUMN_INDEX": "D"
+				}
+                
+            }            
+        ]
+	
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+        
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"COLUMN_INDEX": "O"	
+			},
+			
+			"PROTOCOL_ENDPOINT": {
+				"JSON_VALUE": "size PTA",
+				"ITERATION": "JSON_VALUE"
+			},
+			
+			"PROTOCOL_CATEGORY_CODE": {
+                "COLUMN_INDEX": "P"
+            },
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "Q"
+                }
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "AU"
+			},
+			
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+			
+            "PARAMETERS": {
+			
+				"Replicate number":{
+					"COLUMN_INDEX": "A"
+				},
+				
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+				
+				"Use of dispersant": {
+                    "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference": {
+                    "COLUMN_INDEX": "I"
+                },
+				
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+				
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+				
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+				
+				"Sample volume intake": {
+					"COLUMN_INDEX": "R"
+				},
+				
+				"Sample grid/sample holder": {
+					"COLUMN_INDEX": "S"
+				},
+				
+				"Make and type of the electron microscope": {
+					"COLUMN_INDEX": "T"
+				},
+				
+				"Frame size camera": {
+					"COLUMN_INDEX": "U",
+					"UNIT": "pixels"
+				},
+				
+				"Calibration uncertainty": {
+					"COLUMN_INDEX": "V"
+				},
+				
+				"CCD camera": {
+					"COLUMN_INDEX": "W"
+				},
+				
+				"nominal camera length": {
+					"COLUMN_INDEX": "X"
+				},
+				
+				"acceleration voltage": {
+					"COLUMN_INDEX": "Y"
+				},
+				
+				"tilt angle": {
+					"COLUMN_INDEX": "Z"
+				},
+				
+				"spot size": {
+					"COLUMN_INDEX": "AD",
+					"UNIT": "nm"
+				},
+				
+				"aperture": {
+					"COLUMN_INDEX": "AB"
+				},
+				
+				"others": {
+					"COLUMN_INDEX": "AC"
+				},
+				
+				"Micrographs used for analysis": {
+					"COLUMN_INDEX": "AD"
+				},
+				
+				"Identification number of the view fields": {
+					"COLUMN_INDEX": "AE"
+				},
+				
+				"Pixel size": {
+					"COLUMN_INDEX": "AF",
+					"UNIT": "nm"
+				},
+				
+				"Micrograph size": {
+					"COLUMN_INDEX": "AG",
+					"UNIT": "µm"
+				},
+				
+				"Total area sampled per sample": {
+					"COLUMN_INDEX": "AH",
+					"UNIT": "µm2"
+				},
+				
+				"Counting procedure: Treatment of particles cut by the measurement frame(ISO 13322-1:2004)": {
+					"COLUMN_INDEX": "AI"
+				},
+				
+				"Counting procedure: Exclude border particles": {
+					"COLUMN_INDEX": "AJ",
+					"UNIT": "y/n"
+				},
+				
+				"Counting procedure: include 50%": {
+					"COLUMN_INDEX": "AK"
+				},
+				
+				"Counting procedure: others": {
+					"COLUMN_INDEX": "AL"
+				},
+				
+				"Estimation of the measurement uncertainty": {
+					"COLUMN_INDEX": "AM"
+				},
+				
+				"image software package": {
+					"COLUMN_INDEX": "AT"
+				}
+				
+            },
+				
+			
+            "EFFECTS": [
+         
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Hydrodynamic Diameter. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AN"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AO",
+					"ROW_INDEX": 3
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AO"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Hydrodynamic Diameter. Mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AP"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					},
+					
+					"LO_QUALIFIER": {
+					"ITERATION": "ABSOLUTE_LOCATION",
+					"COLUMN_INDEX": "AQ",
+					"ROW_INDEX": 3
+					},
+					
+					"ERR_VALUE": {
+					"COLUMN_INDEX": "AQ"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Concentration. Median"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AR"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Particles/ml"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Concentration. Mean"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AS"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Particles/ml"
+					}
+                }
+			]
+		}
+	]
+}

@@ -1,0 +1,458 @@
+{
+	"TEMPLATE_INFO": {
+		"NAME": "Mammalian toxicology - in vivo. Sheet_water-microalgae-D.Magna",
+		"VERSION": "01",
+		"TYPE": 1
+	},
+	"DATA_ACCESS": {
+		"ITERATION": "ROW_SINGLE",
+		"SHEET_INDEX": 1,
+		"START_ROW": 6,
+		"START_HEADER_ROW": 1,
+		"END_HEADER_ROW": 5,
+		"ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"
+	},
+
+	"SUBSTANCE_RECORD": {
+
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+		},
+
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+		},
+
+
+		"EXTERNAL_IDENTIFIERS": [{
+			"TYPE": {
+				"ITERATION": "ABSOLUTE_LOCATION",
+				"COLUMN_INDEX": "B",
+				"ROW_INDEX": 2
+			},
+
+			"ID": {
+				"ITERATION": "ROW_SINGLE",
+				"COLUMN_INDEX": "B"
+			}
+		}],
+
+		"COMPOSITION": [{
+			"STRUCTURE_RELATION": "HAS_CORE",
+			"PROPERTIES": {
+				"NAME": {
+					"COLUMN_INDEX": "C"
+				},
+				"CASRN": {
+					"COLUMN_INDEX": "D"
+				}
+			}
+		}]
+
+	},
+
+	"PROTOCOL_APPLICATIONS": [{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "ECOTOX"
+			},
+
+
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "water-microalgae-D.Magna"
+			},
+
+			"PROTOCOL_CATEGORY_CODE": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "EC_DAPHNIATOX_SECTION"
+			},
+
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+					"COLUMN_INDEX": "AS"
+				}
+			},
+
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "Q"
+			},
+
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+
+			"PARAMETERS": {
+
+				"Replicate number": {
+					"COLUMN_INDEX": "A"
+				},
+
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+
+				"Use of dispersant": {
+					"COLUMN_INDEX": "H"
+				},
+
+				"Dispersant reference": {
+					"COLUMN_INDEX": "I"
+				},
+
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				}
+			},
+
+			"EFFECTS": [
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "number of micronucleated polychromatic erythrocytes / 2000 erythrocytes"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AQ"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "number of normochromatic  erythrocytes / 2000 erythrocytes"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AR"
+					}
+				}
+
+			]
+
+		},
+
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "P-Chem"
+			},
+
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "Size Distribution"
+			},
+
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+					"COLUMN_INDEX": "R"
+				}
+			},
+
+			"PARAMETERS": {
+
+				"Size distribution analyse technique": {
+					"COLUMN_INDEX": "T"
+				},
+
+				"Dispersion medium": {
+					"COLUMN_INDEX": "U"
+				},
+
+				"Mass concentration": {
+					"COLUMN_INDEX": "V",
+					"UNIT": "mg/mL"
+				},
+
+				"Diameter": {
+					"COLUMN_INDEX": "W",
+					"UNIT": "nm"
+				},
+
+				"PDI": {
+					"COLUMN_INDEX": "Y"
+				}
+
+
+			},
+
+			"EFFECTS": [{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Size Distribution"
+					},
+
+					"TEXT_VALUE": {
+						"COLUMN_INDEX": "S"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "In weight or number"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "X"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "w or n"
+					}
+				}
+			]
+
+		},
+
+		{
+
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "ANALYTICAL PARAMETERS -  Initial exposure media"
+			},
+
+			"PARAMETERS": {
+
+				"Nominal initial concentration": {
+					"COLUMN_INDEX": "Z",
+					"UNIT": "mg/L"
+				},
+
+				"Effective initial concentration": {
+					"COLUMN_INDEX": "AA",
+					"UNIT": "mg/L"
+				}
+
+			},
+
+			"EFFECTS": [{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Hydrodynamic diameter in exposure media"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AB"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "nm"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "T"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AF"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "°C"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "pH"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AE"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "PDI in exposure media"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AC"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "UV/Vis absorbance"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AD"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "O2 concentration"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AG"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "mg/L"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Microscopy verification(PSD)"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AH"
+					}
+				}
+
+			]
+
+
+		},
+
+		{
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "ANALYTICAL PARAMETERS -  Final exposure media"
+			},
+
+			"PARAMETERS": {
+
+				"Exposure time": {
+					"COLUMN_INDEX": "AP",
+					"UNIT": "h"
+				}
+
+			},
+
+			"EFFECTS": [{
+
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Hydrodynamic diameter in exposure media"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AI"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "nm"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "PDI in exposure media"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AJ"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Microscopy verification(PSD)"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AO"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "UV/Vis absorbance"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AK"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "O2 concentration"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AN"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "mg/L"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "T"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AM"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "°C"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "pH"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AL"
+					}
+				}
+
+
+			]
+		}
+	]
+
+}

@@ -1,0 +1,367 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "P-Chem. Size. Sheet: size&PSD_sp-ICP-MS",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 8,
+        "START_ROW": 3,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 2,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+	
+	"SUBSTANCE_RECORD": {
+		
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+				
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+        },
+		
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+		
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+        },
+		
+		
+        "EXTERNAL_IDENTIFIERS": [
+            {
+                 "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 2
+                },
+				
+                "ID": {
+                    "ITERATION": "ROW_SINGLE",
+					"COLUMN_INDEX": "B"
+                }
+            }
+        ],
+		
+        "COMPOSITION": [
+            {
+                "STRUCTURE_RELATION": "HAS_CORE",
+				
+				"NAME": {
+                    "COLUMN_INDEX": "C"
+                },
+				
+				"CAS RN": {
+					"COLUMN_INDEX": "D"
+				}
+                
+            }            
+        ]
+	
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+        
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"COLUMN_INDEX": "O"	
+			},
+			
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "size&PSD_sp-ICP-MS"
+			},
+			
+			"PROTOCOL_CATEGORY_CODE": {
+                "COLUMN_INDEX": "P"
+            },
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "Q"
+                }
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "AY"
+			},
+			
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+			
+            "PARAMETERS": {
+			
+				"Replicate number":{
+					"COLUMN_INDEX": "A"
+				},
+				
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+				
+				"Use of dispersant": {
+                    "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference": {
+                    "COLUMN_INDEX": "I"
+                },
+				
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+				
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+				
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+				
+				"Instrument brand and model": {
+					"COLUMN_INDEX": "Y"
+				},
+				
+				"Tunning date/aquisition date": {
+					"COLUMN_INDEX": "Z"
+				},
+				
+				"Sample introduction system description": {
+					"COLUMN_INDEX": "AA"
+				},
+				
+				"Sample inlet flow": {
+					"COLUMN_INDEX": "AB",
+					"UNIT": "mL/min"
+				},
+				
+				"Nebulization efficiency": {
+					"COLUMN_INDEX": "AC",
+					"UNIT": "%"
+				},
+				
+				"Isotope dwell time": {
+					"COLUMN_INDEX": "AD",
+					"UNIT": "ms"
+				},
+				
+				"Total acquisistion time": {
+					"COLUMN_INDEX": "AE",
+					"UNIT": "min"
+				},
+				
+				"Response factor calibration solution: Response at element amu": {
+					"COLUMN_INDEX": "AF",
+					"UNIT": "cps/ppb"
+				},
+				
+				"Response factor calibration solution: Ionic standard concentration": {
+					"COLUMN_INDEX": "AG",
+					"UNIT": "ppb"
+				},
+				
+				"Response factor calibration solution: Size calibration": {
+					"COLUMN_INDEX": "AH"
+				},
+				
+				"Reference material: Manufacturer / Product number": {
+					"COLUMN_INDEX": "AI"
+				},
+				
+				"Reference material: Reference element mass": {
+					"COLUMN_INDEX": "AJ",
+					"UNIT": "amu"
+				},
+				
+				"Reference material: Mean reference particle diameter": {
+					"COLUMN_INDEX": "AK",
+					"UNIT": "nm"
+				},
+				
+				"Reference material: Reference material density": {
+					"COLUMN_INDEX": "AL",
+					"UNIT": "g/cm3"
+				},
+				
+				"Reference material: Concentration of reference material": {
+					"COLUMN_INDEX": "AM",
+					"UNIT": "ng/L"
+				}
+				
+            },
+				
+			
+            "EFFECTS": [
+         
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Unknown sample: Target element mas"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AN"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "amu"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Unknown sample: Analyte mass fraction"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AO"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Unknown sample: Particle density"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AP"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "g/cm3"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Nebulization efficiency"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AQ"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "%"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Number of detected particles"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AR"
+                    }
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Concentration"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AS"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "particles/L"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Concentration"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AT"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "ng/L"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Ionic concentration"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AU"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "ug/L"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Particle size distribution - Mean/mode"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AV"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "[nm]/[nm]"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Uncertainty"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AW"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "nm"
+					}
+                },
+				
+				{				
+					"ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Background equivalent diameter (BED)"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AX"
+                    }
+                }
+			]
+		}
+	]
+}

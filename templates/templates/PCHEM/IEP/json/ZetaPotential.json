@@ -1,0 +1,339 @@
+{
+	"TEMPLATE_INFO":{
+		"NAME": "Phys-Chem: ZetaPotential",
+		"VERSION": "01",
+		"TYPE": 1	
+	},
+	
+	"DATA_ACCESS": {
+		"ITERATION":"ROW_SINGLE",
+		"SHEET_INDEX": 2,
+        "START_ROW": 3,
+		"START_HEADER_ROW": 1,
+        "END_HEADER_ROW": 2,
+        "ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"	
+	},
+
+	"SUBSTANCE_RECORD": {
+	
+		"COMPANY_NAME": {
+			"COLUMN_INDEX": "K"
+        },
+		
+		 "OWNER_NAME": {
+			"COLUMN_INDEX": "K"
+        },
+		
+		"EXTERNAL_IDENTIFIERS": [
+            {
+                "ID": {
+                    "COLUMN_INDEX": "A",
+                     "ITERATION": "ROW_SINGLE"
+                },
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "A",
+                    "ROW_INDEX" : 4
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "B",
+                     "ITERATION": "ROW_SINGLE"
+                },
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "B",
+                    "ROW_INDEX" : 4
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "E",
+                     "ITERATION": "ROW_SINGLE"
+                },
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "E",
+                    "ROW_INDEX" : 4
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "F",
+                     "ITERATION": "ROW_SINGLE"
+                },
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "F",
+                    "ROW_INDEX" : 4
+                }
+            },
+	
+	{
+	"TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "L",
+                    "ROW_INDEX" : 4
+                },
+				
+                "ID": {
+                    "COLUMN_INDEX": "L",
+                     "ITERATION": "ROW_SINGLE"
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "M",
+                    "ITERATION": "ROW_SINGLE"
+                },
+				
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "M",
+                    "ROW_INDEX" : 4
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "N",
+                    "ITERATION": "ROW_SINGLE"
+                },
+				
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "N",
+                    "ROW_INDEX" : 4
+                }
+            },
+			
+			{
+                "ID": {
+                    "COLUMN_INDEX": "Q",
+                    "ITERATION": "ROW_SINGLE"
+                },
+				
+                "TYPE": {
+                	"ITERATION": "ABSOLUTE_LOCATION",
+                    "COLUMN_INDEX": "Q",
+                    "ROW_INDEX" : 2
+                }
+            }
+		],
+		
+        "COMPOSITION": [
+            {
+                "STRUCTURE_RELATION": "HAS_CORE",
+				"SAMPLE_NAME": "J",
+				"CONTENT": {
+                    "COLUMN_INDEX": "C"
+                },
+				
+                "FORMAT": {
+                    "COLUMN_INDEX": "C",
+					"JSON_VALUE": "INC"
+                },
+				
+				"PROPERTIES" : {
+					"Material State " : {
+						"COLUMN_INDEX" : "G"
+					},
+
+					"CAS Number" : {
+						"COLUMN_INDEX" : "D"
+					}
+				}
+                
+            }            
+        ]
+	},
+	
+	"PROTOCOL_APPLICATIONS": [
+	
+	{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "Phys-Chem"
+			},
+					
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "Zeta Potential"
+			},
+			
+			"UNIT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "mV"
+			},
+			
+			"LO_QUALIFIER": {
+                "ITERATION": "ABSOLUTE_LOCATION",
+                "COLUMN_INDEX": "AN",
+                "ROW_INDEX": 2
+            },
+			
+            "ERR_VALUE": {
+                "COLUMN_INDEX": "F"
+            },
+			
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+                    "COLUMN_INDEX": "AO"
+                }
+			},
+			
+			"PROTOCOL_CATEGORY_TITLE": {
+				"COLUMN_INDEX": "O"
+			},
+			
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "P"
+			},
+			
+			"PARAMETERS": {
+			
+				"Use of dispersant: Yes/No": {
+                        "COLUMN_INDEX": "H"
+                },
+				
+				"Dispersant reference (indicate here the reference number of the vial used)": {
+                        "COLUMN_INDEX": "I"
+                },
+				
+				"Date of acquisition": {
+					"COLUMN_INDEX": "R"
+				},
+				
+				"Cell model": {
+					"COLUMN_INDEX": "S"
+				},
+				
+				"Resting time at room temperature (min)": {
+					"COLUMN_INDEX": "T"
+				},
+
+				"Temperature": {
+					"COLUMN_INDEX": "U"
+				},
+				
+				"Thermal equilibrium time (sec)": {
+					"COLUMN_INDEX": "V"
+				},
+				
+				"Minimum runs": {
+					"COLUMN_INDEX": "W"
+				},
+				
+				"Maximum runs": {
+					"COLUMN_INDEX": "X"
+				},
+				
+				"Number of measurments": {
+					"COLUMN_INDEX": "Y"
+				},
+				
+				"Delay between measurments (sec)": {
+					"COLUMN_INDEX": "Z"
+				},
+				
+				"Laser focus position": {
+					"COLUMN_INDEX": "AA"
+				},
+				
+				"Laser attenuation": {
+					"COLUMN_INDEX": "AB"
+				},
+				
+				"Applied Voltage (V)": {
+					"COLUMN_INDEX": "AD"
+				},
+				
+				"Modle": {
+					"COLUMN_INDEX": "AE"
+				},
+				
+				"Dielectric  constant of the medium": {
+					"COLUMN_INDEX": "AK"
+				},
+				
+				"Data Analysis model": {
+					"COLUMN_INDEX": "AL"
+				}
+			},
+			
+			"EFFECTS": [
+                {
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Refractive index of the sample"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AF"
+                    }
+                },
+				
+				{
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Absorption index of the sample"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AG"
+                    }
+                },
+				
+				{
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Refractive index of the medium"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AH"
+                    }
+                },
+				
+				{
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Absorption index of the medium"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AI"
+                    }
+                },
+				
+				{
+                    "ENDPOINT": {
+                        "ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "Viscosity of the suspension"
+                    },
+                    
+                    "VALUE": {
+                        "COLUMN_INDEX": "AJ"
+                    },
+					
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+                        "JSON_VALUE": "kg/(sm)"
+					}
+                }
+				
+				
+				
+			]
+			
+			
+	}
+	
+	]
+}

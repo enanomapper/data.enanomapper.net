@@ -1,0 +1,433 @@
+{
+	"TEMPLATE_INFO": {
+		"NAME": "Mammalian toxicology – in vivo. In_vitro_Genotoxicity Sheet: Micronucleus",
+		"VERSION": "01",
+		"TYPE": 1
+	},
+
+	"DATA_ACCESS": {
+		"ITERATION": "ROW_SINGLE",
+		"SHEET_INDEX": 1,
+		"START_ROW": 6,
+		"START_HEADER_ROW": 1,
+		"END_HEADER_ROW": 5,
+		"ALLOW_EMPTY": true,
+		"RECOGNITION": "BY_INDEX"
+	},
+
+	"SUBSTANCE_RECORD": {
+
+		"PUBLIC_NAME": {
+			"COLUMN_INDEX": "B"
+		},
+
+		"OWNER_NAME": {
+			"COLUMN_INDEX": "F"
+		},
+
+		"SUBSTANCE_TYPE": {
+			"COLUMN_INDEX": "G"
+		},
+
+		"SUBSTANCE_NAME": {
+			"COLUMN_INDEX": "J"
+		},
+
+
+		"EXTERNAL_IDENTIFIERS": [{
+			"TYPE": {
+				"ITERATION": "ABSOLUTE_LOCATION",
+				"COLUMN_INDEX": "B",
+				"ROW_INDEX": 2
+			},
+
+			"ID": {
+				"ITERATION": "ROW_SINGLE",
+				"COLUMN_INDEX": "B"
+			}
+		}],
+
+		"COMPOSITION": [{
+			"STRUCTURE_RELATION": "HAS_CORE",
+			"PROPERTIES": {
+				"NAME": {
+					"COLUMN_INDEX": "C"
+				},
+				"CASRN": {
+					"COLUMN_INDEX": "D"
+				}
+			}
+		}]
+
+	},
+
+	"PROTOCOL_APPLICATIONS": [
+
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "TOX"
+			},
+
+
+			"PROTOCOL_ENDPOINT": {
+				"COLUMN_INDEX": "P"
+			},
+
+			"PROTOCOL_CATEGORY_CODE": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "BAO_0002167_SECTION"
+			},
+
+
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+					"COLUMN_INDEX": "AT"
+				}
+			},
+
+			"CITATION_TITLE": {
+				"COLUMN_INDEX": "Q"
+			},
+
+			"CITATION_OWNER": {
+				"COLUMN_INDEX": "K"
+			},
+
+			"PARAMETERS": {
+				"Test method": {
+					"COLUMN_INDEX": "Q"
+				},
+
+
+				"Replicate number": {
+					"COLUMN_INDEX": "A"
+				},
+
+				"Vial number": {
+					"COLUMN_INDEX": "E"
+				},
+
+				"Use of dispersant": {
+					"COLUMN_INDEX": "H"
+				},
+
+				"Dispersant reference": {
+					"COLUMN_INDEX": "I"
+				},
+
+				"Operator": {
+					"COLUMN_INDEX": "L"
+				},
+
+				"date of preparation": {
+					"COLUMN_INDEX": "M"
+				},
+
+				"date of analysis": {
+					"COLUMN_INDEX": "N"
+				},
+
+				"number of samples/experiments": {
+					"COLUMN_INDEX": "AB"
+				},
+
+				"Cell type": {
+					"COLUMN_INDEX": "AC"
+				},
+
+				"Pass number": {
+					"COLUMN_INDEX": "AD"
+				},
+
+				"Culture medium composition": {
+					"COLUMN_INDEX": "AE"
+				},
+
+				"Plate": {
+					"COLUMN_INDEX": "AF"
+				},
+
+				"volume incubation medium/well": {
+					"COLUMN_INDEX": "AG"
+				},
+
+				"Seeding": {
+					"COLUMN_INDEX": "AH"
+				},
+
+				"Preincubation time": {
+					"COLUMN_INDEX": "AI",
+					"UNIT": "h"
+				},
+
+				"Exposure concentration": {
+					"COLUMN_INDEX": "AJ",
+					"UNIT": "µg/mL"
+				},
+
+				"Calculated exposure concentration": {
+					"COLUMN_INDEX": "AK",
+					"UNIT": "µg/cm²"
+				},
+
+				"Cyt B concentration": {
+					"COLUMN_INDEX": "AL",
+					"UNIT": "µg/cm²"
+				},
+
+				"Reference(-ve)": {
+					"COLUMN_INDEX": "AM"
+				},
+
+				"Reference(-ve) Concentration1": {
+					"COLUMN_INDEX": "AN"
+				},
+
+				"Reference(+ve)": {
+					"COLUMN_INDEX": "AO"
+				},
+
+				"Reference(+ve) Concentration": {
+					"COLUMN_INDEX": "AP"
+				},
+
+
+				"Replication index": {
+					"COLUMN_INDEX": "AQ"
+				}
+			},
+
+
+			"EFFECTS": [
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Cytokinesis block replication index"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AS"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AR"
+						}
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Micronucleus Reference (-ve)"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AU"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "%"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AT"
+						}
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Micronucleus Reference (+ve)"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AV"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "%"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AT"
+						}
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Micronucleus NM"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AW"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "%"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AT"
+						}
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Values"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AX"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "%/control"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AT"
+						}
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Data range"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "AY"
+					},
+
+					"CONDITIONS": {
+						"Number of cells scored": {
+							"COLUMN_INDEX": "AT"
+						}
+					}
+				}
+
+
+			]
+		},
+
+		{
+			"PROTOCOL_TOP_CATEGORY": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "P-CHEM"
+			},
+			"PROTOCOL_CATEGORY_CODE": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "PC_GRANULOMETRY_SECTION"
+			},
+			"PROTOCOL_ENDPOINT": {
+				"ITERATION": "JSON_VALUE",
+				"JSON_VALUE": "Size Distribution"
+			},
+
+			"PROTOCOL_GUIDELINE": {
+				"guideline1": {
+					"COLUMN_INDEX": "T"
+				}
+			},
+
+			"PARAMETERS": {
+
+				"Dispersion protocol": {
+					"COLUMN_INDEX": "R"
+				},
+
+				"Dispersion medium": {
+					"COLUMN_INDEX": "U"
+				},
+
+				"Concentration": {
+					"COLUMN_INDEX": "V",
+					"UNIT": "mg/mL"
+				},
+
+				"Incubation time": {
+					"COLUMN_INDEX": "W",
+					"UNIT": "h"
+				}
+
+			},
+
+			"EFFECTS": [{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Size Distribution"
+					},
+
+					"TEXT_VALUE": {
+						"COLUMN_INDEX": "S"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "Mean Hydrodynamic diameter"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "X"
+					},
+
+					"UNIT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "nm"
+					},
+
+					"LO_QUALIFIER": {
+						"ITERATION": "ABSOLUTE_LOCATION",
+						"COLUMN_INDEX": "Y",
+						"ROW_INDEX": 3
+					},
+
+					"ERR_VALUE": {
+						"COLUMN_INDEX": "Y"
+					}
+				},
+
+				{
+					"ENDPOINT": {
+						"ITERATION": "JSON_VALUE",
+						"JSON_VALUE": "PDI"
+					},
+
+					"VALUE": {
+						"COLUMN_INDEX": "Z"
+					},
+
+					"LO_QUALIFIER": {
+						"ITERATION": "ABSOLUTE_LOCATION",
+						"COLUMN_INDEX": "AA",
+						"ROW_INDEX": 3
+					},
+
+					"ERR_VALUE": {
+						"COLUMN_INDEX": "AA"
+					}
+				}
+			]
+
+		}
+	]
+}
