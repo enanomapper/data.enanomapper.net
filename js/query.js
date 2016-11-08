@@ -171,7 +171,7 @@ var Manager,
 			'facet.mincount' : 1,
       // https://cwiki.apache.org/confluence/display/solr/Collapse+and+Expand+Results
 			'fq' : "{!collapse field=s_uuid}",
-			'fl' : 'type_s:"study",s_uuid,name:File,doc_uuid:id,topcategory:module,endpointcategory:endpoint,guidance:Annotation,publicname:s_uuid,reference:term_uri,reference_owner:term_score,reference_year:term_label,content:"",owner_name:s_uuid,loValue:Row,upValue:Column,owner_name:"Templates",substanceType:module,effectendpoint:cleanedvalue,interpretation_result:"",unit:unit',
+			'fl' : 'type_s:"study",s_uuid,name:File,doc_uuid:id,topcategory:module,endpointcategory:endpoint,guidance:Annotation,publicname:s_uuid,reference:term_uri,reference_owner:term_score,reference_year:term_label,content:"",owner_name:s_uuid,loValue:Row,upValue:Column,owner_name:"Templates",substanceType:sheet_label,effectendpoint:cleanedvalue,interpretation_result:"",unit:unit,term_score,sheet_score',
 			'stats': true,			
 			'json.nl' : "map",
 			'rows' : 20,

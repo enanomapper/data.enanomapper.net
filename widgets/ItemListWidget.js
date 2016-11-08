@@ -166,7 +166,7 @@
   	if ($.isArray(prop))
   	  prop = prop[0];
   	  
-  	substancetype = lookup[substancetype] || substancetype;
+  	substancetype = doc.sheet_score>10?doc.substanceType:"";
     
     return  pubname + (pubname === doc.name ? "" : "  (" + doc.name + ")") + 
             (substancetype == null ? "" : (" " + substancetype + " " + (prop == null ? "" : "[" + prop + "] ")));
@@ -225,7 +225,7 @@
 
 		snippet.value = value;
 	
-		if (doc.reference != null) {
+		if (doc.reference != null && (doc.term_score>5)) {
 			snippet.link = (doc.reference_year == null) ? "Term" : "[" + doc.reference_year + "]";
 			snippet.href = doc.reference;
 			snippet.title = snippet.link;
