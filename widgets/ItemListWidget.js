@@ -75,7 +75,7 @@
 		
 		delete this.itemData.expanded[uuid];
 		this.length--;
-		return this.itemData.docs.splice(i, 1)[0];
+		return this.itemData.docs.splice(i, 1);
 	};
 	
 	ItemListWidget.prototype.enumerateItems = function (callback) {
@@ -101,10 +101,9 @@
 					composition: this.renderComposition(doc),
 					snippet: "",
 					item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
-					footer: 
-						'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
-						'<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">Composition</a>' +
-						'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Study</a>'
+					footer:  
+						'<a href="' + this.settings.root + "templates_"+doc.topcategory.toLowerCase() +'.html'+'" title="Template" target="' + doc.s_uuid + '">Template</a>'
+						
 				};
 		
 		if (expanded != null) {
@@ -136,7 +135,7 @@
 		else {
 			item.href = item.link || "#";
 			
-			if (!!doc.owner_name && doc.owner_name[0].lastIndexOf("caNano", 0) === 0) {
+			if (!!doc.owner_name && doc.owner_name.lastIndexOf("caNano", 0) === 0) {
 				item.logo = "images/canano.jpg";
 				item.href_title = "caNanoLab: " + item.link;
 				item.href_target = external = "caNanoLab";
@@ -149,7 +148,7 @@
 			}
 			
 			if (doc.content.length > 0) {
-				item.link = doc.content[0];	
+				item.link = doc.content;	
 
 				for (var i = 0, l = doc.content.length; i < l; i++)
 					item.footer += '<a href="' + doc.content[i] + '" target="external">' + (external == null ? "External database" : external) + '</a>';	
@@ -161,15 +160,15 @@
 	
 	ItemListWidget.prototype.renderHeader = function(doc) {
   	var prop = doc[this.settings.summaryProperty],
-  	    substancetype = doc.substanceType != null ? doc.substanceType[0] : null,
-  	    pubname = (doc.publicname || doc.name || [""])[0];
+  	    substancetype = doc.substanceType != null ? doc.substanceType : null,
+  	    pubname = (doc.publicname || doc.name || [""]);
   	
   	if ($.isArray(prop))
   	  prop = prop[0];
   	  
   	substancetype = lookup[substancetype] || substancetype;
     
-    return  pubname + (pubname === doc.name[0] ? "" : "  (" + doc.name[0] + ")") + 
+    return  pubname + (pubname === doc.name ? "" : "  (" + doc.name + ")") + 
             (substancetype == null ? "" : (" " + substancetype + " " + (prop == null ? "" : "[" + prop + "] ")));
 	};
 	
@@ -218,19 +217,20 @@
 					'title': ""
 				};
 				
-		if (!!doc.effectendpoint)	value += (lookup[doc.effectendpoint] || doc.effectendpoint[0]) + " = ";
-		if (!!doc.loValue) value += " " + (doc.loValue[0] || "");
-		if (!!doc.upValue) value += (!doc.loValue ? " " : "…") + (doc.upValue[0] || "");
-		if (!!doc.unit) value += '<span class="units">' + jT.ui.formatUnits(doc.unit[0] || "") + '</span>';
+		if (!!doc.effectendpoint)	value += (lookup[doc.effectendpoint] || doc.effectendpoint) + " (row,column)";
+		if (!!doc.loValue) value += " (" + (doc.loValue || "");
+		if (!!doc.upValue) value += (!doc.loValue ? " " : ",") + (doc.upValue || "") + ")";
+		if (!!doc.unit) value += '<span class="units">' + jT.ui.formatUnits(doc.unit || "") + '</span>';
 		if (!!doc.textValue) value += " " + doc.textValue || "";
 
 		snippet.value = value;
+	
 		if (doc.reference != null) {
-			snippet.link = (doc.reference_year == null) ? "DOI" : "[" + doc.reference_year + "]";
-			snippet.href = doc.reference[0];
-			snippet.title = doc.reference;
+			snippet.link = (doc.reference_year == null) ? "Term" : "[" + doc.reference_year + "]";
+			snippet.href = doc.reference;
+			snippet.title = snippet.link;
 		}
-
+	
 		return snippet;
 	};
 })(jQuery);

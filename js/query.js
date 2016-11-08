@@ -1,21 +1,11 @@
 var Manager, 
 		Basket,
 		Facets = { 
-			'substanceType': 	"substanceType",
-  		'owner_name': 		"owner_name", 
-  		'reference': 			"reference", 
-  		'reference_year': "reference_year",
-  		'protocol': 			"guidance",
-  		'interpretation': "interpretation_result", 
-  		'species': 				"_childDocuments_.params.Species", 
-  		'cell': 					"_childDocuments_.params.Cell_line", 
-  		'instruments': 		"_childDocuments_.params.DATA_GATHERING_INSTRUMENTS",
-  		/*
-  		'testtype': '_childDocuments_.conditions.Test_type',
-			'solvent' :	'_childDocuments_.conditions.Solvent',
-			'route':	'_childDocuments_.params.Route_of_administration',
-			'genotoxicity':	'_childDocuments_.params.Type_of_genotoxicity'
-			*/
+  		'name': "s_uuid" ,
+  		'topcategory' : 'module',
+  		'endpointcategory' : 'endpoint',
+  		'parameter' : 'cleanedvalue'
+
   	},
     Colors = {
       "endpointcategory": "blue",
@@ -25,13 +15,9 @@ var Manager,
 (function($) {
 	$(function() {
   	Settings = {
-			//this is now updated wih cananolab index
-//       solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
-			// this has cananolab index
-     solrUrl : 'https://solr.ideaconsult.net/solr/enm_shard1_replica1/',
- //      solrUrl: 'https://solr.ideaconsult.net/solr/ambitlri_shard1_replica1/',
-			root : "https://data.enanomapper.net/substance/",
-			summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE"
+     solrUrl : 'http://localhost:8983/solr/templates_shard1_replica1/',
+			root : "http://ambit.sf.net/enanomapper/templates/",
+			summaryProperty: null
 		};
 		Manager = new AjaxSolr.Manager(Settings);
 		
@@ -122,7 +108,7 @@ var Manager,
 			}));
 		});
 		
-		// ... add the mighty pivot widget.
+		/*
 		Manager.addWidget(new AjaxSolr.PivotWidget({
 			id : "studies",
 			target : $(".after_topcategory"),
@@ -131,7 +117,7 @@ var Manager,
 			renderTag: renderTag,
 			tabsRefresher: getTabsRefresher 
 		}));
-		
+		*/
     // ... And finally the current-selection one, and ...
 		Manager.addWidget(new AjaxSolr.CurrentSearchWidget({
 			id : 'currentsearch',
@@ -145,9 +131,6 @@ var Manager,
 			id : 'text',
 			target : $('#search'),
 			fields : [ 
-			    'substanceType', 'effectendpoint', 'endpointcategory',
-					'name', 'guidance', 'interpretation_result',
-					'_childDocuments_.params.Species','_childDocuments_.params.Cell_line', 'reference',
 					'_text_' ]
 		}));
 		
@@ -186,34 +169,14 @@ var Manager,
 			'facet.field' : ['unit'],
 			'facet.limit' : -1,
 			'facet.mincount' : 1,
-			'f._childDocuments_.params.Cell_line.facet.mincount' : 1,
-			'f.interpretation_result.facet.mincount' : 2,
-			'f.reference.facet.mincount' : 2,
-			'f.owner_name.facet.mincount' : 3,
-			'f.reference_year.facet.mincount' : 1,
-			'f.substanceType.facet.mincount' : 2,
-			'f.guidance.facet.mincount' : 2,
-			'f.interpretation_result.facet.mincount' : 10,
-			// 'f.topcategory.facet.limit': 50,
-			// 'f.countryCodes.facet.limit': -1,
-			// 'facet.date': 'date',
-			// 'facet.date.start': '1987-02-26T00:00:00.000Z/DAY',
-			// 'facet.date.end': '1987-10-20T00:00:00.000Z/DAY+1DAY',
-			// 'facet.date.gap': '+1DAY',
-			'f.endpointcategory.facet.limit' : -1,
-			'f.substanceType.facet.limit' : -1,
-			'f.s_uuid.facet.limit' : -1,
-			'f.doc_uuid.facet.limit' : -1,
-			'f.e_hash.facet.limit' : -1,
       // https://cwiki.apache.org/confluence/display/solr/Collapse+and+Expand+Results
 			'fq' : "{!collapse field=s_uuid}",
-			'fl' : 'id,type_s,s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY',
-// 			'fl' : "id,type_s,s_uuid,doc_uuid,loValue,upValue,topcategory,endpointcategory,effectendpoint,unit,guidance,substanceType,name,publicname,reference,reference_owner,e_hash,err,interpretation_result,textValue,reference_year,content,owner_name",
+			'fl' : 'type_s:"study",s_uuid,name:File,doc_uuid:id,topcategory:module,endpointcategory:endpoint,guidance:Annotation,publicname:s_uuid,reference:term_uri,reference_owner:term_score,reference_year:term_label,content:"",owner_name:s_uuid,loValue:Row,upValue:Column,owner_name:"Templates",substanceType:module,effectendpoint:cleanedvalue,interpretation_result:"",unit:unit',
 			'stats': true,			
 			'json.nl' : "map",
 			'rows' : 20,
 			'expand' : true,
-			'expand.rows' : 3
+			'expand.rows' : 60
 		};
 		
 		for ( var name in params)
