@@ -31,14 +31,32 @@
 <script>
 $(document).ready( function () {
     $('#templates').DataTable({
+    	
+    	"pagingType": "full_numbers",
+    	"lengthMenu": [[25,50, 100, 500, -1], [25,50,100, 500, "All"]],
     	data:templates,
 			columns: [
         { data: 'module' , title : 'Module'},
-        { data: 'endpoint', title : 'Endpoint' },
-        { data: 's_uuid', title: 'Assay' },
+        { data: 'endpoint', title : 'Endpoint' ,
+        	"render": function ( data, type, full, meta ) {
+      				return '<a href="https://github.com/enanomapper/nmdataparser/tree/master/enmconvertor/src/site/resources/templates/'+
+      					full.module+'/'+full.endpoint + '" target="bioportal" title="Click for template" target=_template>'+full.endpoint+'</a>';
+    				}
+        	
+        },
+        { data: 's_uuid', title: 'Assay' , sWidth: "15%"},
         { data: 'Value' , title: 'Field'},
-        { data: 'cleanedvalue', title : "Field (cleaned)" },
-        { data: 'unit', title : "Units" }
+        { data: 'cleanedvalue', title : "Field (cleaned)", defaultContent : "WARNING: NOT SET" },
+        { data: 'unit', title : "Units" , defaultContent : "" },
+        { data: 'term_uri', title : "Term (auto)" , defaultContent : "",
+        	"render": function ( data, type, full, meta ) {
+
+        		if (data === undefined) return "";
+        		if (data = "") return "";
+      				return '<a href="'+full.term_uri+'" target="bioportal">'+full.term_label+'</a>';
+    				}
+       	},
+				{ data: 'term_score', title : "Term score" , defaultContent : ""}       	
     	]
     });
 } );
@@ -96,9 +114,8 @@ $(document).ready( function () {
 		</div>
 							
 <div class="row half-bottom cc-fixed">
-<div class="one column">&nbsp;</div>
-<div class="fourteen columns">
-<table id="templates"  width='90%' class="display" width="100%">
+<div class="sixteen columns">
+<table id="templates"  width='90%' class="display row-border" width="100%">
 <thead>
 	
 </thead>	
@@ -107,7 +124,7 @@ $(document).ready( function () {
 </tbody>	
 </table>	
 </div>
-<div class="one column">&nbsp;</div>
+
 </div>
 </div>
 </body>	
