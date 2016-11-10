@@ -31,7 +31,7 @@
 <script>
 $(document).ready( function () {
     $('#templates').DataTable({
-    	
+    	"dom": '<"top"ip>rt<"bottom"flp><"clear">',
     	"pagingType": "full_numbers",
     	"lengthMenu": [[25,50, 100, 500, -1], [25,50,100, 500, "All"]],
     	data:templates,
