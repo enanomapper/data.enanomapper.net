@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!--<![endif]-->
+
+<head>
+<link rel="shortcut icon" type="image/png" href="lib/jasmine-core/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css" href="lib/jasmine-core/jasmine.css">
+
+<script type="text/javascript" src="lib/jasmine-core/jasmine.js"></script>
+<script type="text/javascript" src="lib/jasmine-core/jasmine-html.js"></script>
+<script type="text/javascript" src="lib/jasmine-core/boot.js"></script>
+<script type="text/javascript" src="lib/underscore/underscore-min.js"></script>
+<script type="text/javascript" src="lib/asSys/as-sys.min.js"></script>
+
+<script type="text/javascript" src="../solr-jsx.js"></script>
+<script type="text/javascript">
+  var global = window;
+  function require(a) { 
+    if (a == "underscore" || a == "_")
+      return _;
+    else if (a == "asSys" || a == "a$")
+      return asSys;
+    else
+      return Solr;
+  }
+</script>
+<script type="text/javascript" src="SolrJsXSpec.js"></script>
+</head>
+<html>
+</html>

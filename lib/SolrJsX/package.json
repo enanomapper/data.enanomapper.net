@@ -1,0 +1,70 @@
+{
+  "name": "solr-jsx",
+  "version": "0.9.0",
+  "description": "A lightweight, JavaScript engine for building Solr requests",
+  "keywords": [
+    "solr",
+    "requests",
+    "extensible",
+    "flexible"
+  ],
+  "homepage": "http://jonan.info/SolrJsX/",
+  "license": "MIT",
+  "author": [
+    {
+      "name": "Ivan (Jonan) Georgiev",
+      "homepage": "http://jonan.info/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thejonan/SolrJsX"
+  },
+  "main": "solr-jsx.js",
+  "browser": "solr-jsx-full.js",
+  "jspm": {
+    "main": "solr-jsx.js",
+    "shim": {
+      "solr-jsx": {
+        "exports": "Solr"
+      }
+    },
+    "files": [
+      "src/Core.js",
+      "src/Management.js",
+      "src/Configuring.js",
+      "src/Compatibility.js",
+      "src/QueryingURL.js",
+      "src/QueryingJson.js",
+      "src/Persistency.js",
+      "src/Texting.js",
+      "src/Paging.js",
+      "src/Faceting.js"
+    ],
+    "buildConfig": {
+      "uglify": true
+    }
+  },
+  "spm": {
+    "main": "solr-jsx.js"
+  },
+  "devDependencies": {
+    "uglify-js": "latest",
+    "jasmine-node": "latest",
+    "jasmine-core": "latest",
+    "underscore": "latest",
+    "smash": "latest"
+  },
+  "scripts": {
+    "preinstall": "npm install https://github.com/thejonan/asSys.js.git",
+    "preupdate": "npm update https://github.com/thejonan/asSys.js.git",
+    
+    "pretest": "rm -f solr-jsx.* && export VERSION=`node -e 'console.log(require(\"./package.json\").version)'` && sed -E -e s/{{VERSION}}/$VERSION/ src/Core.js > src/start.js && smash src/start.js > solr-jsx.js && rm -rf src/start.js",
+    "test": "jasmine-node test && uglifyjs -nc -mt < solr-jsx.js > solr-jsx.min.js && npm run-script widgets",
+    "posttest": "mkdir -p test/lib/jasmine-core && cp -f node_modules/jasmine-core/lib/jasmine-core/*.js test/lib/jasmine-core && cp -f node_modules/jasmine-core/lib/jasmine-core/*.css test/lib/jasmine-core && mkdir -p test/lib/underscore && cp -f node_modules/underscore/*.js test/lib/underscore && mkdir -p test/lib/asSys && cp -f node_modules/as-sys/*.js test/lib/asSys",
+    
+    "widgets": "smash widgets/*.js > solr-jsx.widgets.js && uglifyjs -nc -mt < solr-jsx.widgets.js > solr-jsx.widgets.min.js",
+    "prepublish": "npm test && chmod a-w solr-jsx.*.js && zip solr-jsx.zip LICENSE solr-jsx.*.js",
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" ${VERSION} && git push --tags"
+  }
+}
