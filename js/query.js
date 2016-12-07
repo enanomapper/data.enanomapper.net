@@ -35,7 +35,9 @@ var Manager,
 (function(Solr, a$, $, jT) {
 	$(function() {
   	Settings = {
-       			solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+	//       			solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+	//this is test server only    
+   			solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
 			root : "https://data.enanomapper.net/substance/",
 			summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
 			servlet: "autophrase",
