@@ -197,7 +197,7 @@ jT.CurrentSearchWidgeting.prototype = {
   
   rangePresent: function (index, field, value) {
     var self = this;
-    return function () {
+    return function (e) {
       var pivots = PivotWidget.locatePivots(field, value, PivotWidget.unitField),
           // build a counter map of found pivots.
           pivotMap = (function() {
@@ -325,6 +325,8 @@ jT.CurrentSearchWidgeting.prototype = {
       	});
       }
       
+      e.stopPropagation();
+      e.preventDefault();
       return false;
     };
   }
