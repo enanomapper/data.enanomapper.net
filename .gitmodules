@@ -4,3 +4,6 @@
 [submodule "lib/SolrJsX"]
 	path = lib/SolrJsX
 	url = https://github.com/thejonan/SolrJsX
+[submodule "lib/jToxKit"]
+	path = lib/jToxKit
+	url = git@github.com:ideaconsult/jToxKit.git
