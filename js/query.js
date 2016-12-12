@@ -52,12 +52,12 @@ var Manager,
           settings.type = settings.method = 'POST';
         }
         else {
-          settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json&json.wrf=?"; 
+          settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
         }
       }
 		},
 		
-		SolrManager = a$(Solr.Management, Solr.Configuring, Solr.QueryingURL),
+		SolrManager = a$(Solr.Management, Solr.Configuring, Solr.QueryingJson),
 		Manager = new SolrManager(Settings);
 		
     Manager.addListeners(new jT.ResultWidget({
