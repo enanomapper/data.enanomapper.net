@@ -57,8 +57,8 @@ var Manager,
       }
 		};
 		
-		Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson))(Settings);
-		
+		Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Consumption, jT.RawSolrTranslation))(Settings);
+
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
 			target : $('#docs'),
@@ -131,7 +131,7 @@ var Manager,
 			}
 			
     	me.addClass(f.color = col || f.color);
-			Manager.addListeners(new jT.TagWidget($.extend({
+		Manager.addConsumers(new jT.TagWidget($.extend({
 				id : fid,
 				target : me,
 				header: hdr,
@@ -139,8 +139,9 @@ var Manager,
 				aggregate: true,
 				exclusion: true,
 				renderTag: renderTag
-			}, f)));
+			}, f)) ,fid);
 		});
+
 		
 		// ... add the mighty pivot widget.
 		Manager.addListeners(PivotWidget = new jT.PivotWidget({
@@ -199,7 +200,7 @@ var Manager,
 				if (!!(s = ccLib.modifyURL(window.location.href, "basket", s)))
 					window.history.pushState({ query : window.location.search }, document.title, s);
 							
-        if (resItem.length > 0)
+       		if (resItem.length > 0)
 				  $("footer", resItem[0]).toggleClass("add none");
 			},
 			onCreated: function (doc) {
