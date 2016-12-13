@@ -5,17 +5,15 @@ jT.TagWidgeting = function (settings) {
 };
 
 jT.TagWidgeting.prototype = {
-  __expects: [ "hasValue", "clickHandler" ],
+  __expects: [ "hasValue", "clickHandler", "getFacetCounts" ],
 
   afterRequest: function () {
     a$.pass(this, jT.TagWidgeting, 'afterRequest');
+    var facet_counts = this.manager.response.facet_counts;
+    // TODO: Use these, perhaps, from the tranlated, JSON Facet API based responses.
+//     var facet_counts = this.manager.response.facets; 
       
-    if (this.manager.response.facet_counts.facet_fields[this.field] === undefined) {
-      this.target.html('no items found in current selection');
-      return;
-    }
-
-    var objectedItems = [], 
+    var objectedItems = this.getFacetCounts(facet_counts), 
     		facet = null, 
     		total = 0,
     		hdr = getHeaderText(this.header),
@@ -23,25 +21,24 @@ jT.TagWidgeting.prototype = {
     		nullf = function (e) { return false; },
     		el, selected;
         
-    for (var facet in this.manager.response.facet_counts.facet_fields[this.field]) {
-      var count = parseInt(this.manager.response.facet_counts.facet_fields[this.field][facet]);
-
-      objectedItems.push({ facet: facet, count: count });
-      total += count;
-    }
     objectedItems.sort(function (a, b) {
-      return a.facet < b.facet ? -1 : 1;
+      return a.val < b.val ? -1 : 1;
     });
-
-    this.target.empty();
-    for (var i = 0, l = objectedItems.length; i < l; i++) {
-      facet = objectedItems[i].facet;
-      selected = this.hasValue(facet);
-      
-      this.target.append(el = this.renderTag(facet, objectedItems[i].count, selected ? nullf : this.clickHandler(facet)));
-      
-      if (selected)
-        el.addClass("selected");
+    
+    if (objectedItems.length == 0)
+      this.target.html('no items found in current selection');
+    else {
+      this.target.empty();
+      for (var i = 0, l = objectedItems.length; i < l; i++) {
+        facet = objectedItems[i];
+        selected = this.hasValue(facet.val);
+        total += facet.count;
+        
+        this.target.append(el = this.renderTag(facet.val.toString(), facet.count, selected ? nullf : this.clickHandler(facet.val)));
+        
+        if (selected)
+          el.addClass("selected");
+      }
     }
       
     hdr.textContent = jT.ui.updateCounter(hdr.textContent, total);

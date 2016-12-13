@@ -253,8 +253,9 @@ jT.CurrentSearchWidgeting.prototype = {
             });
             
             path.reverse();
+            var over_stats = a$.path(PivotWidget.overallStatistics, path) || { loValue: { min: 0, max: 100 } };
             
-            return a$.extend(rng, { 'context': ctx }, pivot.stats.stats_fields.loValue, { overall: a$.path(PivotWidget.overallStatistics, path).loValue });
+            return a$.extend(rng, { 'context': ctx }, pivot.stats.stats_fields.loValue, { overall: over_stats.loValue });
           };
 
       if ($(this).closest("li").hasClass("active")) {
