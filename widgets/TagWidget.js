@@ -5,7 +5,6 @@ jT.TagWidgeting = function (settings) {
 };
 
 jT.TagWidgeting.prototype = {
-  __depends: [ Solr.Faceting ],
   __expects: [ "hasValue", "clickHandler" ],
 
   afterRequest: function () {
@@ -51,6 +50,6 @@ jT.TagWidgeting.prototype = {
   }
 };
 
-jT.TagWidget = a$(jT.TagWidgeting);
+jT.TagWidget = a$(jT.TagWidgeting, Solr.Faceting);
 
 })(Solr, asSys, jQuery, jToxKit);

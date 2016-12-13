@@ -1,9 +1,12 @@
 [submodule "lib/asSys"]
 	path = lib/asSys
 	url = https://github.com/thejonan/asSys.js
+	branch = development
 [submodule "lib/SolrJsX"]
 	path = lib/SolrJsX
 	url = https://github.com/thejonan/SolrJsX
+	branch = development
 [submodule "lib/jToxKit"]
 	path = lib/jToxKit
 	url = git@github.com:ideaconsult/jToxKit.git
+	branch = development

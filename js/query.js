@@ -34,10 +34,10 @@ var Manager,
 
 (function(Solr, a$, $, jT) {
 	$(function() {
-  	Settings = {
+  	var Settings = {
 	//       			solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
 	//this is test server only    
-   			solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+   	  solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
 			root : "https://data.enanomapper.net/substance/",
 			summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
 			servlet: "autophrase",
@@ -55,10 +55,9 @@ var Manager,
           settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
         }
       }
-		},
+		};
 		
-		SolrManager = a$(Solr.Management, Solr.Configuring, Solr.QueryingJson),
-		Manager = new SolrManager(Settings);
+		Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson))(Settings);
 		
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
