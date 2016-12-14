@@ -35,29 +35,29 @@ var Manager,
 (function(Solr, a$, $, jT) {
 	$(function() {
   	var Settings = {
-	//       			solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+	//solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
 	//this is test server only    
-   	  solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
-			root : "https://data.enanomapper.net/substance/",
-			summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
-			servlet: "autophrase",
-      parameters: Parameters,
-      connector: $,
-      onPrepare: function (settings) {
-        var qidx = settings.url.indexOf("?");
-        
-        if (this.proxyUrl) {
-          settings.data = { query: settings.url.substr(qidx + 1) };
-          settings.url = this.proxyUrl;
-          settings.type = settings.method = 'POST';
-        }
-        else {
-          settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
-        }
-      }
-		};
+		solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+		root : "https://data.enanomapper.net/substance/",
+		summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
+		servlet: "autophrase",
+		parameters: Parameters,
+		connector: $,
+		onPrepare: function (settings) {
+			var qidx = settings.url.indexOf("?");
+
+			if (this.proxyUrl) {
+				settings.data = { query: settings.url.substr(qidx + 1) };
+				settings.url = this.proxyUrl;
+				settings.type = settings.method = 'POST';
+			}
+			else {
+				settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
+			}
+		}
+		},
 		
-		Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Consumption, jT.RawSolrTranslation))(Settings);
+	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingURL, jT.Consumption, jT.RawSolrTranslation))(Settings);
 
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',

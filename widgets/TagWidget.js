@@ -5,15 +5,12 @@ jT.TagWidgeting = function (settings) {
 };
 
 jT.TagWidgeting.prototype = {
-  __expects: [ "hasValue", "clickHandler", "getFacetCounts" ],
+  __expects: [ "hasValue", "clickHandler", "getFacetCounts", ],
 
-  afterRequest: function () {
-    a$.pass(this, jT.TagWidgeting, 'afterRequest');
-    var facet_counts = this.manager.response.facet_counts;
-    // TODO: Use these, perhaps, from the tranlated, JSON Facet API based responses.
-//     var facet_counts = this.manager.response.facets; 
-      
-    var objectedItems = this.getFacetCounts(facet_counts), 
+  afterTranslation: function (data) {
+    a$.pass(this, jT.TagWidgeting, 'afterTranslation'); 
+    var facet_counts = data.facet,
+        objectedItems = this.getFacetCounts(facet_counts), 
     		facet = null, 
     		total = 0,
     		hdr = getHeaderText(this.header),
