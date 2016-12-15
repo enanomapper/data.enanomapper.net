@@ -57,7 +57,7 @@ var Manager,
 		}
 		},
 		
-	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingURL, jT.Consumption, jT.RawSolrTranslation))(Settings);
+	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Consumption, jT.RawSolrTranslation))(Settings);
 
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
@@ -129,37 +129,42 @@ var Manager,
 				console.log("Referred a missing wisget: " + fid);
 				return;
 			}
+    		me.addClass(f.color = col || f.color);
 			
-    	me.addClass(f.color = col || f.color);
-		Manager.addConsumers(new jT.TagWidget($.extend({
+			var tagWidget = new jT.TagWidget($.extend({
 				id : fid,
 				target : me,
 				header: hdr,
 				multivalue: true,
 				aggregate: true,
 				exclusion: true,
+				useJson: false,
 				renderTag: renderTag
-			}, f)) ,fid);
+			}, f));
+
+			Manager.addConsumers( tagWidget, fid );
+			Manager.addListeners( tagWidget );
 		});
+
 
 		
 		// ... add the mighty pivot widget.
-		Manager.addListeners(PivotWidget = new jT.PivotWidget({
+		Manager.addConsumers(PivotWidget = new jT.PivotWidget({
 			id : "studies",
 			target : $(".after_topcategory"),
 
 			pivotFields: [ "topcategory", "endpointcategory", "effectendpoint", "unit" ],
-      facetFields: { endpointcategory: { color: "blue" }, effectendpoint: { color: "green" } },
-      endpointField: "effectendpoint",
-      unitField: "unit",
-      statField: "loValue",
+			facetFields: { endpointcategory: { color: "blue" }, effectendpoint: { color: "green" } },
+			endpointField: "effectendpoint",
+			unitField: "unit",
+			statField: "loValue",
 			
 			multivalue: true,
 			aggregate: true,
 			exclusion: true,
 			renderTag: renderTag,
 			tabsRefresher: getTabsRefresher 
-		}));
+		}), "studies" );
 		
     // ... And finally the current-selection one, and ...
 		Manager.addListeners(new jT.CurrentSearchWidget({

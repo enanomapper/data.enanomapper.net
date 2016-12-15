@@ -84,9 +84,9 @@
   		});
 		},
     
-		afterRequest : function() {
+		afterTranslation : function(data) {
 			var self = this,
-					root = this.manager.response.facet_counts.facet_pivot[self.pivotFields],
+					root = data.facets.facet_pivot[self.pivotFields],
 					refresh = this.target.data("refreshPanel");
 					
 			if (root === undefined) {
@@ -145,7 +145,7 @@
 		},
 		
 		locatePivots: function (field, value, deep) {
-  	  var pivots = [],
+  	  		var pivots = [],
   	      searchLevel = function (list, found) {
     	      if (!list || !list.length) return;
     	      for (var i = 0, ll = list.length, e; i < ll; ++i) {
@@ -163,8 +163,8 @@
     	      }
   	      };
       
-      searchLevel(this.manager.response.facet_counts.facet_pivot[this.pivotFields]);
-      return pivots;
+			searchLevel(this.manager.response.facet_counts.facet_pivot[this.pivotFields]);
+			return pivots;
 		}		
 	};
 	
