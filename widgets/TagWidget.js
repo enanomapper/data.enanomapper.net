@@ -6,11 +6,11 @@ jT.TagWidgeting = function (settings) {
 
 jT.TagWidgeting.prototype = {
   __expects: [ "hasValue", "clickHandler", "getFacetCounts", ],
-
   afterTranslation: function (data) {
     a$.pass(this, jT.TagWidgeting, 'afterTranslation'); 
-    var facet_counts = data.facet,
-        objectedItems = this.getFacetCounts(facet_counts), 
+
+    // this.manager.addListeners(this);
+    var objectedItems = this.getFacetCounts(data.facets), 
     		facet = null, 
     		total = 0,
     		hdr = getHeaderText(this.header),
