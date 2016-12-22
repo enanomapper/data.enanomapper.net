@@ -59,13 +59,13 @@ var Manager,
 		
 	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Consumption, jT.RawSolrTranslation))(Settings);
 
-    Manager.addListeners(new jT.ResultWidget({
+    Manager.addConsumers(new jT.ResultWidget({
 			id : 'result',
 			target : $('#docs'),
 			settings : Settings,
 			onClick : function (e, doc, exp, widget) { 
 				if (!Basket.findItem(doc)) {
-					Basket.addItem(doc, exp);
+					Basket.addItem(doc);
 					var s = "", jel = $('a[href="#basket_tab"]');
 					
 					jel.html(jT.ui.updateCounter(jel.html(), Basket.length));
@@ -80,7 +80,7 @@ var Manager,
 			onCreated : function (doc) {
 				$("footer", this).addClass("add");
 			}
-		}));
+		}), 'result');
 
     Manager.addListeners(new (a$(Solr.Widgets.Pager))({
 			id : 'pager',
@@ -167,11 +167,13 @@ var Manager,
 		}), "studies" );
 		
     // ... And finally the current-selection one, and ...
-		Manager.addListeners(new jT.CurrentSearchWidget({
+    	var currentsearch = new jT.CurrentSearchWidget({
 			id : 'currentsearch',
 			target : $('#selection'),
 			renderTag : renderTag,
-		}));
+		});
+		Manager.addConsumers(currentsearch, 'currentsearch');
+		Manager.addListeners(currentsearch);
 
 		// ... auto-completed text-search.
 		Manager.addListeners(new jT.AutocompleteWidget({
@@ -189,7 +191,7 @@ var Manager,
 			id : 'basket',
 			target : $('#basket-docs'),
 			settings : Settings,
-			onClick : function (e, doc, exp) {
+			onClick : function (e, doc) {
 				if (Basket.eraseItem(doc.s_uuid) === false) {
 					console.log("Trying to remove from basket an inexistent entry: " + JSON.stringify(doc));
 					return;

@@ -4,25 +4,24 @@
 		this.clearItems();
 	};
 
-	jT.ItemListWidget.prototype.populate = function (docs, expanded, callback) {
+	jT.ItemListWidget.prototype.populate = function (docs, callback) {
 		$(this.target).empty();
-		this.itemData = { 'docs': docs, 'expanded': expanded };
+		this.itemData = { 'docs': docs };
 		this.length = docs.length;
 		
 		for (var i = 0, l = docs.length; i < l; i++)
-			this.pushItem(docs[i], expanded[docs[i].s_uuid]);
+			this.pushItem(docs[i]);
 	};
 	
-	jT.ItemListWidget.prototype.addItem = function (doc, exp) {
+	jT.ItemListWidget.prototype.addItem = function (doc) {
 		this.itemData.docs.push(doc);
-		this.itemData.expanded[doc.s_uuid] = exp;
 		this.length++;
-		return this.pushItem(doc, exp);
+		return this.pushItem(doc);
 	};
 	
 	jT.ItemListWidget.prototype.clearItems = function () {
 		$(this.target).empty();
-		this.itemData = { 'docs': [], 'expanded': { } }
+		this.itemData = { 'docs': [] }
 		this.length = 0;
 	};
 
@@ -32,7 +31,7 @@
 			this.itemData.docs.indexOf(doc_uuid) >= 0;
 	};
 	
-	jT.ItemListWidget.prototype.pushItem = function (doc, exp) {
+	jT.ItemListWidget.prototype.pushItem = function (doc) {
 		var self = this,
 				el = $(this.renderSubstance(doc));
 				
@@ -40,7 +39,7 @@
 
 		$(this.target).append(el);
 		if (typeof this.onClick === "function")
-			$("a.command", el[0]).on("click", function (e) { self.onClick.call(el[0], e, doc, exp, self); });
+			$("a.command", el[0]).on("click", function (e) { self.onClick.call(el[0], e, doc, self); });
 			
 		if (typeof this.onCreated === 'function')
 			this.onCreated.call(el, doc, this);
@@ -73,8 +72,6 @@
 				break;
 				
 		if (i >= l) return false;
-		
-		delete this.itemData.expanded[uuid];
 		this.length--;
 		return this.itemData.docs.splice(i, 1)[0];
 	};
@@ -91,8 +88,7 @@
 	jT.ItemListWidget.prototype.renderSubstance = function(doc) {
 		if (doc.type_s != 'study') return;
 		
-		var expanded = this.itemData.expanded[doc.s_uuid],
-				external = null,
+			var external = null,
 				sniphtml = $("#study-item").html(),
 				snippets = [this.renderMeasurement(doc)],
 				item = { 
@@ -107,15 +103,6 @@
 						'<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">Composition</a>' +
 						'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Study</a>'
 				};
-		
-		if (expanded != null) {
-			for (var i = 0, l = expanded.docs.length; i < l; i++)
-				snippets.push(this.renderMeasurement(expanded.docs[i]));
-				
-			snippets.sort(function (a, b) {
-				return a.category < b.category ? -1 : (a.category > b.category ? 1 : (a.value < b.value ? -1 : (a.value > b.value ? 1 : 0)));
-			});
-		}
 
 		item.snippet = ccLib.formatString(sniphtml, snippets[0]);
 		if (snippets.length > 1) {

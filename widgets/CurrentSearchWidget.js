@@ -87,7 +87,7 @@ jT.CurrentSearchWidgeting.prototype = {
     });
   },
   
-  afterRequest: function () {
+  afterTranslation: function (data) {
     var self = this, el, f, fk, fv, pv,
         links = [],
         q = this.manager.getParameter('q');

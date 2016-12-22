@@ -18,9 +18,9 @@ jT.ResultWidgeting.prototype = {
 				$('<img>').attr('src', 'images/ajax-loader.gif'));
 	},
 
-	afterRequest : function() {
+	afterTranslation : function(data) {
 		$(this.target).empty();
-		this.populate(this.manager.response.response.docs, this.manager.response.expanded);
+		this.populate(data.entries);
 	}
 };
 
