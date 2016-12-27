@@ -86,7 +86,7 @@
     
 		afterTranslation : function(data) {
 			var self = this,
-					root = data.facets.facet_pivot[self.pivotFields],
+					root = data.pivots[self.pivotFields],
 					refresh = this.target.data("refreshPanel");
 					
 			if (root === undefined) {

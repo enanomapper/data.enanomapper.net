@@ -8,7 +8,6 @@
 		$(this.target).empty();
 		this.itemData = { 'docs': docs };
 		this.length = docs.length;
-		
 		for (var i = 0, l = docs.length; i < l; i++)
 			this.pushItem(docs[i]);
 	};
