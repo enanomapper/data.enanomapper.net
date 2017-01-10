@@ -1,16 +1,28 @@
 (function (Solr, a$, $, jT) {
 
+// Keep in mind that the field should be the same in all entries.
+var defaultRules = {
+  "study": { field: "type_s", parent: "substance", limit: 100 },
+  "composition": { field: "type_s", parent: "substance", limit: 100 }
+};
+
 jT.ResultWidgeting = function (settings) {
-  a$.extend(this, settings);
+  this.nestingRules = a$.extend(true, {}, defaultRules, settings && settings.nestingRules);
 };
 
 jT.ResultWidgeting.prototype = {
-  __depends: [ jT.ItemListWidget ],
   __expects: [ "populate" ],
 
   init: function (manager) {
     a$.pass(this, jT.ResultWidgeting, 'init', manager);
     this.manager = manager;
+    
+    a$.each(this.nestingRules, function (r, i) {
+      manager.addParameter('fl', 
+        "[child parentFilter=" + r.field + ":" + r.parent 
+        + " childFilter=" + r.field + ":" + i 
+        + " limit=" + r.limit + "]");
+    });
   },
   
 	beforeRequest : function() {
@@ -24,6 +36,6 @@ jT.ResultWidgeting.prototype = {
 	}
 };
 
-jT.ResultWidget = a$(jT.ResultWidgeting);
+jT.ResultWidget = a$(jT.ItemListWidget, jT.ResultWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);

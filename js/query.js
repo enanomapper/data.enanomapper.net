@@ -37,7 +37,8 @@ var Manager,
   	var Settings = {
 	//solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
 	//this is test server only    
-		solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+		solrUrl : 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+// 		solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
 		root : "https://data.enanomapper.net/substance/",
 		summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
 		servlet: "autophrase",
@@ -57,9 +58,9 @@ var Manager,
 		}
 		},
 		
-	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Consumption, jT.RawSolrTranslation))(Settings);
+	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings);
 
-    Manager.addConsumers(new jT.ResultWidget({
+    Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
 			target : $('#docs'),
 			settings : Settings,
@@ -131,7 +132,7 @@ var Manager,
 			}
     		me.addClass(f.color = col || f.color);
 			
-			var tagWidget = new jT.TagWidget($.extend({
+			Manager.addListeners(new jT.TagWidget($.extend({
 				id : fid,
 				target : me,
 				header: hdr,
@@ -140,16 +141,13 @@ var Manager,
 				exclusion: true,
 				useJson: false,
 				renderTag: renderTag
-			}, f));
-
-			Manager.addConsumers( tagWidget, fid );
-			Manager.addListeners( tagWidget );
+			}, f)));
 		});
 
 
 		
 		// ... add the mighty pivot widget.
-		Manager.addConsumers(PivotWidget = new jT.PivotWidget({
+		Manager.addListeners(PivotWidget = new jT.PivotWidget({
 			id : "studies",
 			target : $(".after_topcategory"),
 
@@ -167,13 +165,11 @@ var Manager,
 		}), "studies" );
 		
     // ... And finally the current-selection one, and ...
-    	var currentsearch = new jT.CurrentSearchWidget({
+    Manager.addListeners(new jT.CurrentSearchWidget({
 			id : 'currentsearch',
 			target : $('#selection'),
 			renderTag : renderTag,
-		});
-		Manager.addConsumers(currentsearch, 'currentsearch');
-		Manager.addListeners(currentsearch);
+		}));
 
 		// ... auto-completed text-search.
 		Manager.addListeners(new jT.AutocompleteWidget({
