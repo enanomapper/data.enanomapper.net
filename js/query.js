@@ -1,16 +1,12 @@
 var Manager, 
 		Basket,
+    // https://cwiki.apache.org/confluence/display/solr/Collapse+and+Expand+Results
   	Parameters = {
 			'facet.limit' : -1,
 			'facet.mincount' : 1,
 // 			'echoParams': "none", // enable this for release versions.
-      // https://cwiki.apache.org/confluence/display/solr/Collapse+and+Expand+Results
-			'fq' : "{!collapse field=s_uuid}",
-			'fl' : 'id,type_s,s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY',
-// 			'fl' : "id,type_s,s_uuid,doc_uuid,loValue,upValue,topcategory,endpointcategory,effectendpoint,unit,guidance,substanceType,name,publicname,reference,reference_owner,e_hash,err,interpretation_result,textValue,reference_year,content,owner_name",
+			'fl' : "id",
 			'json.nl' : "map",
-			'expand' : true,
-			'expand.rows' : 3,
 			'q.alt': "*:*",
 		},
 		Facets = { 
@@ -81,7 +77,7 @@ var Manager,
 			onCreated : function (doc) {
 				$("footer", this).addClass("add");
 			}
-		}), 'result');
+		}));
 
     Manager.addListeners(new (a$(Solr.Widgets.Pager))({
 			id : 'pager',
@@ -99,6 +95,7 @@ var Manager,
 			}
 		}));
 
+/*
 		var fel = $("#tag-section").html();
         renderTag = function (facet, count, hint, handler) {
           var view = facet = facet.replace(/^\"(.+)\"$/, "$1");
@@ -143,10 +140,12 @@ var Manager,
 				renderTag: renderTag
 			}, f)));
 		});
+*/
 
 
 		
 		// ... add the mighty pivot widget.
+/*
 		Manager.addListeners(PivotWidget = new jT.PivotWidget({
 			id : "studies",
 			target : $(".after_topcategory"),
@@ -162,7 +161,7 @@ var Manager,
 			exclusion: true,
 			renderTag: renderTag,
 			tabsRefresher: getTabsRefresher 
-		}), "studies" );
+		}));
 		
     // ... And finally the current-selection one, and ...
     Manager.addListeners(new jT.CurrentSearchWidget({
@@ -170,17 +169,20 @@ var Manager,
 			target : $('#selection'),
 			renderTag : renderTag,
 		}));
-
+*/
 		// ... auto-completed text-search.
-		Manager.addListeners(new jT.AutocompleteWidget({
+		var textWidget = new jT.AutocompleteWidget({
 			id : 'text',
 			target : $('#search'),
+			domain: { type: "parent", which: "type_s:substance" },
 			fields : [ 
 			    'substanceType', 'effectendpoint', 'endpointcategory',
 					'name', 'guidance', 'interpretation_result',
 					'_childDocuments_.params.Species','_childDocuments_.params.Cell_line', 'reference',
 					'_text_' ]
-		}));
+		});
+		
+		Manager.addListeners(textWidget);
 		
 		// Now add the basket.
 		Basket = new jT.ItemListWidget({
@@ -213,13 +215,13 @@ var Manager,
 		
 		Manager.init();
 		
-		// now get the search parameters passed via URL	
-		Manager.addParameter('q', $.url().param('search') || '*:*');
+		// now get the search parameters passed via URL
+		textWidget.set($.url().param('search') || 'name_s:*');
 		Manager.doRequest();
 
-		// Set some general search machanisms
+		// Set some general search machanisms for links among the results / text.
 		$(document).on('click', "a.freetext_selector", function (e) {
-  		Manager.addParameter('q', Solr.escapeValue(this.innerText));
+  		textWidget.set(this.innerText);
   		Manager.doRequest();
 		});
 	});

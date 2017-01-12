@@ -2,12 +2,13 @@
 
 // Keep in mind that the field should be the same in all entries.
 var defaultRules = {
-  "study": { field: "type_s", parent: "substance", limit: 100 },
-  "composition": { field: "type_s", parent: "substance", limit: 100 }
-};
+      "study": { field: "type_s", parent: "substance", limit: 100 },
+      "composition": { field: "type_s", parent: "substance", limit: 100 }
+    },
+    defaultFields = [ "name:name_hs", "publicname:publicname_hs", "owner_name:owner_name_hs", "substanceType:substanceType_hs", "s_uuid:s_uuid_hs" ];
 
 jT.ResultWidgeting = function (settings) {
-  this.nestingRules = a$.extend(true, {}, defaultRules, settings && settings.nestingRules);
+  a$.extend(true, this, settings, { nestingRules: defaultRules });
 };
 
 jT.ResultWidgeting.prototype = {
@@ -23,6 +24,8 @@ jT.ResultWidgeting.prototype = {
         + " childFilter=" + r.field + ":" + i 
         + " limit=" + r.limit + "]");
     });
+
+    a$.each(defaultFields, function (f) { manager.addParameter('fl', f)});    
   },
   
 	beforeRequest : function() {
@@ -36,6 +39,6 @@ jT.ResultWidgeting.prototype = {
 	}
 };
 
-jT.ResultWidget = a$(jT.ItemListWidget, jT.ResultWidgeting);
+jT.ResultWidget = a$(jT.ListWidgeting, jT.ItemListWidget, jT.ResultWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);
