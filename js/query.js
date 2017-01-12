@@ -10,16 +10,16 @@ var Manager,
 			'q.alt': "*:*",
 		},
 		Facets = { 
-			'substanceType': 	{ field: "substanceType", facet: { mincount: 2, limit: -1 } },
-  		'owner_name': 		{ field: "owner_name", facet: { mincount: 3 } }, 
-  		'reference': 			{ field: "reference", facet: { mincount: 2 } }, 
-  		'reference_year': { field: "reference_year", facet: { mincount: 1 } },
-  		'protocol': 			{ field: "guidance", facet: { mincount: 2 } },
-  		'interpretation': { field: "interpretation_result", facet: { mincount: 2 } }, 
+			'substanceType': 	{ field: "substanceType_s", facet: { mincount: 2, limit: -1 } },
+  		'owner_name': 		{ field: "owner_name_s", facet: { mincount: 3 } }, 
+  		'reference': 			{ field: "reference_s", facet: { mincount: 2 } }, 
+//   		'reference_year': { field: "reference_year", facet: { mincount: 1 } },
+  		'protocol': 			{ field: "guidance_s", facet: { mincount: 2 } },
+//   		'interpretation': { field: "interpretation_result", facet: { mincount: 2 } }, 
+/*
   		'species': 				{ field: "_childDocuments_.params.Species" }, 
   		'cell': 					{ field: "_childDocuments_.params.Cell_line", facet: { mincount: 1 } }, 
   		'instruments': 		{ field: "_childDocuments_.params.DATA_GATHERING_INSTRUMENTS" },
-  		/*
   		'testtype': '_childDocuments_.conditions.Test_type',
 			'solvent' :	'_childDocuments_.conditions.Solvent',
 			'route':	'_childDocuments_.params.Route_of_administration',
@@ -95,7 +95,6 @@ var Manager,
 			}
 		}));
 
-/*
 		var fel = $("#tag-section").html();
         renderTag = function (facet, count, hint, handler) {
           var view = facet = facet.replace(/^\"(.+)\"$/, "$1");
@@ -109,7 +108,7 @@ var Manager,
           else if (facet.lastIndexOf("http://dx.doi.org/", 0) == 0)
             view = facet.replace("http://dx.doi.org/", "");
           else
-        	  view = (lookup[facet] || facet).replace("NPO_", "").replace(" nanoparticle", "");
+        	  view = (lookup[facet] || facet).replace(/NPO_|\s+nanoparticle/, "");
           
           return $('<li><a href="#" class="tag" title="' + view + (hint || "") + ((facet != view) ? ' [' + facet + ']' : '') + '">' + view + ' <span>' + (count || 0) + '</span></a></li>')
               .click(handler);
@@ -127,7 +126,7 @@ var Manager,
 				console.log("Referred a missing wisget: " + fid);
 				return;
 			}
-    		me.addClass(f.color = col || f.color);
+      me.addClass(f.color = col || f.color);
 			
 			Manager.addListeners(new jT.TagWidget($.extend({
 				id : fid,
@@ -136,12 +135,12 @@ var Manager,
 				multivalue: true,
 				aggregate: true,
 				exclusion: true,
-				useJson: false,
-				renderTag: renderTag
+				useJson: true,
+				renderTag: renderTag,
+				nestingField: "type_s",
+				domain: { type: "parent", "which": "type_s:substance" }
 			}, f)));
 		});
-*/
-
 
 		
 		// ... add the mighty pivot widget.
@@ -162,14 +161,15 @@ var Manager,
 			renderTag: renderTag,
 			tabsRefresher: getTabsRefresher 
 		}));
+*/
 		
     // ... And finally the current-selection one, and ...
     Manager.addListeners(new jT.CurrentSearchWidget({
 			id : 'currentsearch',
 			target : $('#selection'),
 			renderTag : renderTag,
+			useJson: true
 		}));
-*/
 		// ... auto-completed text-search.
 		var textWidget = new jT.AutocompleteWidget({
 			id : 'text',

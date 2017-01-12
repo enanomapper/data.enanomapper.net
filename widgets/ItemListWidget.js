@@ -119,7 +119,7 @@
 				
 		if (!!doc.effectendpoint_s)	value += lookup[doc.effectendpoint_s] || doc.effectendpoint_s + " = ";
 		if (!!doc.loValue_d) value += " " + doc.loValue_d;
-// 		if (!!doc.upValue) value += (!doc.loValue ? " " : "…") + (doc.upValue[0] || "");
+// 		if (!!doc.upValue_d) value += (!doc.loValue_d ? " " : "&hellip") + (doc.upValue_d || "");
 		if (!!doc.unit_s) value += '<span class="units">' + jT.ui.formatUnits(doc.unit_s) + '</span>';
 		if (!!doc.textValue_s) value += " " + doc.textValue_s;
 

@@ -7,6 +7,7 @@ jT.CurrentSearchWidgeting = function (settings) {
   this.facetWidgets = null;
   this.rangeParameters = [];
   this.rangeFieldRegExp = /loValue:\[\s*([\d\.\-]+)\s+TO\s+([\d\.\-]+)\s*\]/;
+  this.fqName = this.useJson ? "json.filter" : "fq";
 };
 
 jT.CurrentSearchWidgeting.prototype = {
@@ -35,7 +36,7 @@ jT.CurrentSearchWidgeting.prototype = {
   
   tweakAddRangeParam: function (range, values, tag) {
     if (!range.__parameter)
-      range.__parameter = this.manager.addParameter({ 'name': "fq", 'value': "____", 'domain': tag != null ? { 'tag': tag } : undefined } );
+      range.__parameter = this.manager.addParameter({ 'name': this.fqName, 'value': "____", 'domain': tag != null ? { 'tag': tag } : undefined } );
       
     if (values != null)
       range.value = values;
@@ -55,7 +56,7 @@ jT.CurrentSearchWidgeting.prototype = {
   },
   
   filterRangeParameters: function (filter) {
-    var pars = this.manager.getParameter('fq');
+    var pars = this.manager.getParameter(this.fqName);
     for (var i = 0; i < pars.length; ++i) {
       var p = pars[i];
 
@@ -65,7 +66,7 @@ jT.CurrentSearchWidgeting.prototype = {
       if (filter(p))
         continue;
       
-      this.manager.removeParameters('fq', i--);
+      this.manager.removeParameters(this.fqName, i--);
     }
   },
 
@@ -91,7 +92,7 @@ jT.CurrentSearchWidgeting.prototype = {
     var self = this, el, f, fk, fv, pv,
         links = [],
         q = this.manager.getParameter('q');
-        fq = this.manager.getParameter('fq');
+        fq = this.manager.getParameter(this.fqName);
         
     if (self.skipClear) {
       self.skipClear = false;
@@ -165,7 +166,7 @@ jT.CurrentSearchWidgeting.prototype = {
       links.push(self.renderTag("Clear", "", function () {
         q.value = '*:*';
         a$.each(self.facetWidgets, function (w) { w.clearValues(); })
-        self.manager.removeParameters('fq', self.rangeFieldRegExp);
+        self.manager.removeParameters(self.fqName, self.rangeFieldRegExp);
         self.manager.doRequest();
         return false;
       }).addClass('tag_selected tag_clear tag_fixed'));

@@ -6,10 +6,16 @@ jT.TagWidgeting = function (settings) {
 
 jT.TagWidgeting.prototype = {
   __expects: [ "hasValue", "clickHandler", "getFacetCounts", ],
+  init: function (manager) {
+    if (this.nestingField != null)
+      this.facet.domain = a$.extend(this.facet.domain, { blockChildren: this.nestingField + ":substance"} );
+
+    a$.pass(this, jT.TagWidgeting, "init", manager);  
+  },
+  
   afterTranslation: function (data) {
     a$.pass(this, jT.TagWidgeting, 'afterTranslation'); 
 
-    // this.manager.addListeners(this);
     var objectedItems = this.getFacetCounts(data.facets), 
     		facet = null, 
     		total = 0,
