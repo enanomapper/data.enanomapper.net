@@ -2,74 +2,16 @@
 
 jT.CurrentSearchWidgeting = function (settings) {
   a$.extend(true, this, settings);
+  
+  this.widgets = [];
   this.manager = null;
   this.skipClear = false;
   this.facetWidgets = null;
   this.rangeParameters = [];
-  this.rangeFieldRegExp = /loValue:\[\s*([\d\.\-]+)\s+TO\s+([\d\.\-]+)\s*\]/;
   this.fqName = this.useJson ? "json.filter" : "fq";
 };
 
 jT.CurrentSearchWidgeting.prototype = {
-
-  getRangeFromParam: function (par) {
-    var pval = par.value,
-        m = pval.match(this.rangeFieldRegExp),
-        range = null;
-
-    if (!m)
-      return null;
-      
-    var range = { '__parameter': par, 'value': [ parseFloat(m[1]), parseFloat(m[2]) ], 'context': {} },
-        sarr = pval.replace(m[0], "").replace(/\s+AND\s*\)|^\s*-?\(?\s*$|\)\s*$/, "").split(/\s+AND\s+/);
-        
-    for (var i = 0;i < sarr.length; ++i) {
-      var mm = sarr[i].match(/(\w+):(.+)/);
-      if (!mm)
-        continue;
-        
-      range.context[mm[1]] = mm[2].replace(/^"|"$/, "");
-    }
-
-    return range;
-  },
-  
-  tweakAddRangeParam: function (range, values, tag) {
-    if (!range.__parameter)
-      range.__parameter = this.manager.addParameter({ 'name': this.fqName, 'value': "____", 'domain': tag != null ? { 'tag': tag } : undefined } );
-      
-    if (values != null)
-      range.value = values;
-      
-    var vals = [],
-        rngVal = "loValue:[" + range.value.join(" TO ") + "]";
-        
-    for (var f in range.context)
-      vals.push(f + ":" + Solr.escapeValue(range.context[f]));
-      
-    if (vals.length > 0) {
-      vals.push("-" + rngVal);  
-      range.__parameter.value = "-(" + vals.join(" AND ") + ")";
-    }
-    else
-      range.__parameter.value = rngVal;
-  },
-  
-  filterRangeParameters: function (filter) {
-    var pars = this.manager.getParameter(this.fqName);
-    for (var i = 0; i < pars.length; ++i) {
-      var p = pars[i];
-
-      if (!p.value.match(this.rangeFieldRegExp))
-        continue;
-        
-      if (filter(p))
-        continue;
-      
-      this.manager.removeParameters(this.fqName, i--);
-    }
-  },
-
   init: function (manager) {
     var self = this;
         self.slidersBlock = $("#sliders");
@@ -86,6 +28,10 @@ jT.CurrentSearchWidgeting.prototype = {
       self.rangeRemove();
       return false;
     });
+  },
+  
+  addTag: function (filter, widget) {
+        
   },
   
   afterTranslation: function (data) {
@@ -112,12 +58,12 @@ jT.CurrentSearchWidgeting.prototype = {
     self.rangeParameters = [];
     
     // add the free text search as a tag
-    if (q.value != '*:*') {
-        links.push(self.renderTag(q.value, "x", function () {
+    if (!q.value.match(/\?:\*/)) {
+        links.push(self.renderTag({ title: q.value, count: "x", onMain: function () {
           q.value = "*:*";
           self.manager.doRequest();
           return false;
-        }).addClass("tag_fixed"));
+        } }).addClass("tag_fixed"));
     }
 
     // now scan all the parameters for facets and ranges.
@@ -145,13 +91,15 @@ jT.CurrentSearchWidgeting.prototype = {
           fv = [ fv ];
 
         for (var j = 0, fvl = fv.length; j < fvl; ++j) {
-      		links.push(el = self.renderTag(fv[j], "i", self.unclickHandler(fv[j], fk)).addClass("tag_selected " + (pv ? "tag_open" : "tag_fixed")));
+      		links.push(el = self.renderTag({ 
+        		title: fv[j], 
+        		count: "i", 
+        		onMain: self.unclickHandler(fv[j], fk),
+        		onAux: pv ? self.rangePresent(i, fk.field, fv[j]) : null
+          }).addClass("tag_selected " + (pv ? "tag_open" : "tag_fixed")));
 
       		if (fvl > 1)
       		  el.addClass("tag_combined");
-      		  
-      		if (pv)
-      		  $("span", el[0]).on("click", self.rangePresent(i, fk.field, fv[j]));
       		  
       		if (fk.color)
       		  el.addClass(fk.color);
@@ -163,13 +111,13 @@ jT.CurrentSearchWidgeting.prototype = {
     }
     
     if (links.length) {
-      links.push(self.renderTag("Clear", "", function () {
+      links.push(self.renderTag({ title: "Clear", onMain: function () {
         q.value = '*:*';
         a$.each(self.facetWidgets, function (w) { w.clearValues(); })
         self.manager.removeParameters(self.fqName, self.rangeFieldRegExp);
         self.manager.doRequest();
         return false;
-      }).addClass('tag_selected tag_clear tag_fixed'));
+      }}).addClass('tag_selected tag_clear tag_fixed'));
       
       this.target.empty().addClass('tags').append(links);
     }

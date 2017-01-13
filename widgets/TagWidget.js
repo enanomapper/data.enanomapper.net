@@ -1,11 +1,11 @@
 (function (Solr, a$, $, jT) {
 
 jT.TagWidgeting = function (settings) {
-  a$.extend(this, settings);
+  a$.extend(true, this, settings);
 };
 
 jT.TagWidgeting.prototype = {
-  __expects: [ "hasValue", "clickHandler", "getFacetCounts", ],
+  __expects: [ "hasValue", "clickHandler", "getFacetCounts" ],
   init: function (manager) {
     if (this.nestingField != null)
       this.facet.domain = a$.extend(this.facet.domain, { blockChildren: this.nestingField + ":substance"} );
@@ -16,12 +16,12 @@ jT.TagWidgeting.prototype = {
   afterTranslation: function (data) {
     a$.pass(this, jT.TagWidgeting, 'afterTranslation'); 
 
-    var objectedItems = this.getFacetCounts(data.facets), 
+    var self = this,
+        objectedItems = this.getFacetCounts(data.facets), 
     		facet = null, 
     		total = 0,
     		hdr = getHeaderText(this.header),
     		refresh = this.header.data("refreshPanel"),
-    		nullf = function (e) { return false; },
     		el, selected;
         
     objectedItems.sort(function (a, b) {
@@ -37,7 +37,19 @@ jT.TagWidgeting.prototype = {
         selected = this.hasValue(facet.val);
         total += facet.count;
         
-        this.target.append(el = this.renderTag(facet.val.toString(), facet.count, selected ? nullf : this.clickHandler(facet.val)));
+        facet.title = facet.val.toString();
+        if (typeof this.modifyTag === 'function')
+          facet = this.modifyTag(facet);
+
+        if (!selected) {
+          var clickFn = this.clickHandler(facet.val);
+          facet.onMain = function (e) {
+            self.manager.getListener("current").addTag(facet, self);
+            clickFn(e);
+          }
+        }
+        
+        this.target.append(el = this.renderTag(facet));
         
         if (selected)
           el.addClass("selected");
@@ -50,6 +62,6 @@ jT.TagWidgeting.prototype = {
   }
 };
 
-jT.TagWidget = a$(jT.TagWidgeting, Solr.Faceting, Solr.Requesting);
+jT.TagWidget = a$(Solr.Requesting, Solr.Faceting, jT.TagWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);

@@ -44,7 +44,7 @@
 	jT.ItemListWidget.prototype.renderSubstance = function(doc) {
 		var external = null,
 			sniphtml = $("#study-item").html(),
-			snippets = doc._extended_.study.map(this.renderStudy),
+			snippets = doc._extended_.study != null ? doc._extended_.study.map(this.renderStudy) : [],
 			item = { 
 				logo: "images/logo.png",
 				link: "#",
@@ -54,7 +54,7 @@
 // 				        + " " + (prop == null ? "" : "[" + prop + "] ")
 				      )),
 				composition: this.renderComposition(doc._extended_.composition),
-				snippet: "",
+				snippet: snippets.length > 0 ? ccLib.formatString(sniphtml, snippets[0]) : "",
 				item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
 				footer: 
 					'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
@@ -62,7 +62,6 @@
 					'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Study</a>'
 			};
 
-		item.snippet = ccLib.formatString(sniphtml, snippets[0]);
 		if (snippets.length > 1) {
 			snippets.splice(0, 1);
 			item.snippet += 

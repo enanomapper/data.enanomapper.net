@@ -95,23 +95,30 @@ var Manager,
 			}
 		}));
 
-		var fel = $("#tag-section").html();
-        renderTag = function (facet, count, hint, handler) {
-          var view = facet = facet.replace(/^\"(.+)\"$/, "$1");
-          if (typeof hint === 'function') {
-            handler = hint;
-            hint = null;
-          }
+		var fel = $("#tag-section").html(),
+        renderTag = function (tag) {
+          var view, title = view = tag.title.replace(/^\"(.+)\"$/, "$1");
               
-          if (facet.lastIndexOf("caNanoLab.", 0) == 0)
-            view = facet.replace("caNanoLab.","");
-          else if (facet.lastIndexOf("http://dx.doi.org/", 0) == 0)
-            view = facet.replace("http://dx.doi.org/", "");
+          if (title.lastIndexOf("caNanoLab.", 0) == 0)
+            view = title.replace("caNanoLab.","");
+          else if (title.lastIndexOf("http://dx.doi.org/", 0) == 0)
+            view = title.replace("http://dx.doi.org/", "");
           else
-        	  view = (lookup[facet] || facet).replace(/NPO_|\s+nanoparticle/, "");
-          
-          return $('<li><a href="#" class="tag" title="' + view + (hint || "") + ((facet != view) ? ' [' + facet + ']' : '') + '">' + view + ' <span>' + (count || 0) + '</span></a></li>')
-              .click(handler);
+        	  view = (lookup[title] || title).replace(/NPO_|\s+nanoparticle/, "");
+        	  
+          var aux$ = $('<span/>').html(tag.count || 0);
+          if (typeof tag.onAux === 'function')
+            in$.click(tag.onAux);
+            
+          var el$ = $('<li/>')
+            .append($('<a href="#" class="tag" title="' + view + " " + (tag.hint || "") + ((title != view) ? ' [' + title + ']' : '') + '">' + view + '</a>')
+              .append(aux$)
+            );
+
+          if (typeof tag.onMain === 'function')
+            el$.click(tag.onMain);
+            
+          return el$;
           };
 
 		// Now the actual initialization of facet widgets
@@ -165,7 +172,7 @@ var Manager,
 		
     // ... And finally the current-selection one, and ...
     Manager.addListeners(new jT.CurrentSearchWidget({
-			id : 'currentsearch',
+			id : 'current',
 			target : $('#selection'),
 			renderTag : renderTag,
 			useJson: true
@@ -216,7 +223,7 @@ var Manager,
 		Manager.init();
 		
 		// now get the search parameters passed via URL
-		textWidget.set($.url().param('search') || 'name_s:*');
+		textWidget.set($.url().param('search') || '');
 		Manager.doRequest();
 
 		// Set some general search machanisms for links among the results / text.

@@ -63,7 +63,7 @@ jT.AutocompleteWidgeting.prototype = {
     $.getJSON(this.manager.solrUrl + 'autophrase?' + params.join('&') + '&wt=json&json.wrf=?', {}, callback);
 */
     
-    if (qval != "*:*")
+    if (qval != "*:*" && qval.length > 0)
       findbox.val(qval);
   }
 };
