@@ -68,6 +68,6 @@ jT.AutocompleteWidgeting.prototype = {
   }
 };
 
-jT.AutocompleteWidget = a$(Solr.Texting, jT.AutocompleteWidgeting);
+jT.AutocompleteWidget = a$(Solr.Requesting, Solr.Delaying, Solr.Texting, jT.AutocompleteWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);

@@ -1,7 +1,7 @@
 (function (Solr, a$, $, jT) {
 
 jT.CurrentSearchWidgeting = function (settings) {
-  a$.extend(this, settings);
+  a$.extend(true, this, settings);
   this.manager = null;
   this.skipClear = false;
   this.facetWidgets = null;
@@ -21,14 +21,14 @@ jT.CurrentSearchWidgeting.prototype = {
       return null;
       
     var range = { '__parameter': par, 'value': [ parseFloat(m[1]), parseFloat(m[2]) ], 'context': {} },
-        sarr = pval.replace(m[0], "").replace(/\s+AND\s*\)\s*$/, "").replace(/^\s*-?\(?/, "").replace(/\)\s*$/, "").split(/\s+AND\s+/);
+        sarr = pval.replace(m[0], "").replace(/\s+AND\s*\)|^\s*-?\(?\s*$|\)\s*$/, "").split(/\s+AND\s+/);
         
     for (var i = 0;i < sarr.length; ++i) {
       var mm = sarr[i].match(/(\w+):(.+)/);
       if (!mm)
         continue;
         
-      range.context[mm[1]] = mm[2].replace(/^"/, "").replace(/"$/, "");
+      range.context[mm[1]] = mm[2].replace(/^"|"$/, "");
     }
 
     return range;

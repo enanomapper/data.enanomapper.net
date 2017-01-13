@@ -50,6 +50,6 @@ jT.TagWidgeting.prototype = {
   }
 };
 
-jT.TagWidget = a$(jT.TagWidgeting, Solr.Faceting);
+jT.TagWidget = a$(jT.TagWidgeting, Solr.Faceting, Solr.Requesting);
 
 })(Solr, asSys, jQuery, jToxKit);
