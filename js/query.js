@@ -31,30 +31,62 @@ var Manager,
 (function(Solr, a$, $, jT) {
 	$(function() {
   	var Settings = {
-	//solrUrl : 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
-	//this is test server only    
-		solrUrl : 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
-// 		solrUrl : 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
-		root : "https://data.enanomapper.net/substance/",
-		summaryProperty: "P-CHEM.PC_GRANULOMETRY_SECTION.SIZE",
-		servlet: "autophrase",
-		parameters: Parameters,
-		connector: $,
-		onPrepare: function (settings) {
-			var qidx = settings.url.indexOf("?");
-
-			if (this.proxyUrl) {
-				settings.data = { query: settings.url.substr(qidx + 1) };
-				settings.url = this.proxyUrl;
-				settings.type = settings.method = 'POST';
-			}
-			else {
-				settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
-			}
-		}
+  	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+  	//this is test server only    
+   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+//  		solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
+//  		solrUsername: "nanoreg1",
+//  		solrPassword: "Pl-LPn_nIMw01C7M",
+// 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+  		root : "https://data.enanomapper.net/substance/",
+  		summaryRenderers: {
+    		"SIZE": function (val, topic) {
+     		if (!Array.isArray(val) || val.length == 1)
+     		  return val;
+      		  
+      		var min = null, 
+      		    max = null, 
+      		    pattern = null,
+      		    re = /([+-]?[0-9]*[.,]?[0-9]+)/;
+      		
+          for (var i = 0;i < val.length; ++i) {
+            var v, m = val[i].match(re);
+            
+            if (!m) 
+              continue;
+            if (!pattern)
+              pattern = val[i];
+              
+            v = parseFloat(m[1]);
+            if (min == null)
+              max = min = v;
+            else if (v > max)
+              max = v;
+            else if (v < min)
+              min = v;
+          }
+          
+          return { 'topic': topic.toLowerCase(), 'content' : pattern.replace(re, min + "&nbsp;&hellip;&nbsp;" + max) };
+    		}
+  		},
+  		servlet: "autophrase",
+  		parameters: Parameters,
+  		connector: $,
+  		onPrepare: function (settings) {
+  			var qidx = settings.url.indexOf("?");
+  
+  			if (this.proxyUrl) {
+  				settings.data = { query: settings.url.substr(qidx + 1) };
+  				settings.url = this.proxyUrl;
+  				settings.type = settings.method = 'POST';
+  			}
+  			else {
+  				settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
+  			}
+  		}
 		},
 		
-	Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings);
+    Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings);
 
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
@@ -192,7 +224,7 @@ var Manager,
 		Manager.addListeners(textWidget);
 		
 		// Now add the basket.
-		Basket = new jT.ItemListWidget({
+		Basket = new (a$(jT.ListWidgeting, jT.ItemListWidget))({
 			id : 'basket',
 			target : $('#basket-docs'),
 			settings : Settings,

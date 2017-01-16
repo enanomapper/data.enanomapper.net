@@ -179,16 +179,13 @@ footer.none .command.none {
 	display: inline-block;
 }
 
-article div.one-study {
+article div.one-summary {
 	margin-top: 10px;
 }
 
-article span.category { 
+article div.one-summary .topic { 
+	text-transform: capitalize;
 	font-weight: bold;
-}
-
-article span.guidance { 
-	font-style: italic; 
 }
 
 /* tagcloud */

@@ -1,6 +1,26 @@
 (function(jT, a$, $) {
+  var htmlLink = '<a href="{{href}}" title="{{hint}}" target="{{target}}">{{value}}</a>',
+      defaultSettings = {
+        summaryPrime: "RESULTS",
+        summaryRenderers: {
+          "RESULTS": function (val, topic) { 
+            return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
+          },
+          "REFOWNERS": function (val, topic) {
+            return val.map(function (ref) { return ccLib.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: ref }); });
+          },
+          "REFS": function (val, topic) { 
+            return val.map(function (ref) { return ccLib.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
+          }
+        }
+      };
+  
 	jT.ItemListWidget = function (settings) {
-  	this.renderItem = settings && settings.renderItem || this.renderItem;
+  	this.settings = defaultSettings;
+  	if (!!settings) {
+    	this.renderItem = settings.renderItem || this.renderItem;
+    	this.settings = a$.extend(true, this.settings, settings.settings);
+  	}
 	};
 
 	jT.ItemListWidget.prototype.renderItem = function (doc) {
@@ -42,33 +62,36 @@
 	 * substance
 	 */
 	jT.ItemListWidget.prototype.renderSubstance = function(doc) {
-		var external = null,
-			sniphtml = $("#study-item").html(),
-			snippets = doc._extended_.study != null ? doc._extended_.study.map(this.renderStudy) : [],
-			item = { 
-				logo: "images/logo.png",
-				link: "#",
-				title: (doc.publicname || doc.name) + (doc.pubname === doc.name ? "" : "  (" + doc.name + ")") 
-				      + (doc.substanceType == null ? "" : (" " 
-				        + (lookup[doc.substanceType] || doc.substanceType)
-// 				        + " " + (prop == null ? "" : "[" + prop + "] ")
-				      )),
-				composition: this.renderComposition(doc._extended_.composition).join("<br/>"),
-				snippet: snippets.length > 0 ? ccLib.formatString(sniphtml, snippets[0]) : "",
-				item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
-				footer: 
-					'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
-					'<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">Composition</a>' +
-					'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Studies</a>'
-			};
+		var summaryhtml = $("#summary-item").html(),
+		    summarylist = this.buildSummary(doc),
+		    item = { 
+  				logo: "images/logo.png",
+  				link: "#",
+  				href: "#",
+  				title: (doc.publicname || doc.name) + (doc.pubname === doc.name ? "" : "  (" + doc.name + ")") 
+  				      + (doc.substanceType == null ? "" : (" " 
+  				        + (lookup[doc.substanceType] || doc.substanceType)
+  				      )),
+  				composition: this.renderComposition(doc._extended_.composition, 
+    				  '<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">&hellip;</a>'
+    				).join("<br/>"),
+    		  summary: summarylist.length > 0 ? ccLib.formatString(summaryhtml, summarylist[0]) : "",
+  				item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
+  				footer: 
+  					'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
+  					'<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">Composition</a>' +
+  					'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Studies</a>'
+  			};
 
-		if (snippets.length > 1) {
-			snippets.splice(0, 1);
-			item.snippet += 
+    // Build the outlook of the summary item
+    if (summarylist.length > 1) {
+			summarylist.splice(0, 1);
+			item.summary += 
 				'<a href="#" class="more">more</a>' +
-				'<div class="more-less" style="display:none;">' + snippets.map(function (s) { return ccLib.formatString(sniphtml, s)}).join("") + '</div>';
-		}
-		
+				'<div class="more-less" style="display:none;">' + summarylist.map(function (s) { return ccLib.formatString(summaryhtml, s)}).join("") + '</div>';
+    }
+    
+    // Check if external references are provided and prepare and show them.
 		if (doc.content == null) {
 			item.link = this.settings.root + doc.s_uuid;
 			item.href = item.link	+ "/study";
@@ -76,9 +99,9 @@
 			item.href_target = doc.s_uuid;
 		} 
 		else {
-			item.href = item.link || "#";
-			
-			if (!!doc.owner_name && doc.owner_name.lastIndexOf("caNano", 0) === 0) {
+  		var external = "External database";
+  		
+			if (doc.owner_name && doc.owner_name.lastIndexOf("caNano", 0) === 0) {
 				item.logo = "images/canano.jpg";
 				item.href_title = "caNanoLab: " + item.link;
 				item.href_target = external = "caNanoLab";
@@ -94,14 +117,14 @@
 				item.link = doc.content[0];	
 
 				for (var i = 0, l = doc.content.length; i < l; i++)
-					item.footer += '<a href="' + doc.content[i] + '" target="external">' + (external || "External database") + '</a>';	
+					item.footer += '<a href="' + doc.content[i] + '" target="external">' + external + '</a>';
 			}
 		}	
 		
 		return jT.getFillTemplate("#result-item", item);
 	};
 	
-	jT.ItemListWidget.prototype.renderComposition = function (composition) {
+	jT.ItemListWidget.prototype.renderComposition = function (composition, defValue) {
   	var summary = [];
     if (!!composition) {
       var cmap = {};
@@ -114,15 +137,19 @@
         a$.each(c, function (v, k) {
           k = k.match(/([^_]+)_?\a?/)[1];
           if (k != "type" && k != "id" && k != "component")
-            se.push(k + ':<a href="#" class="freetext_selector">' + v + '</a>');
+            se.push(k + ":" + ccLib.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: v }));
         });
         
-        ce.push(se.join(", "));
+        if (se.length > 0)
+          ce.push(se.join(", "));
     	});
     	
     	a$.each(cmap, function (map, type) {
-      	var entry = type + " (" + map.length + ")";
-      	for (var i = 0;i < map.length; ++i) {
+      	var entry = type + " (" + composition.length + ")";
+      	
+      	if (map.length == 0)
+      	  entry += ":&nbsp;" + defValue;
+        else for (var i = 0;i < map.length; ++i) {
         	entry += (i == 0) ? ": " : "; ";
         	if (map.length > 1)
         	  entry += "<strong>[" + (i + 1) + "]</strong>&nbsp;";
@@ -136,29 +163,36 @@
   	return summary;
 	};
 	
-	jT.ItemListWidget.prototype.renderStudy = function(doc) {
-		var value = "",
-				snippet = {
-					'category': doc.topcategory_s + "." + (lookup[doc.endpointcategory_s] || doc.endpointcategory_s),
-					'interpretation': doc.interpretation_result_s || "",
-					'guidance': !!doc.guidance_s ? "[" + doc.guidance_s + "]" : "",
-					'link': "",
-					'href': "",
-					'title': ""
-				};
-				
-		if (!!doc.effectendpoint_s)	value += lookup[doc.effectendpoint_s] || doc.effectendpoint_s + " = ";
-		if (!!doc.loValue_d) value += " " + doc.loValue_d;
-		if (!!doc.upValue_d) value += (!doc.loValue_d ? " " : "&hellip") + (doc.upValue_d || "");
-		if (!!doc.unit_s) value += '<span class="units">' + jT.ui.formatUnits(doc.unit_s) + '</span>';
-		if (!!doc.textValue_s) value += " " + doc.textValue_s;
+	jT.ItemListWidget.prototype.buildSummary = function(doc) {
+  	var self = this,
+  	    items = [];
+  	
+  	a$.each(doc, function (val, key) {
+    	var name = key.match(/^SUMMARY\.([^_]+)_?[hsd]*$/);
+    	if (!name)
+    	  return;
+    	  
+      name = name[1];
+      var render = (self.settings.summaryRenderers[name] || self.settings.summaryRenderers._),
+          item = typeof render === "function" ? render(val, name) : val;
 
-		snippet.value = value;
-		if (doc.reference_s != null) {
-			snippet.link = (doc.reference_year_s == null) ? "DOI" : "[" + doc.reference_year_s + "]";
-			snippet.href = snippet.title = doc.reference_s;
-		}
-
-		return snippet;
+      if (!item)
+        return;
+      
+      if (typeof item !== "object" || Array.isArray(item))
+        item = { 'topic': name.toLowerCase(), 'values' : item };
+      else if (item.topic == null)
+        item.topic = name.toLowerCase();
+      
+      if (!item.content)
+        item.content = Array.isArray(item.values) ? item.values.join(", ") : item.values.toString();
+        
+      if (name == self.settings.summaryPrime)
+        items.unshift(item);
+      else
+        items.push(item);
+  	});
+  	
+  	return items;
 	};
 })(jToxKit, asSys, jQuery);

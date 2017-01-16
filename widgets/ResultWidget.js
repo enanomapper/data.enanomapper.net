@@ -5,7 +5,15 @@ var defaultRules = {
       "study": { field: "type_s", parent: "substance", limit: 10 },
       "composition": { field: "type_s", parent: "substance", limit: 100 }
     },
-    defaultFields = [ "name:name_hs", "publicname:publicname_hs", "owner_name:owner_name_hs", "substanceType:substanceType_hs", "s_uuid:s_uuid_hs", "SUMMARY.*" ];
+    defaultFields = [ 
+      "name:name_hs", 
+      "publicname:publicname_hs", 
+      "owner_name:owner_name_hs",
+      "substanceType:substanceType_hs",
+      "s_uuid:s_uuid_hs",
+      "content:content_hss",
+      "SUMMARY.*"
+    ];
 
 jT.ResultWidgeting = function (settings) {
   a$.extend(true, this, settings, { nestingRules: defaultRules });
