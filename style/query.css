@@ -421,9 +421,13 @@ div.slider-container.theme-orange .back-bar div.selected-bar {
 }
 
 #accordion ul.tag-group.static::before {
+  float: left;
+  height: 26px;
+  line-height: 23px;
+  padding: 0 0 0 8px;
+  font-size: 14px;
   margin-top: 0px;
   text-align: right;
-  width: 90%;
 }
 
 #accordion ul.tag-group::before { content: "-"; }
