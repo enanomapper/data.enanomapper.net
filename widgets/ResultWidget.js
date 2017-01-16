@@ -2,7 +2,7 @@
 
 // Keep in mind that the field should be the same in all entries.
 var defaultRules = {
-      "study": { field: "type_s", parent: "substance", limit: 10 },
+//       "study": { field: "type_s", parent: "substance", limit: 10 },
       "composition": { field: "type_s", parent: "substance", limit: 100 }
     },
     defaultFields = [ 

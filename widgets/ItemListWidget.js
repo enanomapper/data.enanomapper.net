@@ -72,7 +72,7 @@
   				      + (doc.substanceType == null ? "" : (" " 
   				        + (lookup[doc.substanceType] || doc.substanceType)
   				      )),
-  				composition: this.renderComposition(doc._extended_.composition, 
+  				composition: this.renderComposition(doc, 
     				  '<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">&hellip;</a>'
     				).join("<br/>"),
     		  summary: summarylist.length > 0 ? jT.ui.formatString(summaryhtml, summarylist[0]) : "",
@@ -124,8 +124,10 @@
 		return jT.ui.fillTemplate("#result-item", item);
 	};
 	
-	jT.ItemListWidget.prototype.renderComposition = function (composition, defValue) {
+	jT.ItemListWidget.prototype.renderComposition = function (doc, defValue) {
   	var summary = [];
+  	    composition = doc._extended_ && doc._extended_.composition;
+  	    
     if (!!composition) {
       var cmap = {};
       a$.each(composition, function(c) {

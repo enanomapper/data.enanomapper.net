@@ -5,7 +5,7 @@ jT.CurrentSearchWidgeting = function (settings) {
   
   this.manager = null;
   this.skipClear = false;
-  this.facetWidgets = null;
+  this.facetWidgets = {};
   this.fqName = this.useJson ? "json.filter" : "fq";
 };
 
@@ -28,15 +28,15 @@ jT.CurrentSearchWidgeting.prototype = {
     });
   },
   
-  addTag: function (filter, widget) {
-        
+  addWidget: function (widget) {
+    this.facetWidgets[widget.id] = true;
   },
   
   afterTranslation: function (data) {
-    var self = this, el, f, fk, fv, pv,
+    var self = this,
         links = [],
-        q = this.manager.getParameter('q');
-        fq = this.manager.getParameter(this.fqName);
+        q = this.manager.getParameter('q'),
+        fq = this.manager.getAllValues(this.fqName);
         
     if (self.skipClear) {
       self.skipClear = false;
@@ -44,7 +44,6 @@ jT.CurrentSearchWidgeting.prototype = {
     }
         
     self.rangeRemove();
-    self.rangeParameters = [];
     
     // add the free text search as a tag
     if (!q.value.match(/\*?:?\*?/)) {
@@ -56,55 +55,47 @@ jT.CurrentSearchWidgeting.prototype = {
     }
 
     // now scan all the parameters for facets and ranges.
-    for (var i = 0, l = fq.length; i < l; i++) {
-	    f = fq[i];
+    for (var i = 0, l = fq != null ? fq.length : 0; i < l; i++) {
+	    var f = fq[i],
+	        vals = null,
+	        aux = false;
 	    
-	    // First try it as a range parameter
-/*
-	    fv = self.getRangeFromParam(f);
-	    if (!!fv) {
-  	    self.rangeParameters.push(fv);
-  	    continue;
-	    }
-*/
-	    
-	    // then try it as a normal set facet filter
-	    fv = Solr.parseFacet(f.value);
-	    if (!!fv) {
-        fk = fv.field;
-        if (self.facetWidgets[fk] == null)
-          continue;
-          
-        pv = (fk == PivotWidget.endpointField);
-        fk = self.facetWidgets[fk]; 
-        fv = fv.value;
-        if (!Array.isArray(fv))
-          fv = [ fv ];
-
-        for (var j = 0, fvl = fv.length; j < fvl; ++j) {
-      		links.push(el = self.renderTag({ 
-        		title: fv[j], 
-        		count: "i", 
-        		onMain: self.unclickHandler(fv[j], fk),
-        		onAux: pv ? self.rangePresent(i, fk.field, fv[j]) : null
-          }).addClass("tag_selected " + (pv ? "tag_open" : "tag_fixed")));
-
-      		if (fvl > 1)
-      		  el.addClass("tag_combined");
-      		  
-      		if (fk.color)
-      		  el.addClass(fk.color);
-        }
+      for (var wid in self.facetWidgets) {
+  	    var w = self.manager.getListener(wid),
+  	        vals = w.fqParse(f);
+  	        if (!!vals)
+  	          break;
+  	  }
+  	  
+  	  if (!Array.isArray(vals))
+  	    vals = [ vals ];
+  	        
+      for (var j = 0, fvl = vals.length; j < fvl; ++j) {
+        var v = vals[j], el;
         
-        if (fvl > 1)
-  		    el.addClass("tag_last");
+    		links.push(el = self.renderTag({ 
+      		title: v, 
+      		count: "i", 
+      		onMain: w.unclickHandler(v),
+          onAux: aux ? self.rangePresent(w, v) : null
+        }).addClass("tag_selected " + (aux ? "tag_open" : "tag_fixed")));
+
+    		if (fvl > 1)
+    		  el.addClass("tag_combined");
+    		  
+    		if (w.color)
+    		  el.addClass(w.color);
       }
+      
+      if (fvl > 1)
+		    el.addClass("tag_last");
     }
     
     if (links.length) {
       links.push(self.renderTag({ title: "Clear", onMain: function () {
-        q.value = '*:*';
-        a$.each(self.facetWidgets, function (w) { w.clearValues(); })
+        q.value = "";
+        a$.each(self.valueMap, function (vals, wid) { self.manager.getListener(wid).clearValues(); });
+        self.valueMap = {};
         self.manager.removeParameters(self.fqName, self.rangeFieldRegExp);
         self.manager.doRequest();
         return false;
@@ -116,26 +107,13 @@ jT.CurrentSearchWidgeting.prototype = {
       this.target.removeClass('tags').html('<li>No filters selected!</li>');
   },
   
-  unclickHandler: function(value, widget) {
-    var self = this;
-        
-    return function () {
-      widget.removeValue(value);
-
-      self.filterRangeParameters(function (p) { return p.value.indexOf(widget.field + ":" + Solr.escapeValue(value)) == -1; });
-      
-      widget.doRequest();
-      return false;
-    };
-  },
-
   rangeRemove: function() {
     this.slidersBlock.empty();
     this.slidersBlock.parent().removeClass("active");
     $("li", this.target[0]).removeClass("active");
   },
   
-  rangePresent: function (index, field, value) {
+  rangePresent: function (widget, value) {
     var self = this;
     return function (e) {
       var pivots = PivotWidget.locatePivots(field, value, PivotWidget.unitField),

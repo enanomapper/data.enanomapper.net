@@ -10,7 +10,8 @@ jT.TagWidgeting.prototype = {
     if (this.nestingField != null)
       this.facet.domain = a$.extend(this.facet.domain, { blockChildren: this.nestingField + ":substance"} );
 
-    a$.pass(this, jT.TagWidgeting, "init", manager);  
+    a$.pass(this, jT.TagWidgeting, "init", manager);
+    this.color = this.target.data("color");
   },
   
   afterTranslation: function (data) {
@@ -29,8 +30,11 @@ jT.TagWidgeting.prototype = {
     });
     
     if (objectedItems.length == 0)
-      this.target.html('no items found in current selection');
+      this.target.html('No items found in current selection');
     else {
+      // Make sure the current selection widget knows about us.
+      self.manager.getListener("current").addWidget(self);
+      
       this.target.empty();
       for (var i = 0, l = objectedItems.length; i < l; i++) {
         facet = objectedItems[i];
@@ -41,13 +45,8 @@ jT.TagWidgeting.prototype = {
         if (typeof this.modifyTag === 'function')
           facet = this.modifyTag(facet);
 
-        if (!selected) {
-          var clickFn = this.clickHandler(facet.val);
-          facet.onMain = function (e) {
-            self.manager.getListener("current").addTag(facet, self);
-            clickFn(e);
-          }
-        }
+        if (!selected)
+          facet.onMain = self.clickHandler(facet.val);
         
         this.target.append(el = this.renderTag(facet));
         
