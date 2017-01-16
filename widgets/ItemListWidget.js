@@ -140,22 +140,26 @@
             se.push(k + ":" + ccLib.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: v }));
         });
         
-        if (se.length > 0)
-          ce.push(se.join(", "));
+        ce.push(se.join(", "));
     	});
     	
     	a$.each(cmap, function (map, type) {
-      	var entry = type + " (" + composition.length + ")";
-      	
-      	if (map.length == 0)
-      	  entry += ":&nbsp;" + defValue;
-        else for (var i = 0;i < map.length; ++i) {
+        var entry = "";
+        for (var i = 0;i < map.length; ++i) {
+          if (map[i] == "")
+            continue;
+            
         	entry += (i == 0) ? ": " : "; ";
         	if (map.length > 1)
         	  entry += "<strong>[" + (i + 1) + "]</strong>&nbsp;";
           entry += map[i];
       	}
       	
+      	if (entry === "")
+      	  entry = ":&nbsp;" + defValue;
+      	  
+        entry = type + " (" + map.length + ")" + entry;
+      	  
       	summary.push(entry);
     	});
     }
