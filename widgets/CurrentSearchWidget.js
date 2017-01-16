@@ -3,11 +3,9 @@
 jT.CurrentSearchWidgeting = function (settings) {
   a$.extend(true, this, settings);
   
-  this.widgets = [];
   this.manager = null;
   this.skipClear = false;
   this.facetWidgets = null;
-  this.rangeParameters = [];
   this.fqName = this.useJson ? "json.filter" : "fq";
 };
 
@@ -44,23 +42,14 @@ jT.CurrentSearchWidgeting.prototype = {
       self.skipClear = false;
       return;
     }
-    
-    // We do that know to be _sure_ that all widgets are already added.
-    if (self.facetWidgets == null) {
-      self.facetWidgets = {};
-      self.manager.enumerateListeners(function (l) {
-        if (l.field != null)
-          self.facetWidgets[l.field] = l;
-      });
-    }
-    
+        
     self.rangeRemove();
     self.rangeParameters = [];
     
     // add the free text search as a tag
-    if (!q.value.match(/\?:\*/)) {
+    if (!q.value.match(/\*?:?\*?/)) {
         links.push(self.renderTag({ title: q.value, count: "x", onMain: function () {
-          q.value = "*:*";
+          q.value = "";
           self.manager.doRequest();
           return false;
         } }).addClass("tag_fixed"));
@@ -71,11 +60,13 @@ jT.CurrentSearchWidgeting.prototype = {
 	    f = fq[i];
 	    
 	    // First try it as a range parameter
+/*
 	    fv = self.getRangeFromParam(f);
 	    if (!!fv) {
   	    self.rangeParameters.push(fv);
   	    continue;
 	    }
+*/
 	    
 	    // then try it as a normal set facet filter
 	    fv = Solr.parseFacet(f.value);

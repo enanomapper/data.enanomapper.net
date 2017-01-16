@@ -48,18 +48,18 @@
 			item = { 
 				logo: "images/logo.png",
 				link: "#",
-				title: (doc.publicname || doc.name) + (doc.pubname === doc.name ? "" : "  (" + doc.name[0] + ")") 
+				title: (doc.publicname || doc.name) + (doc.pubname === doc.name ? "" : "  (" + doc.name + ")") 
 				      + (doc.substanceType == null ? "" : (" " 
 				        + (lookup[doc.substanceType] || doc.substanceType)
 // 				        + " " + (prop == null ? "" : "[" + prop + "] ")
 				      )),
-				composition: this.renderComposition(doc._extended_.composition),
+				composition: this.renderComposition(doc._extended_.composition).join("<br/>"),
 				snippet: snippets.length > 0 ? ccLib.formatString(sniphtml, snippets[0]) : "",
 				item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
 				footer: 
 					'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
 					'<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">Composition</a>' +
-					'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Study</a>'
+					'<a href="' + this.settings.root + doc.s_uuid + '/study" title="Study" target="' + doc.s_uuid + '">Studies</a>'
 			};
 
 		if (snippets.length > 1) {
@@ -102,7 +102,38 @@
 	};
 	
 	jT.ItemListWidget.prototype.renderComposition = function (composition) {
-  	return composition != null ? composition.map(function (c) { return c.component; }).join("<br/>") : "";
+  	var summary = [];
+    if (!!composition) {
+      var cmap = {};
+      a$.each(composition, function(c) {
+        var ce = cmap[c.component],
+            se = [];
+        if (ce === undefined)
+          cmap[c.component] = ce = [];
+        
+        a$.each(c, function (v, k) {
+          k = k.match(/([^_]+)_?\a?/)[1];
+          if (k != "type" && k != "id" && k != "component")
+            se.push(k + ':<a href="#" class="freetext_selector">' + v + '</a>');
+        });
+        
+        ce.push(se.join(", "));
+    	});
+    	
+    	a$.each(cmap, function (map, type) {
+      	var entry = type + " (" + map.length + ")";
+      	for (var i = 0;i < map.length; ++i) {
+        	entry += (i == 0) ? ": " : "; ";
+        	if (map.length > 1)
+        	  entry += "<strong>[" + (i + 1) + "]</strong>&nbsp;";
+          entry += map[i];
+      	}
+      	
+      	summary.push(entry);
+    	});
+    }
+  	
+  	return summary;
 	};
 	
 	jT.ItemListWidget.prototype.renderStudy = function(doc) {
@@ -118,7 +149,7 @@
 				
 		if (!!doc.effectendpoint_s)	value += lookup[doc.effectendpoint_s] || doc.effectendpoint_s + " = ";
 		if (!!doc.loValue_d) value += " " + doc.loValue_d;
-// 		if (!!doc.upValue_d) value += (!doc.loValue_d ? " " : "&hellip") + (doc.upValue_d || "");
+		if (!!doc.upValue_d) value += (!doc.loValue_d ? " " : "&hellip") + (doc.upValue_d || "");
 		if (!!doc.unit_s) value += '<span class="units">' + jT.ui.formatUnits(doc.unit_s) + '</span>';
 		if (!!doc.textValue_s) value += " " + doc.textValue_s;
 
