@@ -100,7 +100,7 @@ var Manager,
 					jel.html(jT.ui.updateCounter(jel.html(), Basket.length));
 					
 					Basket.enumerateItems(function (d) { s += d.s_uuid + ";";});
-					if (!!(s = ccLib.modifyURL(window.location.href, "basket", s)))
+					if (!!(s = jT.ui.modifyURL(window.location.href, "basket", s)))
 						window.history.pushState({ query : window.location.search }, document.title, s);					
 
 					$("footer", this).toggleClass("add none");					
@@ -241,7 +241,7 @@ var Manager,
 				    
 				jel.html(jT.ui.updateCounter(jel.html(), Basket.length));
 				Basket.enumerateItems(function (d) { s += d.s_uuid + ";";});
-				if (!!(s = ccLib.modifyURL(window.location.href, "basket", s)))
+				if (!!(s = jT.ui.modifyURL(window.location.href, "basket", s)))
 					window.history.pushState({ query : window.location.search }, document.title, s);
 							
        		if (resItem.length > 0)

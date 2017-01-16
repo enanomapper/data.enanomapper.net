@@ -7,10 +7,10 @@
             return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
           },
           "REFOWNERS": function (val, topic) {
-            return val.map(function (ref) { return ccLib.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: ref }); });
+            return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: ref }); });
           },
           "REFS": function (val, topic) { 
-            return val.map(function (ref) { return ccLib.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
+            return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
           }
         }
       };
@@ -75,7 +75,7 @@
   				composition: this.renderComposition(doc._extended_.composition, 
     				  '<a href="' + this.settings.root + doc.s_uuid + '/structure" title="Composition" target="' + doc.s_uuid + '">&hellip;</a>'
     				).join("<br/>"),
-    		  summary: summarylist.length > 0 ? ccLib.formatString(summaryhtml, summarylist[0]) : "",
+    		  summary: summarylist.length > 0 ? jT.ui.formatString(summaryhtml, summarylist[0]) : "",
   				item_id: (this.prefix || this.id || "item") + "_" + doc.s_uuid,
   				footer: 
   					'<a href="' + this.settings.root + doc.s_uuid + '" title="Substance" target="' + doc.s_uuid + '">Material</a>' +
@@ -88,7 +88,7 @@
 			summarylist.splice(0, 1);
 			item.summary += 
 				'<a href="#" class="more">more</a>' +
-				'<div class="more-less" style="display:none;">' + summarylist.map(function (s) { return ccLib.formatString(summaryhtml, s)}).join("") + '</div>';
+				'<div class="more-less" style="display:none;">' + summarylist.map(function (s) { return jT.ui.formatString(summaryhtml, s)}).join("") + '</div>';
     }
     
     // Check if external references are provided and prepare and show them.
@@ -121,7 +121,7 @@
 			}
 		}	
 		
-		return jT.getFillTemplate("#result-item", item);
+		return jT.ui.fillTemplate("#result-item", item);
 	};
 	
 	jT.ItemListWidget.prototype.renderComposition = function (composition, defValue) {
@@ -137,7 +137,7 @@
         a$.each(c, function (v, k) {
           k = k.match(/([^_]+)_?\a?/)[1];
           if (k != "type" && k != "id" && k != "component")
-            se.push(k + ":" + ccLib.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: v }));
+            se.push(k + ":" + jT.ui.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: v }));
         });
         
         ce.push(se.join(", "));

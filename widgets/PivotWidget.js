@@ -58,7 +58,7 @@
 				}
 	
 				if (elements.length > 0 && facet.field != this.topField) {
-					root = jT.getFillTemplate($("#tag-facet"), facet);
+					root = jT.ui.fillTemplate($("#tag-facet"), facet);
 					
 					// we need to add outselves as main tag
 					if (facet.field != this.endpointField)
@@ -117,7 +117,7 @@
     		  }
   				else {
     				facet.id = fid;
-    				self.target.before(target = jT.getFillTemplate($("#tab-topcategory"), facet));
+    				self.target.before(target = jT.ui.fillTemplate("#tab-topcategory", facet));
     				target = $(target.last()).addClass("dynamic-tab");
     				self.tabsRefresher();
     				self.buildStatistics(facet);

@@ -242,7 +242,7 @@ jT.CurrentSearchWidgeting.prototype = {
           names.reverse();
           
         // We're ready to prepare the slider and add it to the DOM.
-        self.slidersBlock.append(el = jT.getFillTemplate("#slider-one", range));
+        self.slidersBlock.append(el = jT.ui.fillTemplate("#slider-one", range));
           
         scale = [
           getRoundedNumber(range.overall.min, prec), 
