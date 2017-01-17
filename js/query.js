@@ -26,22 +26,17 @@ var Manager,
 			'genotoxicity':	'_childDocuments_.params.Type_of_genotoxicity'
 			*/
   	},
-  	PivotWidget = null;
-
-(function(Solr, a$, $, jT) {
-	$(function() {
-  	var Settings = {
-  	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
-  	//this is test server only    
-   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
-//       solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
-//       solrUsername: "nanoreg1",
-//       solrPassword: "Pl-LPn_nIMw01C7M",
-      
-// 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
-  		root : "https://data.enanomapper.net/substance/",
-  		summaryRenderers: {
-    		"SIZE": function (val, topic) {
+  	Fields = [ 
+      "name:name_hs", 
+      "publicname:publicname_hs", 
+      "owner_name:owner_name_hs",
+      "substanceType:substanceType_hs",
+      "s_uuid:s_uuid_hs",
+      "content:content_hss",
+      "SUMMARY.*"
+    ],
+    Renderers = {
+  		"SIZE": function (val, topic) {
      		if (!Array.isArray(val) || val.length == 1)
      		  return val;
       		  
@@ -69,7 +64,25 @@ var Manager,
           
           return { 'topic': topic.toLowerCase(), 'content' : pattern.replace(re, min + "&nbsp;&hellip;&nbsp;" + max) };
     		}
-  		},
+		},
+  	PivotWidget = null;
+
+(function(Solr, a$, $, jT) {
+	$(function() {
+  	var Settings = {
+  	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+  	//this is test server only    
+   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+//       solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
+//       solrUsername: "nanoreg1",
+//       solrPassword: "Pl-LPn_nIMw01C7M",
+      
+// 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+  		root : "https://data.enanomapper.net/substance/",
+  		nestingRules: {
+    //       "study": { field: "type_s", parent: "substance", limit: 10 },
+        "composition": { field: "type_s", parent: "substance", limit: 100 }
+      },
   		servlet: "autophrase",
   		parameters: Parameters,
   		connector: $,
@@ -93,6 +106,8 @@ var Manager,
 			id : 'result',
 			target : $('#docs'),
 			settings : Settings,
+  		listingFields: Fields,
+  		summaryRenderers: Renderers,
 			onClick : function (e, doc, exp, widget) { 
 				if (!Basket.findItem(doc)) {
 					Basket.addItem(doc);
@@ -215,11 +230,8 @@ var Manager,
 			id : 'text',
 			target : $('#search'),
 			domain: { type: "parent", which: "type_s:substance" },
-			fields : [ 
-			    'substanceType', 'effectendpoint', 'endpointcategory',
-					'name', 'guidance', 'interpretation_result',
-					'_childDocuments_.params.Species','_childDocuments_.params.Cell_line', 'reference',
-					'_text_' ]
+			useJson: true,
+			facetFields : Facets
 		});
 		
 		Manager.addListeners(textWidget);
@@ -229,6 +241,7 @@ var Manager,
 			id : 'basket',
 			target : $('#basket-docs'),
 			settings : Settings,
+  		summaryRenderers: Renderers,
 			onClick : function (e, doc) {
 				if (Basket.eraseItem(doc.s_uuid) === false) {
 					console.log("Trying to remove from basket an inexistent entry: " + JSON.stringify(doc));

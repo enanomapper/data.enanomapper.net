@@ -52,7 +52,7 @@ jT.CurrentSearchWidgeting.prototype = {
     self.rangeRemove();
     
     // add the free text search as a tag
-    if (!q.value.match(/\*?:?\*?/)) {
+    if (!!q.value && !q.value.match(/^(\*:)?\*$/)) {
         links.push(self.renderTag({ title: q.value, count: "x", onMain: function () {
           q.value = "";
           self.manager.doRequest();

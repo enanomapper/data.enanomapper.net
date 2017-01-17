@@ -10,24 +10,23 @@ jT.ItemListWidget = function (settings) {
 };
 
 jT.ItemListWidget.prototype = {
-  settings: {
-    summaryPrime: "RESULTS",
-    summaryRenderers: {
-      "RESULTS": function (val, topic) { 
-        return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
-      },
-      "REFOWNERS": function (val, topic) {
-        return val.map(function (ref) { return jT.ui.formatString(htmlLink, { 
-          href: "#", 
-          hint: "Freetext search", 
-          target: "_self", 
-          value: ref, 
-          css: "freetext_selector" 
-        }); });
-      },
-      "REFS": function (val, topic) { 
-        return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
-      }
+  settings: { root: "" },
+  summaryPrime: "RESULTS",
+  summaryRenderers: {
+    "RESULTS": function (val, topic) { 
+      return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
+    },
+    "REFOWNERS": function (val, topic) {
+      return val.map(function (ref) { return jT.ui.formatString(htmlLink, { 
+        href: "#", 
+        hint: "Freetext search", 
+        target: "_self", 
+        value: ref, 
+        css: "freetext_selector" 
+      }); });
+    },
+    "REFS": function (val, topic) { 
+      return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
     }
   },
 	
@@ -187,7 +186,7 @@ jT.ItemListWidget.prototype = {
     	  return;
     	  
       name = name[1];
-      var render = (self.settings.summaryRenderers[name] || self.settings.summaryRenderers._),
+      var render = (self.summaryRenderers[name] || self.summaryRenderers._),
           item = typeof render === "function" ? render(val, name) : val;
 
       if (!item)
@@ -201,7 +200,7 @@ jT.ItemListWidget.prototype = {
       if (!item.content)
         item.content = Array.isArray(item.values) ? item.values.join(", ") : item.values.toString();
         
-      if (name == self.settings.summaryPrime)
+      if (name == self.summaryPrime)
         items.unshift(item);
       else
         items.push(item);
