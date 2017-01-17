@@ -14,7 +14,7 @@ function getRoundedNumber(num, prec) {
 
 $(document).ready(function() {
 
-  ccLib.flexSize($(".container")[0]);
+  // ccLib.flexSize($(".container")[0]);
 	
 	$("#smartmenu" ).smartmenus();
 	$("#search").find('input').autocomplete();
