@@ -288,6 +288,7 @@
         <ul>
           <li><a href="#hits_tab">Hits list</a></li>
           <li><a href="#basket_tab">Selection</a></li>
+          <li class="jtox-ds-export"><a href="#export_tab">Export</a></li>
         </ul>
     		<div id="hits_tab">
     			<div class="row remove-bottom">
@@ -304,14 +305,39 @@
     				<ul id="pager"></ul>
     				<div id="pager-header"></div>
     			</div>
+    			<div class="docs_wrapper">
           <section id="docs" class="item-list"></section>
-          <div style="padding-top: 70px;"></div>
+      </div>
     		</div>
     		<div id="basket_tab">
           <section id="basket-docs" class="item-list"></section>
           <div style="padding-top: 70px;"></div>
     		</div>
+    		<div id="export_tab">
+      		<form target="_blank" method="post">
+        		<input type="hidden" name="q"/>
+        		
+        		<h6>Select output format</h6>
+        		<input type="hidden" name="export_type" id="export_type"/>
+      		  <div class="data_types"></div>
+        		
+            <h6>Select dataset to export</h6>
+        		<div id="export_dataset">
+              <input type="radio" value="filtered" name="export_dataset" id="filtered_data" checked="checked"/>
+              <label for="filtered_data">Filtered entries</label>
+              <input type="radio" value="selected" name="export_dataset" id="selected_data"/>
+              <label for="selected_data">Selected entries</label>
+            </div>
+            
+            <h6>Click to download</h6>
+            <button type="submit" name="export_go" data-prefix="Download">?</button>
+            
+            <h6><div style="float: left; text-align: center"><a id="whole_dataset" href="https://zenodo.org/record/173258" target="_blank">Full dataset download</a><br><span style="color: black; font-style: italic">hosted on <a href="https://zenodo.org/about" target="_blank"><img src="images/zenodo-black.svg" width="50px" style="padding-bottom: 7px" alt="Zenodo logo"></a></span></div></h6>
+            
+      		</form>
+    		</div>
   		</div>
+
 
   	<!-- query container -->	
 		</div> 
@@ -360,6 +386,12 @@
     
     <div id="slider-one">
   		<input type="hidden" value="{{value[0]}},{{value[1]}}"/>
+    </div>
+
+    <div id="export-type">
+      <div class="jtox-inline jtox-ds-download jtox-fadable">
+        <a target="_blank" data-mime="{{mime}}" href="#"><img class="borderless" jt-src="{{icon}}"/></a>
+      </div>
     </div>
     		
 	</div>
