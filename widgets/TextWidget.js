@@ -1,7 +1,7 @@
 (function (Solr, a$, $, jT) {
 
 jT.TextWidgeting = function (settings) {
-  a$.extend(this, settings);
+  a$.extend(true, this, a$.common(settings, this));
 };
 
 jT.TextWidgeting.prototype = {

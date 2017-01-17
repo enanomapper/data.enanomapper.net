@@ -1,29 +1,37 @@
 (function(jT, a$, $) {
-  var htmlLink = '<a href="{{href}}" title="{{hint}}" target="{{target}}">{{value}}</a>',
-      defaultSettings = {
-        summaryPrime: "RESULTS",
-        summaryRenderers: {
-          "RESULTS": function (val, topic) { 
-            return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
-          },
-          "REFOWNERS": function (val, topic) {
-            return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: "#", hint: "Freetext search", target: "_self", value: ref }); });
-          },
-          "REFS": function (val, topic) { 
-            return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
-          }
-        }
-      };
   
-	jT.ItemListWidget = function (settings) {
-  	this.settings = defaultSettings;
-  	if (!!settings) {
-    	this.renderItem = settings.renderItem || this.renderItem;
-    	this.settings = a$.extend(true, this.settings, settings.settings);
-  	}
-	};
+var htmlLink = '<a href="{{href}}" title="{{hint}}" target="{{target}}" class="{{css}}">{{value}}</a>';
+  
+jT.ItemListWidget = function (settings) {
+  a$.extend(true, this, a$.common(settings, this));
 
-	jT.ItemListWidget.prototype.renderItem = function (doc) {
+	this.target = settings.target;
+	this.id = settings.id;
+};
+
+jT.ItemListWidget.prototype = {
+  settings: {
+    summaryPrime: "RESULTS",
+    summaryRenderers: {
+      "RESULTS": function (val, topic) { 
+        return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
+      },
+      "REFOWNERS": function (val, topic) {
+        return val.map(function (ref) { return jT.ui.formatString(htmlLink, { 
+          href: "#", 
+          hint: "Freetext search", 
+          target: "_self", 
+          value: ref, 
+          css: "freetext_selector" 
+        }); });
+      },
+      "REFS": function (val, topic) { 
+        return val.map(function (ref) { return jT.ui.formatString(htmlLink, { href: ref, hint: "External reference", target: "ref", value: ref }); });
+      }
+    }
+  },
+	
+  renderItem: function (doc) {
 		var self = this,
 				el = $(this.renderSubstance(doc));
 				
@@ -56,12 +64,12 @@
 		});
 		
 		return null;
-	};
+	},
 	
 	/**
 	 * substance
 	 */
-	jT.ItemListWidget.prototype.renderSubstance = function(doc) {
+  renderSubstance: function(doc) {
 		var summaryhtml = $("#summary-item").html(),
 		    summarylist = this.buildSummary(doc),
 		    item = { 
@@ -122,9 +130,9 @@
 		}	
 		
 		return jT.ui.fillTemplate("#result-item", item);
-	};
+	},
 	
-	jT.ItemListWidget.prototype.renderComposition = function (doc, defValue) {
+  renderComposition: function (doc, defValue) {
   	var summary = [];
   	    composition = doc._extended_ && doc._extended_.composition;
   	    
@@ -167,9 +175,9 @@
     }
   	
   	return summary;
-	};
+	},
 	
-	jT.ItemListWidget.prototype.buildSummary = function(doc) {
+  buildSummary: function(doc) {
   	var self = this,
   	    items = [];
   	
@@ -200,5 +208,7 @@
   	});
   	
   	return items;
-	};
+	}
+}; // prototype
+
 })(jToxKit, asSys, jQuery);

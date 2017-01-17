@@ -1,17 +1,26 @@
 (function (Solr, a$, $, jT) {
 
 jT.TagWidgeting = function (settings) {
-  a$.extend(true, this, settings);
+  a$.extend(true, this, a$.common(settings, this));
+
+  this.target = settings.target;
+  this.header = settings.header;
+  this.id = settings.id;  
+  
+  this.color = this.color || this.target.data("color");
 };
 
 jT.TagWidgeting.prototype = {
   __expects: [ "hasValue", "clickHandler", "getFacetCounts" ],
+  color: null,
+  nestingField: null,
+  renderTag: null,
+
   init: function (manager) {
     if (this.nestingField != null)
       this.facet.domain = a$.extend(this.facet.domain, { blockChildren: this.nestingField + ":substance"} );
 
     a$.pass(this, jT.TagWidgeting, "init", manager);
-    this.color = this.target.data("color");
   },
   
   afterTranslation: function (data) {

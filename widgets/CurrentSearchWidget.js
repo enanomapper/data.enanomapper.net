@@ -1,7 +1,10 @@
 (function (Solr, a$, $, jT) {
 
 jT.CurrentSearchWidgeting = function (settings) {
-  a$.extend(true, this, settings);
+  a$.extend(true, this, a$.common(settings, this));
+  
+  this.target = settings.target;
+  this.id = settings.id;
   
   this.manager = null;
   this.skipClear = false;
@@ -10,6 +13,9 @@ jT.CurrentSearchWidgeting = function (settings) {
 };
 
 jT.CurrentSearchWidgeting.prototype = {
+  useJson: false,
+  renderTag: null,
+  
   init: function (manager) {
     var self = this;
         self.slidersBlock = $("#sliders");
