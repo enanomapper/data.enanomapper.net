@@ -17,7 +17,7 @@ var Manager,
   		'protocol': 			{ field: "guidance_s", facet: { mincount: 2 } },
   		'interpretation': { field: "interpretation_result_s", facet: { mincount: 2 } }, 
   		'species': 				{ field: "Species_s", facet: { mincount: 2 } }, 
-  		'cell': 					{ field: "Cell line_s", facet: { mincount: 1 } }
+  		'cell': 					{ field: "Cell line_s", facet: { mincount: 1, domain: { blockChildren: "type_s:study" } } },
 /*
   		'instruments': 		{ field: "_childDocuments_.params.DATA_GATHERING_INSTRUMENTS" },
   		'testtype': '_childDocuments_.conditions.Test_type',
@@ -33,10 +33,11 @@ var Manager,
   	var Settings = {
   	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
   	//this is test server only    
-   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
-//  		solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
-//  		solrUsername: "nanoreg1",
-//  		solrPassword: "Pl-LPn_nIMw01C7M",
+//    		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+      solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
+      solrUsername: "nanoreg1",
+      solrPassword: "Pl-LPn_nIMw01C7M",
+      
 // 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
   		root : "https://data.enanomapper.net/substance/",
   		summaryRenderers: {
@@ -162,7 +163,7 @@ var Manager,
 					f = Facets[fid];
 					
 			if (!f) {
-				console.log("Referred a missing wisget: " + fid);
+				console.log("Referred a missing widget: " + fid);
 				return;
 			}
       me.addClass(f.color = col || f.color);
