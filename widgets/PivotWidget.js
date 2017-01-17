@@ -8,7 +8,7 @@
 			};
 	
   jT.PivotWidgeting = function (settings) {
-    a$.extend(this, settings);
+    a$.extend(true, this, settings);
     this.contextFields = Object.keys(settings.facetFields);
     this.overallStatistics = {};
   }

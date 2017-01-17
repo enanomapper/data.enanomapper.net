@@ -168,7 +168,13 @@ var Manager,
             el$.click(tag.onMain);
             
           return el$;
-          };
+          },
+					tagInit = function (manager) {
+  					jT.TagWidget.prototype.init.call(this, manager);
+            manager.getListener("current").addWidget(this);
+					},
+					TagWidget = a$(Solr.Requesting, Solr.Faceting, jT.TagWidget);
+          
 
 		// Now the actual initialization of facet widgets
 		$("#accordion .widget-content").each(function (idx){
@@ -184,7 +190,7 @@ var Manager,
 			}
       me.addClass(f.color = col || f.color);
 			
-			Manager.addListeners(new jT.TagWidget($.extend({
+			Manager.addListeners(new TagWidget($.extend({
 				id : fid,
 				target : me,
 				header: hdr,
@@ -193,7 +199,8 @@ var Manager,
 				exclusion: true,
 				useJson: true,
 				renderTag: renderTag,
-				nestingField: "type_s",
+				init: tagInit,
+				nesting: "type_s:substance",
 				domain: { type: "parent", "which": "type_s:substance" }
 			}, f)));
 		});
@@ -205,15 +212,16 @@ var Manager,
 			id : "studies",
 			target : $(".after_topcategory"),
 
-			pivotFields: [ "topcategory", "endpointcategory", "effectendpoint", "unit" ],
-			facetFields: { endpointcategory: { color: "blue" }, effectendpoint: { color: "green" } },
-			endpointField: "effectendpoint",
-			unitField: "unit",
-			statField: "loValue",
+			pivotFields: [ "topcategory_s", "endpointcategory_s", "effectendpoint_s", "unit_s" ],
+			facetFields: { endpointcategory_s: { color: "blue" }, effectendpoint_s: { color: "green" } },
+			endpointField: "effectendpoint_s",
+			unitField: "unit_s",
+			statField: "loValue_d",
 			
 			multivalue: true,
 			aggregate: true,
 			exclusion: true,
+			useJson: true,
 			renderTag: renderTag,
 			tabsRefresher: getTabsRefresher 
 		}));
@@ -226,19 +234,21 @@ var Manager,
 			renderTag : renderTag,
 			useJson: true
 		}));
+		
 		// ... auto-completed text-search.
-		var textWidget = new jT.AutocompleteWidget({
+		var textWidget = new (a$(Solr.Requesting, Solr.Texting, jT.AutocompleteWidget))({
 			id : 'text',
 			target : $('#search'),
 			domain: { type: "parent", which: "type_s:substance" },
 			useJson: true,
-			facetFields : Facets
+			facetFields : Facets,
+			SpyManager: a$(Solr.Configuring, Solr.QueryingURL)
 		});
 		
 		Manager.addListeners(textWidget);
 		
 		// Now add the basket.
-		Basket = new (a$(jT.ListWidgeting, jT.ItemListWidget))({
+		Basket = new (a$(jT.ListWidget, jT.ItemListWidget))({
 			id : 'basket',
 			target : $('#basket-docs'),
 			settings : Settings,

@@ -25,6 +25,6 @@ jT.ResultWidgeting.prototype = {
 	}
 };
 
-jT.ResultWidget = a$(Solr.Listing, jT.ListWidgeting, jT.ItemListWidget, jT.ResultWidgeting);
+jT.ResultWidget = a$(Solr.Listing, jT.ListWidget, jT.ItemListWidget, jT.ResultWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);
