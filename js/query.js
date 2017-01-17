@@ -108,8 +108,9 @@ var Manager,
 			settings : Settings,
   		listingFields: Fields,
   		summaryRenderers: Renderers,
+  		itemId: "s_uuid",
 			onClick : function (e, doc, exp, widget) { 
-				if (!Basket.findItem(doc)) {
+				if (Basket.findItem(doc.s_uuid) < 0) {
 					Basket.addItem(doc);
 					var s = "", jel = $('a[href="#basket_tab"]');
 					
@@ -242,6 +243,7 @@ var Manager,
 			target : $('#basket-docs'),
 			settings : Settings,
   		summaryRenderers: Renderers,
+  		itemId: "s_uuid",
 			onClick : function (e, doc) {
 				if (Basket.eraseItem(doc.s_uuid) === false) {
 					console.log("Trying to remove from basket an inexistent entry: " + JSON.stringify(doc));

@@ -12,6 +12,8 @@ jT.ItemListWidget = function (settings) {
 jT.ItemListWidget.prototype = {
   settings: { root: "" },
   summaryPrime: "RESULTS",
+  onCreated: null,
+  onClick: null,
   summaryRenderers: {
     "RESULTS": function (val, topic) { 
       return val.map(function (study) { return study.split(".").map(function (one) { return lookup[one] || one; }).join("."); });
