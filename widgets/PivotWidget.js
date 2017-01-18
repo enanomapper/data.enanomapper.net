@@ -1,46 +1,46 @@
 (function (Solr, a$, $, jT) {
-
-	var buildValueRange = function (facet, suffix) {
-				var stats = facet.stats.stats_fields;
-				return 	" = " + (stats.loValue.min == null ? "-&#x221E;" :  stats.loValue.min) +
-								"&#x2026;" + (stats.loValue.max == null ? "&#x221E;" : stats.loValue.max) +
-								" " + (suffix == null ? jT.ui.formatUnits(facet.value) : suffix);
+  
+	var buildValueRange = function (stats, suffix) {
+				return 	" = " + (stats.min == null ? "-&#x221E;" :  stats.min) +
+								"&#x2026;" + (stats.max == null ? "&#x221E;" : stats.max) +
+								" " + (suffix == null ? jT.ui.formatUnits(stats.val) : suffix);
 			};
-	
-  jT.PivotWidgeting = function (settings) {
-    a$.extend(true, this, settings);
-    this.contextFields = Object.keys(settings.facetFields);
-    this.overallStatistics = {};
+
+	/** The general wrapper of all parts
+  	*/
+  PivotWidgeting = function (settings) {
+    a$.extend(true, this, a$.common(settings, this));
+
+    this.visibleFields = settings.visibleFields || [];
+    this.initialized = false;
+    this.targets = [];
   }
   
-  jT.PivotWidgeting.prototype = {
+  PivotWidgeting.prototype = {
+    automatic: false,
     
     init: function (manager) {
+      a$.pass(this, PivotWidgeting, "init", manager);
       this.manager = manager;
-
-      var loc = { stats: this.id + "_stats" };
-      if (this.exclusion)
-        loc.ex = this.id + "_tag";
-
-      this.manager.addParameter('facet.pivot', this.pivotFields.join(","), loc);
-      this.manager.addParameter('stats', true);
-      this.manager.addParameter('stats.field', this.statField, { tag: this.id + "_stats", min: true, max: true });
-      
-      this.topField = this.pivotFields[0];
-      
-      var self = this;
-      a$.each(this.facetFields, function (f, k) {
-        manager.addListeners(f.widget = new (a$(Solr.Faceting))({
-          id: k,
-          field: k,
-          multivalue: self.multivalue,
-          aggregate: self.aggregate,
-          exclusion: self.exclusion,
-          color: f.color
-        }));
+    },
+    
+    afterTranslation: function (data) {
+      var f, i, j, p,
+          pivot = this.getPivotCounts(data.facets);
+          
+      if (!this.initialized) {
+        f = this.faceters[0];
         
-        f.widget.init(manager);
-      });
+        for (i = 0;i < pivot.length; ++i) {
+          p = pivot[i];
+          this.targets[i] = new jT.AccordionExpansion($.extend(true, {}, this.settings, f, { id: p.val, title: p.val }));
+        }
+          
+        this.initialized = true;
+      }
+      
+      for (var i = 0, fl = this.faceters.length; i < fl; ++i) {
+      }
     },
     
 		buildFacetDom: function (facet, renderer) {
@@ -84,7 +84,7 @@
   		});
 		},
     
-		afterTranslation : function(data) {
+		oldTranslation: function(data) {
 			var self = this,
 					root = data.pivots[self.pivotFields],
 					refresh = this.target.data("refreshPanel");
@@ -168,6 +168,6 @@
 		}		
 	};
 	
-	jT.PivotWidget = a$(jT.PivotWidgeting);
+	jT.PivotWidget = a$(Solr.Pivoting, PivotWidgeting);
 	
 })(Solr, asSys, jQuery, jToxKit);

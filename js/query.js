@@ -187,7 +187,7 @@ var Manager,
 			var f = Facets[i],
 			    w = new TagWidget($.extend({
     				target : Accordion,
-    				template: "#tab-topcategory",
+    				expansionTemplate: "#tab-topcategory",
     				subtarget: "ul",
     				multivalue: true,
     				aggregate: true,
@@ -210,16 +210,18 @@ var Manager,
 
 		
 		// ... add the mighty pivot widget.
-/*
-		Manager.addListeners(PivotWidget = new jT.PivotWidget({
+		Manager.addListeners(new jT.PivotWidget({
 			id : "studies",
-			target : $(".after_topcategory"),
-
+			target : Accordion,
+      subtarget: "ul",
+			expansionTemplate: "#tab-topcategory",
+			before: "#cell_header",
+			
 			pivot: [ 
-			  "topcategory_s", 
-			  { key: "endpointcategory_s", field: "endpointcategory_s", color: "blue" }, 
-			  { key: "effectendpoint", field: "effectendpoint_s", color: "green" }, 
-			  "unit_s" 
+			  { id: "topcategory", field: "topcategory_s", disabled: true },
+			  { id: "endpointcategory", field: "endpointcategory_s", color: "blue" },
+			  { id: "effectendpoint", field: "effectendpoint_s", color: "green" }, 
+			  { id: "unit", field: "unit_s", disabled: true }
       ],
       statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
       formatter: "{{loValue_d:0.01}}&nbsp;{{unit_s:formatUnits}}",
@@ -229,10 +231,10 @@ var Manager,
 			exclusion: true,
 			useJson: true,
 			renderTag: tagRender,
-			target: $("#accordion"),
-			mainClasses: "dynamic-tab"
+			target: Accordion,
+			classes: "dynamic-tab",
+			nesting: "type_s:substance"
 		}));
-*/
 		
     // ... And finally the current-selection one, and ...
     Manager.addListeners(new jT.CurrentSearchWidget({
