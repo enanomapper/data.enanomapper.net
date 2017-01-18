@@ -14,7 +14,7 @@ jT.CurrentSearchWidgeting = function (settings) {
 
 jT.CurrentSearchWidgeting.prototype = {
   useJson: false,
-  renderTag: null,
+  renderItem: null,
   
   init: function (manager) {
     var self = this;
@@ -34,7 +34,7 @@ jT.CurrentSearchWidgeting.prototype = {
     });
   },
   
-  addWidget: function (widget) {
+  registerWidget: function (widget) {
     this.facetWidgets[widget.id] = true;
   },
   
@@ -53,7 +53,7 @@ jT.CurrentSearchWidgeting.prototype = {
     
     // add the free text search as a tag
     if (!!q.value && !q.value.match(/^(\*:)?\*$/)) {
-        links.push(self.renderTag({ title: q.value, count: "x", onMain: function () {
+        links.push(self.renderItem({ title: q.value, count: "x", onMain: function () {
           q.value = "";
           self.manager.doRequest();
           return false;
@@ -79,7 +79,7 @@ jT.CurrentSearchWidgeting.prototype = {
       for (var j = 0, fvl = vals.length; j < fvl; ++j) {
         var v = vals[j], el;
         
-    		links.push(el = self.renderTag({ 
+    		links.push(el = self.renderItem({ 
       		title: v, 
       		count: "i", 
       		onMain: w.unclickHandler(v),
@@ -98,7 +98,7 @@ jT.CurrentSearchWidgeting.prototype = {
     }
     
     if (links.length) {
-      links.push(self.renderTag({ title: "Clear", onMain: function () {
+      links.push(self.renderItem({ title: "Clear", onMain: function () {
         q.value = "";
         a$.each(self.valueMap, function (vals, wid) { self.manager.getListener(wid).clearValues(); });
         self.valueMap = {};
@@ -229,9 +229,9 @@ jT.CurrentSearchWidgeting.prototype = {
         self.slidersBlock.append(el = jT.ui.fillTemplate("#slider-one", range));
           
         scale = [
-          getRoundedNumber(range.overall.min, prec), 
+          jT.ui.formatNumber(range.overall.min, prec), 
           names.join("/") + (enabled || !units ? "" : " (" + units + ")"), 
-          getRoundedNumber(range.overall.max, prec)
+          jT.ui.formatNumber(range.overall.max, prec)
           ];
           
         el.jRange({

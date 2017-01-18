@@ -326,7 +326,7 @@ div.slider-container.theme-orange .back-bar div.selected-bar {
   max-width: 40px;
 }
 
-#accordion-resizer, #query {
+#accordion-resizer, #search>input {
   height: 100%;
 }
 

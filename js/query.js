@@ -9,15 +9,15 @@ var Manager,
 			'json.nl' : "map",
 			'q.alt': "*:*",
 		},
-		Facets = { 
-			'substanceType': 	{ field: "substanceType_s", facet: { mincount: 2, limit: -1 } },
-  		'owner_name': 		{ field: "owner_name_s", facet: { mincount: 3 } }, 
-  		'reference': 			{ field: "reference_s", facet: { mincount: 2 } }, 
-  		'reference_year': { field: "reference_year_s", facet: { mincount: 1 } },
-  		'protocol': 			{ field: "guidance_s", facet: { mincount: 2 } },
-  		'interpretation': { field: "interpretation_result_s", facet: { mincount: 2 } }, 
-  		'species': 				{ field: "Species_s", facet: { mincount: 2 }, domain: { blockChildren: "type_s:params" } }, 
-  		'cell': 					{ field: "Cell line_s", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
+		Facets = [ 
+  		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 3 } }, 
+			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
+  		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
+  		{ id: 'species', field: "Species_s", title: "Species", color: "green", facet: { mincount: 2 }, domain: { blockChildren: "type_s:params" } }, 
+  		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2 } }, 
+  		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1 } },
+  		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
+  		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2 } },
 /*
   		'instruments': 		{ field: "_childDocuments_.params.DATA_GATHERING_INSTRUMENTS" },
   		'testtype': '_childDocuments_.conditions.Test_type',
@@ -25,7 +25,7 @@ var Manager,
 			'route':	'_childDocuments_.params.Route_of_administration',
 			'genotoxicity':	'_childDocuments_.params.Type_of_genotoxicity'
 			*/
-  	},
+  	],
   	Fields = [ 
       "name:name_hs", 
       "publicname:publicname_hs", 
@@ -99,9 +99,9 @@ var Manager,
   			}
   		}
 		},
-		
     Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings);
 
+		initUI();
     Manager.addListeners(new jT.ResultWidget({
 			id : 'result',
 			target : $('#docs'),
@@ -145,7 +145,7 @@ var Manager,
 		}));
 
 		var fel = $("#tag-section").html(),
-        renderTag = function (tag) {
+        tagRender = function (tag) {
           var view, title = view = tag.title.replace(/^\"(.+)\"$/, "$1");
               
           if (title.lastIndexOf("caNanoLab.", 0) == 0)
@@ -168,42 +168,45 @@ var Manager,
             el$.click(tag.onMain);
             
           return el$;
-          },
-					tagInit = function (manager) {
-  					jT.TagWidget.prototype.init.call(this, manager);
-            manager.getListener("current").addWidget(this);
-					},
-					TagWidget = a$(Solr.Requesting, Solr.Faceting, jT.TagWidget);
+        },
+        tagInit = function (manager) {
+					jT.TagWidget.prototype.init.call(this, manager);
+          manager.getListener("current").registerWidget(this);
+				},
+				tagsUpdated = function (total) {
+  				var hdr = this.getHeaderText();
+          hdr.textContent = jT.ui.updateCounter(hdr.textContent, total);
+          a$.act(this, this.header.data("refreshPanel"));
+				},
+				TagWidget = a$(Solr.Requesting, Solr.Faceting, jT.AccordionExpansion, jT.TagWidget),
+				Accordion = $("#accordion");
           
 
 		// Now the actual initialization of facet widgets
-		$("#accordion .widget-content").each(function (idx){
-			var me = $(this),
-					hdr = me.closest(".widget-root").prev(),
-					fid = me.data("facet"),
-					col = me.data("color"),
-					f = Facets[fid];
-					
-			if (!f) {
-				console.log("Referred a missing widget: " + fid);
-				return;
-			}
-      me.addClass(f.color = col || f.color);
-			
-			Manager.addListeners(new TagWidget($.extend({
-				id : fid,
-				target : me,
-				header: hdr,
-				multivalue: true,
-				aggregate: true,
-				exclusion: true,
-				useJson: true,
-				renderTag: renderTag,
-				init: tagInit,
-				nesting: "type_s:substance",
-				domain: { type: "parent", "which": "type_s:substance" }
-			}, f)));
-		});
+		for (var i = 0, fl = Facets.length; i < fl; ++i) {
+			var f = Facets[i],
+			    w = new TagWidget($.extend({
+    				target : Accordion,
+    				template: "#tab-topcategory",
+    				subtarget: "ul",
+    				multivalue: true,
+    				aggregate: true,
+    				exclusion: true,
+    				useJson: true,
+    				renderItem: tagRender,
+    				init: tagInit,
+    				onUpdated: tagsUpdated,
+    				nesting: "type_s:substance",
+    				domain: { type: "parent", "which": "type_s:substance" },
+    				classes: f.color
+    			}, f))
+      
+      w.afterTranslation = function (data) { 
+        this.populate(this.getFacetCounts(data.facets)); 
+      };
+			    
+			Manager.addListeners(w);
+		};
 
 		
 		// ... add the mighty pivot widget.
@@ -212,18 +215,22 @@ var Manager,
 			id : "studies",
 			target : $(".after_topcategory"),
 
-			pivotFields: [ "topcategory_s", "endpointcategory_s", "effectendpoint_s", "unit_s" ],
-			facetFields: { endpointcategory_s: { color: "blue" }, effectendpoint_s: { color: "green" } },
-			endpointField: "effectendpoint_s",
-			unitField: "unit_s",
-			statField: "loValue_d",
+			pivot: [ 
+			  "topcategory_s", 
+			  { key: "endpointcategory_s", field: "endpointcategory_s", color: "blue" }, 
+			  { key: "effectendpoint", field: "effectendpoint_s", color: "green" }, 
+			  "unit_s" 
+      ],
+      statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
+      formatter: "{{loValue_d:0.01}}&nbsp;{{unit_s:formatUnits}}",
 			
 			multivalue: true,
 			aggregate: true,
 			exclusion: true,
 			useJson: true,
-			renderTag: renderTag,
-			tabsRefresher: getTabsRefresher 
+			renderTag: tagRender,
+			target: $("#accordion"),
+			mainClasses: "dynamic-tab"
 		}));
 */
 		
@@ -231,7 +238,7 @@ var Manager,
     Manager.addListeners(new jT.CurrentSearchWidget({
 			id : 'current',
 			target : $('#selection'),
-			renderTag : renderTag,
+			renderItem : tagRender,
 			useJson: true
 		}));
 		
@@ -241,7 +248,7 @@ var Manager,
 			target : $('#search'),
 			domain: { type: "parent", which: "type_s:substance" },
 			useJson: true,
-			facetFields : Facets,
+			groups : Facets,
 			SpyManager: a$(Solr.Configuring, Solr.QueryingURL)
 		});
 		
@@ -281,7 +288,7 @@ var Manager,
 		Manager.init();
 		
 		// now get the search parameters passed via URL
-		textWidget.set($.url().param('search') || '');
+		textWidget.setValue($.url().param('search') || '');
 		Manager.doRequest();
 
 		// Set some general search machanisms for links among the results / text.
@@ -290,4 +297,5 @@ var Manager,
   		Manager.doRequest();
 		});
 	});
+	
 })(Solr, asSys, jQuery, jToxKit);

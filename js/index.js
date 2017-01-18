@@ -1,20 +1,11 @@
-function getHeaderText(jel) { return jel.contents().filter(function () { return this.nodeType == 3; })[0]; }
-
-function getTabsRefresher() { $("#accordion").accordion( "refresh" ); }
 
 function getTitleFromFacet(facet) {
   facet = facet.replace(/^caNanoLab\./, "").replace(/^http\:\/\/dx\.doi\.org/, "");
   return (lookup[facet] || facet).replace("NPO_", "").replace(" nanoparticle", "");
 }
 
-function getRoundedNumber(num, prec) {
-  var v = Math.round(num / prec) * prec;
-  return parseFloat(v.toString().replace(new RegExp("\\.(\\d{" + (-Math.log10(prec)) + "})\\d*"), ".$1"));
-}
-
-$(document).ready(function() {
+function initUI() {
 	$("#smartmenu" ).smartmenus();
-	$("#search").find('input').autocomplete();
 	$(document).on("click", "ul.tag-group", function (e) { 
 		$(this).toggleClass("folded");
 		$(this).parents(".widget-root").data("refreshPanel").call();
@@ -138,5 +129,4 @@ $(document).ready(function() {
     }
   });
   $( "#about-message" ).dialog("close");
-});
-
+}
