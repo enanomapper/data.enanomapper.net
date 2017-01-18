@@ -290,7 +290,7 @@ var Manager,
 		Manager.init();
 		
 		// now get the search parameters passed via URL
-		textWidget.setValue($.url().param('search') || '');
+		textWidget.addValue($.url().param('search') || '');
 		Manager.doRequest();
 
 		// Set some general search machanisms for links among the results / text.
