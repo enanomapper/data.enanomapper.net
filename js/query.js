@@ -64,8 +64,8 @@ var Manager,
           
           return { 'topic': topic.toLowerCase(), 'content' : pattern.replace(re, min + "&nbsp;&hellip;&nbsp;" + max) };
     		}
-		},
-  	PivotWidget = null;
+		};
+  	
 
 (function(Solr, a$, $, jT) {
 	$(function() {
@@ -99,7 +99,8 @@ var Manager,
   			}
   		}
 		},
-    Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings);
+    Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings),
+    PivotWidget = a$(Solr.Requesting, Solr.Pivoting, jT.kits.PivotWidgeting, jT.kits.RangeWidgeting);
 
 		initUI();
     Manager.addListeners(new jT.ResultWidget({
@@ -212,7 +213,7 @@ var Manager,
 
 		
 		// ... add the mighty pivot widget.
-		Manager.addListeners(new jT.PivotWidget({
+		Manager.addListeners(new PivotWidget({
 			id : "studies",
 			target : Accordion,
       subtarget: "ul",
@@ -222,11 +223,12 @@ var Manager,
 			pivot: [ 
 			  { id: "topcategory", field: "topcategory_s", disabled: true },
 			  { id: "endpointcategory", field: "endpointcategory_s", color: "blue" },
-			  { id: "effectendpoint", field: "effectendpoint_s", color: "green" }, 
-			  { id: "unit", field: "unit_s", disabled: true }
+			  { id: "effectendpoint", field: "effectendpoint_s", color: "green", ranging: true }, 
+			  { id: "unit", field: "unit_s", disabled: true, ranging: true }
       ],
       statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
-      formatter: "{{loValue_d:0.01}}&nbsp;{{unit_s:formatUnits}}",
+      slidersTarget: $("#sliders"),
+//       formatter: "{{loValue_d:0.01}}&nbsp;{{unit_s:formatUnits}}",
 			
 			multivalue: true,
 			aggregate: true,

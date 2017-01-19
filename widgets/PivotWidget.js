@@ -10,8 +10,7 @@
   						
     if (isUnits)
       vals += " " + jT.ui.formatUnits(stats.val)
-        .replace("<sup>2</sup>", "&#x00B2;")
-        .replace("<sup>3</sup>", "&#x00B3;")
+        .replace(/<sup>(2|3)<\/sup>/g, "&#x00B$1;")
         .replace(/<sup>(\d)<\/sup>/g, "^$1");
         
     return vals;
@@ -21,6 +20,8 @@
     this.id = settings.id;
     this.pivotWidget = settings.pivotWidget;
   };
+  
+  var iDificationRegExp = /\W/g;
   
   InnerTagWidgeting.prototype = {
     pivotWidget: null,
@@ -47,28 +48,29 @@
   
 	/** The general wrapper of all parts
   	*/
-  function PivotWidgeting (settings) {
+  jT.kits.PivotWidgeting = function (settings) {
     a$.extend(true, this, a$.common(settings, this));
 
     this.target = settings.target;
     this.targets = {};
     this.lastEnabled = 0;
+    this.initialPivotCounts = null;
   };
   
-  PivotWidgeting.prototype = {
-    __expects: [ "getPivotEntry", "getPivotCounts" ],
+  jT.kits.PivotWidgeting.prototype = {
+    __expects: [ "getFaceterEntry", "getPivotEntry", "getPivotCounts", "auxHandler" ],
     automatic: false,
     renderTag: null,
     
     init: function (manager) {
-      a$.pass(this, PivotWidgeting, "init", manager);
+      a$.pass(this, jT.kits.PivotWidgeting, "init", manager);
       this.manager = manager;
       
       this.manager.getListener("current").registerWidget(this, true);
     },
     
     addFaceter: function (info, idx) {
-      var f = a$.pass(this, PivotWidgeting, "addFaceter", info, idx);
+      var f = a$.pass(this, jT.kits.PivotWidgeting, "addFaceter", info, idx);
       if (typeof info === "object")
         f.color = info.color;
       if (idx > this.lastEnabled && !info.disabled)
@@ -79,15 +81,17 @@
     
     afterTranslation: function (data) {
       var pivot = this.getPivotCounts(data.facets);
-          
+
+      a$.pass(this, jT.kits.PivotWidgeting, "afterTranslation", data);
+        
       // Iterate on the main entries
       for (i = 0;i < pivot.length; ++i) {
         var p = pivot[i],
-            pid = p.val.replace(/\s/g, "_"),
+            pid = p.val.replace(iDificationRegExp, "_"),
             target = this.targets[pid];
         
         if (!target) {
-          this.targets[pid] = target = new jT.AccordionExpansion($.extend(true, {}, this.settings, this.getPivotEntry(0), { id: pid, title: p.val }));
+          this.targets[pid] = target = new jT.AccordionExpansion($.extend(true, {}, this.settings, this.getFaceterEntry(0), { id: pid, title: p.val }));
           target.updateHandler = this.updateHandler(target);
           target.target.children().last().remove();
         }
@@ -114,7 +118,7 @@
         color: this.faceters[p.id].color,
         count: "i",
         onMain: this.unclickHandler(value),
-        onAux: this.rangePresent(value)
+        onAux: this.auxHandler(value)
       };
     },
     
@@ -146,7 +150,7 @@
 			else if (bucket != null) {
   			for (var i = 0, fl = bucket.length;i < fl; ++i) {
   				var f = bucket[i],
-  				    fid = f.val.replace(/\s/g, "_"),
+  				    fid = f.val.replace(iDificationRegExp, "_"),
   				    cont$;
 
           if (target.children().length > 1) // the input field.
@@ -166,175 +170,8 @@
       }
       
       target.append(elements);
-		},
+		}
 		
-		locatePivots: function (field, value, deep) {
-  	  		var pivots = [],
-  	      searchLevel = function (list, found) {
-    	      if (!list || !list.length) return;
-    	      for (var i = 0, ll = list.length, e; i < ll; ++i) {
-      	      e = list[i];
-      	        
-      	      if (e.field === field) {
-        	      if (!(found = (e.value === value)))
-                  continue;
-              }
-      	        
-              if (found && (e.field === deep || !e.pivot))
-                pivots.push(e);
-              else if (!!e.pivot)
-    	          searchLevel(e.pivot, found);
-    	      }
-  	      };
-      
-			searchLevel(this.manager.response.facet_counts.facet_pivot[this.pivotFields]);
-			return pivots;
-		},
-		
-    rangeRemove: function() {
-      this.slidersBlock.empty();
-      this.slidersBlock.parent().removeClass("active");
-      $("li", this.target[0]).removeClass("active");
-    },
-    
-    rangePresent: function (value) {
-      var self = this;
-      return function (e) {
-        var pivots = PivotWidget.locatePivots(field, value, PivotWidget.unitField),
-            // build a counter map of found pivots.
-            pivotMap = (function() {
-              var map = {};
-              for (var i = 0, pl = pivots.length; i < pl; ++i) {
-                var pe = pivots[i];
-                for (var pp = pe; !!pp; pp = pp.parent) {
-                  var info = map[pp.field];
-                  if (!info)
-                    map[pp.field] = info = {};
-                    
-                  if (!info[pp.value])
-                    info[pp.value] = 1;
-                  else
-                    info[pp.value]++;
-                }
-              }
-              
-              return map;
-            })(),
-            updateRange = function(range, prec) {  return function (values) {
-              values = values.split(",").map(function (v) { return parseFloat(v); });
-              
-              // Fix the rouding error, because an entire entry can fall out...
-              if (Math.abs(range.overall.max - values[1]) <= prec)
-                values[1] = range.overall.max;
-              if (Math.abs(range.overall.min - values[0]) <= prec)
-                values[0] = range.overall.min;
-                
-              // Now, make the actual Solr parameter setting.
-              self.tweakAddRangeParam(range, values);
-  
-              // add it to our range list, if it is not there already
-              if (self.rangeParameters.indexOf(range) == -1)
-                self.rangeParameters.push(range);
-  
-              self.applyCommand.css("opacity", 1.0);
-              setTimeout(function () { self.applyCommand.css("opacity", ""); }, 500);
-            } },
-            matchRange = function (pivot) {
-              var ctx = { },
-                  path = [];
-                  
-              // build context AND path for the overallStatistics
-              for (var pp = pivot; !!pp; pp = pp.parent) {
-                path.push(pp.value.replace(/\s/, "_"));
-                if (PivotWidget.contextFields.indexOf(pp.field) > -1 || pivotMap[pp.field][pp.value] < pivots.length)
-                  ctx[pp.field] = pp.value;
-              }
-  
-              var rng = self.rangeParameters.find( function (e) { 
-                return a$.similar(e.context, ctx);
-              });
-              
-              path.reverse();
-              var over_stats = a$.path(PivotWidget.overallStatistics, path) || { loValue: { min: 0, max: 100 } };
-              
-              return a$.extend(rng, { 'context': ctx }, pivot.stats.stats_fields.loValue, { overall: over_stats.loValue });
-            };
-  
-        if ($(this).closest("li").hasClass("active")) {
-          self.rangeRemove();
-          return false;
-        }
-        
-        $("li", self.target[0]).removeClass("active");
-        $(this).closest("li").addClass("active");
-        self.slidersBlock.empty().parent().addClass("active");
-        
-        for (var i = 0, lp = pivots.length;i < lp; ++i) {
-          var pe = pivots[i],
-              range = matchRange(pe),
-              prec = Math.pow(10, parseInt(Math.min(1, Math.floor(Math.log10(range.overall.max - range.overall.min + 1) - 3)))),
-              names = [],
-              enabled = (range.overall.min < range.overall.max),
-              units = (pe.field == PivotWidget.unitField ? jT.ui.formatUnits(pe.value) : ""),
-              scale;
-  
-          // jRange will treat 0.1 range, as 0.01, so we better set it this way
-          if (prec < 1 && prec > .01) 
-            prec = .01;
-  
-          if (range.value == null)
-            range.value = [ range.min, range.max ];
-          else {
-            range.value[0] = Math.max(range.value[0], range.min);
-            range.value[1] = Math.min(range.value[1], range.max);
-          }
-  
-          // Build the name on the range scale, based on the field:value pairs
-          // that are needed for filtering, i.e. - those that differ...
-          for(var pp in range.context) {
-            var pv = range.context[pp];
-            if (pp != PivotWidget.unitField && pivotMap[pp][pv] < pivots.length)
-              names.push(getTitleFromFacet(pv));
-          }
-          
-          // ... still have the given filter as fallback for empty scale.
-          if (!names.length)
-            names.push(getTitleFromFacet(value));
-          else
-            names.reverse();
-            
-          // We're ready to prepare the slider and add it to the DOM.
-          self.slidersBlock.append(el = jT.ui.fillTemplate("#slider-one", range));
-            
-          scale = [
-            jT.ui.formatNumber(range.overall.min, prec), 
-            names.join("/") + (enabled || !units ? "" : " (" + units + ")"), 
-            jT.ui.formatNumber(range.overall.max, prec)
-            ];
-            
-          el.jRange({
-          	from: scale[0],
-          	to: scale[2],
-          	step: prec,
-          	scale: scale,
-          	showScale: true,
-          	showLabels: enabled,
-          	disable: !enabled,
-          	isRange: true,
-          	theme: "theme-" + self.facetWidgets[field].color,
-          	width: parseInt(self.slidersBlock.width() - $("#sliders-controls").width() - 20) / (Math.min(lp, 2) + 0.1),
-          	format: "%s " + units,
-          	ondragend: updateRange(range, prec)
-        	});
-        }
-        
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-      };
-    }
 	};
-	
-	jT.PivotWidget = a$(Solr.Requesting, Solr.Pivoting, PivotWidgeting);
 	
 })(Solr, asSys, jQuery, jToxKit);

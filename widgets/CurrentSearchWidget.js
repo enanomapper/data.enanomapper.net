@@ -1,6 +1,6 @@
 (function (Solr, a$, $, jT) {
 
-jT.CurrentSearchWidgeting = function (settings) {
+CurrentSearchWidgeting = function (settings) {
   a$.extend(true, this, a$.common(settings, this));
   
   this.target = settings.target;
@@ -12,26 +12,14 @@ jT.CurrentSearchWidgeting = function (settings) {
   this.fqName = this.useJson ? "json.filter" : "fq";
 };
 
-jT.CurrentSearchWidgeting.prototype = {
+CurrentSearchWidgeting.prototype = {
   useJson: false,
   renderItem: null,
   
   init: function (manager) {
-    var self = this;
-        self.slidersBlock = $("#sliders");
+    a$.pass(this, CurrentSearchWidgeting, "init", manager);
         
-    self.manager = manager;
-        
-    self.applyCommand = $("#sliders-controls a.command.apply").on("click", function (e) {
-      self.skipClear = true;
-      self.manager.doRequest();
-      return false;
-    });
-    
-    $("#sliders-controls a.command.close").on("click", function (e) {
-      self.rangeRemove();
-      return false;
-    });
+    this.manager = manager;
   },
   
   registerWidget: function (widget, pivot) {
@@ -58,7 +46,7 @@ jT.CurrentSearchWidgeting.prototype = {
         } }).addClass("tag_fixed"));
     }
 
-    // now scan all the parameters for facets and ranges.
+    // now scan all the filter parameters for set values
     for (var i = 0, l = fq != null ? fq.length : 0; i < l; i++) {
 	    var f = fq[i],
 	        vals = null;
@@ -70,6 +58,9 @@ jT.CurrentSearchWidgeting.prototype = {
   	          break;
   	  }
   	  
+  	  if (vals == null)
+  	    continue;
+  	    
   	  if (!Array.isArray(vals))
   	    vals = [ vals ];
   	        
@@ -109,6 +100,6 @@ jT.CurrentSearchWidgeting.prototype = {
 
 };
 
-jT.CurrentSearchWidget = a$(jT.CurrentSearchWidgeting);
+jT.CurrentSearchWidget = a$(CurrentSearchWidgeting);
 
 })(Solr, asSys, jQuery, jToxKit);
