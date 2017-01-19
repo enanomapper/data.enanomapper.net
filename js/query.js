@@ -157,7 +157,7 @@ var Manager,
         	  
           var aux$ = $('<span/>').html(tag.count || 0);
           if (typeof tag.onAux === 'function')
-            in$.click(tag.onAux);
+            aux$.click(tag.onAux);
             
           var el$ = $('<li/>')
             .append($('<a href="#" class="tag" title="' + view + " " + (tag.hint || "") + ((title != view) ? ' [' + title + ']' : '') + '">' + view + '</a>')
@@ -166,6 +166,8 @@ var Manager,
 
           if (typeof tag.onMain === 'function')
             el$.click(tag.onMain);
+          if (tag.color)
+            el$.addClass(tag.color);
             
           return el$;
         },
@@ -233,7 +235,8 @@ var Manager,
 			renderTag: tagRender,
 			target: Accordion,
 			classes: "dynamic-tab",
-			nesting: "type_s:substance"
+			nesting: "type_s:substance",
+      domain: { type: "parent", "which": "type_s:substance" }
 		}));
 		
     // ... And finally the current-selection one, and ...
