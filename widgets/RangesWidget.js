@@ -1,9 +1,9 @@
 (function (Solr, a$, $, jT) {
   
-  function SimpleRanger(settings) {
-    this.root = settings.root;  
-  }
+  function SimpleRanger(settings) { }
   
+  SimpleRanger.prototype.__expects = [ "addValue", "doRequest" ];
+  SimpleRanger.prototype.targetValue = null;
   SimpleRanger.prototype.updateHandler = function () {
     var self = this;
     return function (values) {
@@ -11,8 +11,11 @@
         self.doRequest();
     };
   }
+  SimpleRanger.prototype.doRequest = function () {
+    this.manager.doRequest();
+  }
   
-  SingleRangeWidget = a$(Solr.Ranging, jT.SliderWidget, SimpleRanger);
+  SingleRangeWidget = a$(Solr.Ranging, Solr.Patterning, jT.SliderWidget, SimpleRanger, Solr.Delaying);
   
 	/** The general wrapper of all parts
   	*/
@@ -22,10 +25,14 @@
     this.slidersTarget = $(settings.slidersTarget);
     this.pivotMap = null;
     this.rangeWidgets = [];
+    if (!Array.isArray(this.titleSkips))
+      this.titleSkips = [ this.titleSkips ];
   };
   
   jT.kits.RangeWidgeting.prototype = {
     __expects: [ "getPivotEntry", "getPivotCounts" ],
+    field: null,
+    titleSkips: null,
     
     init: function (manager) {
       a$.pass(this, jT.kits.RangeWidgeting, "init", manager);
@@ -51,9 +58,15 @@
             
       if (!this.pivotMap)
         this.pivotMap =  this.buildPivotMap(pivot);
-      
-      if (this.skipClear)
-        this.rangeRemove();
+      else if (this.rangeWidgets.length > 0) {
+        var pivotMap = this.buildPivotMap(pivot), w, ref;
+        
+        for (var i = 0, wl = this.rangeWidgets.length;i < wl; ++i) {
+          w = this.rangeWidgets[i];
+          ref = pivotMap[w.targetValue];
+          w.updateSlider([ ref[i].min, ref[i].max ]);
+        }
+      }
     },
     
     buildPivotMap: function (pivot) {
@@ -70,9 +83,7 @@
               valId = pid + ":" + base.val;
               
             // Now deal with the pattern
-            if (pattern.length > 0)
-              pattern += " AND ";
-            pattern += p.field + ":" + Solr.escapeValue(base.val);
+            pattern += (!base.val ? ("-" + p.field + ":*") : (p.field + ":" + Solr.escapeValue(base.val))) + " ";
             info = base;
               
             p = self.getPivotEntry(idx + 1);
@@ -87,12 +98,13 @@
               
               arr.push({
                 'id': pid,
-                'pattern': "-(" + pattern + " -{{v}})",
+                'pattern': pattern,
                 'color': color,
                 'min': info.min,
                 'max': info.max,
                 'avg': info.avg,
-                'val': info.val
+                'val': info.val,
+                'count': info.count
               });
             }
             // ... or just traverse and go deeper.
@@ -109,9 +121,29 @@
     },
     
     rangeRemove: function() {
-      this.slidersTarget.empty();
-      this.slidersTarget.parent('div').removeClass("active");
+      this.slidersTarget.empty().parent().removeClass("active");
+
       this.rangeWidgets = [];
+      this.lastPivotMap = this.lastPivotValue = null;
+    },
+    
+    buildTitle: function (info, skip) {
+      var pat = info.pattern.replace(/\\"/g, "%0022"),
+          fields = pat.match(/\w+:([^\s:\/"]+|"[^"]+")/g),
+          outs = [];
+      
+      // Stupid, but we need to have both regexps because of the
+      // global flag needed on the first one and NOT needed later.
+      for (var i = 0;i < fields.length; ++i) {
+        var f = fields[i],
+            m = f.match(/(\w+):([^\s:\/"]+|"[^"]+")/),
+            v = m[2].replace(/^\s*\(\s*|\s*\)\s*$/g, "");
+        
+        if (!m[1].match(skip))
+          outs.push(lookup[v] || v);
+      }
+      
+      return outs.join("/") + " <i>(" + info.count + ")</i>";
     },
     
     auxHandler: function (value) {
@@ -119,47 +151,59 @@
       
       return function (event) {
         var entry = self.pivotMap[value],
-            pivotMap = self.buildPivotMap(self.getPivotCounts()),
+            pivotMap = self.lastPivotMap = self.buildPivotMap(self.getPivotCounts()),
             current = pivotMap[value];
 
         event.stopPropagation();
 
         // deal with clicking the button on somebody else
-        if ($(this).closest("li").hasClass("active")) {
+        if (value == self.lastPivotValue) {
           self.rangeRemove();
           return false;
         }
         
-        self.slidersTarget.parent('div').find("li").removeClass("active");
-        $(this).closest("li").addClass("active");
         self.slidersTarget.empty().parent().addClass("active");
 
         for (var i = 0, el = entry.length; i < el; ++i) {
           var all = entry[i],
               ref = current[i],
-              setup = {},
+              setup = {}, w,
               el$ = jT.ui.fillTemplate("#slider-one");
 
           self.slidersTarget.append(el$);
-          
+
+          setup.id = all.id;
+          setup.targetValue = value;          
+          setup.color = all.color;
+          setup.field = self.field;
           setup.limits = [ all.min, all.max ];
           setup.initial = [ ref.min, ref.max ];
           setup.target = el$;
           setup.isRange = true;
-          setup.valuePattern = all.pattern;
+          setup.valuePattern = all.pattern + "{{v}}";
           setup.automatic = true;
           setup.width = parseInt(self.slidersTarget.width() - $("#sliders-controls").width() - 20) / (Math.min(el, 2) + 0.1);
-          setup.title = ""; // TODO: Big TODO here!
-          setup.id = all.id;
-          setup.color = all.color;
+          setup.title = self.buildTitle(ref, /^unit[_shd]*|^effectendpoint[_shd]*/);
           setup.units = ref.id == "unit" ? jT.ui.formatUnits(ref.val) : "";
+          setup.useJson = self.useJson;
+          setup.domain = self.domain;
             
-          self.rangeWidgets.push(new SingleRangeWidget(setup));
+          self.rangeWidgets.push(w = new SingleRangeWidget(setup));
+          w.init(self.manager);
         }
         
         return false;
       };
+    },
+    
+    clearValues: function () {
+      for (var i = 0, wl = this.rangeWidgets.length;i < wl; ++i)
+        this.rangeWidgets[i].clearValues();
+        
+      this.rangeRemove();
+      a$.pass(this, jT.kits.RangeWidgeting, "clearValues");
     }
+    
 	};
 	
 })(Solr, asSys, jQuery, jToxKit);

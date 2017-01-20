@@ -108,6 +108,7 @@ var Manager,
 			target : $('#docs'),
 			settings : Settings,
   		listingFields: Fields,
+  		nestingRules: Settings.nestingRules,
   		summaryRenderers: Renderers,
   		itemId: "s_uuid",
 			onClick : function (e, doc, exp, widget) { 
@@ -219,6 +220,7 @@ var Manager,
       subtarget: "ul",
 			expansionTemplate: "#tab-topcategory",
 			before: "#cell_header",
+			field: "loValue_d",
 			
 			pivot: [ 
 			  { id: "topcategory", field: "topcategory_s", disabled: true },
@@ -228,7 +230,6 @@ var Manager,
       ],
       statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
       slidersTarget: $("#sliders"),
-//       formatter: "{{loValue_d:0.01}}&nbsp;{{unit_s:formatUnits}}",
 			
 			multivalue: true,
 			aggregate: true,

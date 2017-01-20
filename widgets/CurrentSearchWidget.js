@@ -7,7 +7,6 @@ CurrentSearchWidgeting = function (settings) {
   this.id = settings.id;
   
   this.manager = null;
-  this.skipClear = false;
   this.facetWidgets = {};
   this.fqName = this.useJson ? "json.filter" : "fq";
 };
@@ -31,11 +30,6 @@ CurrentSearchWidgeting.prototype = {
         links = [],
         q = this.manager.getParameter('q'),
         fq = this.manager.getAllValues(this.fqName);
-        
-    if (self.skipClear) {
-      self.skipClear = false;
-      return;
-    }
         
     // add the free text search as a tag
     if (!!q.value && !q.value.match(/^(\*:)?\*$/)) {
@@ -65,13 +59,11 @@ CurrentSearchWidgeting.prototype = {
   	    vals = [ vals ];
   	        
       for (var j = 0, fvl = vals.length; j < fvl; ++j) {
-        var v = vals[j], el, info;
+        var v = vals[j], el, 
+            info = (typeof w.prepareTag === "function") ? 
+              w.prepareTag(v) : 
+              {  title: v,  count: "x",  color: w.color, onMain: w.unclickHandler(v) };
         
-        if (typeof w.prepareTag === "function")
-          info = w.prepareTag(v);
-        else
-          info = {  title: v,  count: "-",  color: w.color, onMain: w.unclickHandler(v) };
-          
     		links.push(el = self.renderItem(info).addClass("tag_selected " + (!!info.onAux ? "tag_open" : "tag_fixed")));
 
     		if (fvl > 1)
