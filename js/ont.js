@@ -6778,5 +6778,13 @@ var lookup = {
  	"NPO_719": "liposome",
  	"NPO_755": "metalloid",
  	"CHEBI_60027": "polymer",
- 	"CHEBI_82297": "carbon_black"
+ 	"CHEBI_82297": "carbon_black",
+	 	"CHEBI_33418" : "graphite",
+ 	"CHEBI_51135" : "poly(acrylamide) macromolecule",
+ 	"CHEBI_18246" : "(1,4)-beta-D-glucan",
+ 	"CHEBI_30563" : "silicon dioxide",
+ 	"CHEBI_131191" : "glass wool",
+ 	"CHEBI_36973" : "graphene",
+ 	"CHEBI_46661" : "asbestos",
+ 	"CHEBI_3311" : "calcium carbonate"
  }		
