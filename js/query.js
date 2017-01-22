@@ -97,25 +97,24 @@ var Manager,
   			else {
   				settings.url += (qidx < 0 ? "?" : "&" ) + "wt=json"; 
   			}
-  		}
-		},
-		exportFields: 'Ambit_InchiKey:s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY',
-		exportMaxRows: 999999 //2147483647
-		},
+  		},
+  		exportFields: "Ambit_InchiKey:s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY",
+  		exportMaxRows: 999999 //2147483647
+    },
 		Exports = [
-	      { mime: "application/json", icon: "images/types/json64.png"},
-	      { mime: "text/csv", icon: "images/types/csv64.png"},
-	      { mime: "text/tsv", icon: "images/types/txt64.png"}
-	/*
-	      { mime: "chemical/x-cml", icon: "images/types/cml64.png"},
-	      { mime: "chemical/x-mdl-sdfile", icon: "images/types/sdf64.png"},
-	      { mime: "chemical/x-daylight-smiles", icon: "images/types/smi64.png"},
-	      { mime: "chemical/x-inchi", icon: "images/types/inchi64.png"},
-	      { mime: "text/uri-list", icon: "images/types/lnk64.png"},
-	      { mime: "application/pdf", icon: "images/types/pdf64.png"},
-	      { mime: "application/rdf+xml", icon: "images/types/rdf64.png"}
-	*/
-	    ],		
+      { mime: "application/json", icon: "images/types/json64.png"},
+      { mime: "text/csv", icon: "images/types/csv64.png"},
+      { mime: "text/tsv", icon: "images/types/txt64.png"}
+/*
+      { mime: "chemical/x-cml", icon: "images/types/cml64.png"},
+      { mime: "chemical/x-mdl-sdfile", icon: "images/types/sdf64.png"},
+      { mime: "chemical/x-daylight-smiles", icon: "images/types/smi64.png"},
+      { mime: "chemical/x-inchi", icon: "images/types/inchi64.png"},
+      { mime: "text/uri-list", icon: "images/types/lnk64.png"},
+      { mime: "application/pdf", icon: "images/types/pdf64.png"},
+      { mime: "application/rdf+xml", icon: "images/types/rdf64.png"}
+*/
+    ],
     Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(Settings),
     PivotWidget = a$(Solr.Requesting, Solr.Pivoting, jT.kits.PivotWidgeting, jT.kits.RangeWidgeting);
 
@@ -330,7 +329,7 @@ var Manager,
 	        };
         
 		for (var i = 0, elen = Exports.length; i < elen; ++i) {
-			var el = jT.getFillTemplate("#export-type", Exports[i]);
+			var el = jT.ui.fillTemplate("#export-type", Exports[i]);
 
 			exportEl.append(el);
 			$("a", el[0]).on("click", function (e) {
@@ -365,14 +364,14 @@ var Manager,
 				params.push('wt=' + mime);
 	      
 			if (form.export_dataset.value == "filtered") {
-				var values = Manager.parameterStore.fq;
+				var values = Manager.getAllValue("fq");
 
 				for (var i = 0, vl = values.length; i < vl; i++) {
 					if (!values[i].value.match(/collapse/))
 					params.push('fq=' + encodeURIComponent(values[i].value));
 				}
 
-				form.q.value = Manager.parameterStore.q.value;
+				form.q.value = Manager.gerParameter("q").value;
 			}else { // i.e. selected
 		        var fqset = [];
 		        Basket.enumerateItems(function (d) { fqset.push(d.s_uuid); });
@@ -392,7 +391,8 @@ var Manager,
 					$("div", ui.newPanel[0]).removeClass("selected");
 					$("button", ui.newPanel[0]).button("disable").button("option", "label", "No output format selected...");
 
-					var hasFilter = Manager.parameterStore.fq.length > 1 || Manager.parameterStore.q.value != '*:*';
+					var qval = Manager.getParameter('q'),
+					    hasFilter = Manager.getParameter('fq').length > 1 || (!!qval && qval != '*:*');
 
 					$("#selected_data")[0].disabled = Basket.length < 1;
 					$("#selected_data")[0].checked = Basket.length > 0 && !hasFilter;
