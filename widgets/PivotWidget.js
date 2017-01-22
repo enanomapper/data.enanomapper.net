@@ -1,173 +1,177 @@
 (function (Solr, a$, $, jT) {
-
-	var buildValueRange = function (facet, suffix) {
-				var stats = facet.stats.stats_fields;
-				return 	" = " + (stats.loValue.min == null ? "-&#x221E;" :  stats.loValue.min) +
-								"&#x2026;" + (stats.loValue.max == null ? "&#x221E;" : stats.loValue.max) +
-								" " + (suffix == null ? jT.ui.formatUnits(facet.value) : suffix);
-			};
-	
-  jT.PivotWidgeting = function (settings) {
-    a$.extend(this, settings);
-    this.contextFields = Object.keys(settings.facetFields);
-    this.overallStatistics = {};
-  }
   
-  jT.PivotWidgeting.prototype = {
-    
-    init: function (manager) {
-      this.manager = manager;
+  function buildValueRange(stats, isUnits) {
+    var vals = " = ";
 
-      var loc = { stats: this.id + "_stats" };
-      if (this.exclusion)
-        loc.ex = this.id + "_tag";
-
-      this.manager.addParameter('facet.pivot', this.pivotFields.join(","), loc);
-      this.manager.addParameter('stats', true);
-      this.manager.addParameter('stats.field', this.statField, { tag: this.id + "_stats", min: true, max: true });
-      
-      this.topField = this.pivotFields[0];
-      
-      var self = this;
-      a$.each(this.facetFields, function (f, k) {
-        manager.addListeners(f.widget = new (a$(Solr.Faceting))({
-          id: k,
-          field: k,
-          multivalue: self.multivalue,
-          aggregate: self.aggregate,
-          exclusion: self.exclusion,
-          color: f.color
-        }));
+    // min ... average? ... max
+    vals += (stats.min == null ? "-&#x221E;" :  stats.min);
+    if (!!stats.avg) vals += "&#x2026;" + stats.avg;
+    vals += "&#x2026;" + (stats.max == null ? "&#x221E;" : stats.max);
+  						
+    if (isUnits)
+      vals += " " + jT.ui.formatUnits(stats.val)
+        .replace(/<sup>(2|3)<\/sup>/g, "&#x00B$1;")
+        .replace(/<sup>(\d)<\/sup>/g, "^$1");
         
-        f.widget.init(manager);
-      });
+    return vals;
+	};
+
+  function InnerTagWidgeting (settings) {
+    this.id = settings.id;
+    this.pivotWidget = settings.pivotWidget;
+  };
+  
+  var iDificationRegExp = /\W/g;
+  
+  InnerTagWidgeting.prototype = {
+    pivotWidget: null,
+    
+    hasValue: function (value) {
+      return this.pivotWidget.hasValue(this.id + ":" + value);
     },
     
-		buildFacetDom: function (facet, renderer) {
-      var elements = [], root;
-			
-			if (facet.pivot == null || !facet.pivot.length) // no separate pivots - nothing to declare
-				;
-			else {
-				for (var i = 0, fl = facet.pivot.length, f;i < fl; ++i) {
-					f = facet.pivot[i];
-					f.parent = facet;
-					elements.push(f.field == this.endpointField ? renderer(f).addClass(this.facetFields[f.field].color) : this.buildFacetDom(f, renderer)[0]);
-					if (f.field == this.endpointField && f.pivot)
-					  a$.each(f.pivot, function (o) { o.parent = f; });
-				}
-	
-				if (elements.length > 0 && facet.field != this.topField) {
-					root = jT.getFillTemplate($("#tag-facet"), facet);
-					
-					// we need to add outselves as main tag
-					if (facet.field != this.endpointField)
-				    root.append(renderer(facet).addClass("category title").addClass(this.facetFields[facet.field].color));
-					
-					root.append(elements);
-					elements = [root];
-				}
-			}
-			
-			return elements;
-		},
-		
-		buildStatistics: function (facet, stats) {
-  		var self = this;
-  		
-  		if (stats === undefined)
-  		  stats = self.overallStatistics;
-  		  
-  		stats = stats[facet.value.replace(/\s/, "_")] = facet.stats.stats_fields;
-  		a$.each(facet.pivot, function (f) {
-    		self.buildStatistics(f, stats);
-  		});
-		},
+    clickHandler: function (value) {
+      return this.pivotWidget.clickHandler(this.id + ":" + value);
+    },
     
-		afterTranslation : function(data) {
-			var self = this,
-					root = data.pivots[self.pivotFields],
-					refresh = this.target.data("refreshPanel");
-					
-			if (root === undefined) {
-				this.target.html('No items found in current selection');
-				return;
-			}
+    modifyTag: function (info) {
+      info.hint = !info.unit ? 
+        info.buildValueRange(info) :
+        "\n" + info.unit.buckets.map(function (u) { return buildValueRange(u, true); }).join("\n");
+        
+      info.color = this.color;
+  		return info;
+    }
+  };
+  
+  var InnerTagWidget = a$(jT.TagWidget, InnerTagWidgeting);
+  
+	/** The general wrapper of all parts
+  	*/
+  jT.kits.PivotWidgeting = function (settings) {
+    a$.extend(true, this, a$.common(settings, this));
 
-      // some cleanup...
-      $(".dynamic-tab", self.target.parent()[0]).each(function () {
-  			var hdr = getHeaderText($(this).closest(".widget-root").prev());
-  			
-        hdr.textContent = jT.ui.updateCounter(hdr.textContent, 0);
-        $("ul", this).remove();
-      });
+    this.target = settings.target;
+    this.targets = {};
+    this.lastEnabled = 0;
+    this.initialPivotCounts = null;
+  };
+  
+  jT.kits.PivotWidgeting.prototype = {
+    __expects: [ "getFaceterEntry", "getPivotEntry", "getPivotCounts", "auxHandler" ],
+    automatic: false,
+    renderTag: null,
+    
+    init: function (manager) {
+      a$.pass(this, jT.kits.PivotWidgeting, "init", manager);
+      this.manager = manager;
       
-			for (var i = 0, fl = root.length; i < fl; ++i) {
-				var facet = root[i], 
-				    fid = facet.value.replace(/\s/, "_"),
-				    target;
-				
-				// we need to check if we have that accordion element created.
-				if (facet.field == this.topField) {
-  				target = $("#" + fid);
-  				
-  				if (target.length > 0) {
-    				var hdr = getHeaderText(target.closest(".widget-root").prev());
-            hdr.textContent = jT.ui.updateCounter(hdr.textContent, facet.count);
-    		  }
-  				else {
-    				facet.id = fid;
-    				self.target.before(target = jT.getFillTemplate($("#tab-topcategory"), facet));
-    				target = $(target.last()).addClass("dynamic-tab");
-    				self.tabsRefresher();
-    				self.buildStatistics(facet);
-  				}
-				}
-				
-				target.append(self.buildFacetDom(facet, function (f) {
-					var msg = "";
-					
-					if (f.pivot == undefined) 
-						msg = buildValueRange(f, "");
-					else for ( var j = 0, ul = f.pivot.length; j < ul; ++j ) { 
-						if (j > 0)
-							msg += ", ";
-							
-						msg += buildValueRange(f.pivot[j]);
-					}
-					
-					return self.renderTag( f.value, f.count, msg, self.facetFields[f.field].widget.clickHandler(f.value));
-				}));
-			}
+      this.manager.getListener("current").registerWidget(this, true);
+    },
+    
+    addFaceter: function (info, idx) {
+      var f = a$.pass(this, jT.kits.PivotWidgeting, "addFaceter", info, idx);
+      if (typeof info === "object")
+        f.color = info.color;
+      if (idx > this.lastEnabled && !info.disabled)
+        this.lastEnabled = idx;
+
+      return f;
+    },
+    
+    afterTranslation: function (data) {
+      var pivot = this.getPivotCounts(data.facets);
+
+      a$.pass(this, jT.kits.PivotWidgeting, "afterTranslation", data);
+        
+      // Iterate on the main entries
+      for (i = 0;i < pivot.length; ++i) {
+        var p = pivot[i],
+            pid = p.val.replace(iDificationRegExp, "_"),
+            target = this.targets[pid];
+        
+        if (!target) {
+          this.targets[pid] = target = new jT.AccordionExpansion($.extend(true, {}, this.settings, this.getFaceterEntry(0), { id: pid, title: p.val }));
+          target.updateHandler = this.updateHandler(target);
+          target.target.children().last().remove();
+        }
+        else
+          target.target.children('ul').hide();
+          
+        this.traversePivot(target.target, p, 1);
+        target.updateHandler(p.count);
+      }
+      
+      // Finally make this update call.
+      this.target.accordion("refresh");
+    },
+    
+    updateHandler: function (target) {
+			var hdr = target.getHeaderText();
+			return function (count) { hdr.textContent = jT.ui.updateCounter(hdr.textContent, count); };
+    },
+    
+    prepareTag: function (value) {
+      var p = this.parseValue(value);
+      return {
+        title: p.value,
+        color: this.faceters[p.id].color,
+        count: "i",
+        onMain: this.unclickHandler(value),
+        onAux: this.auxHandler(value)
+      };
+    },
+    
+    traversePivot: function (target, root, idx) {
+      var elements = [],
+          faceter = this.getPivotEntry(idx),
+          bucket = root[faceter.id].buckets;
 			
-			if (!!refresh)
-				refresh.call();
-		},
-		
-		locatePivots: function (field, value, deep) {
-  	  		var pivots = [],
-  	      searchLevel = function (list, found) {
-    	      if (!list || !list.length) return;
-    	      for (var i = 0, ll = list.length, e; i < ll; ++i) {
-      	      e = list[i];
-      	        
-      	      if (e.field === field) {
-        	      if (!(found = (e.value === value)))
-                  continue;
-              }
-      	        
-              if (found && (e.field === deep || !e.pivot))
-                pivots.push(e);
-              else if (!!e.pivot)
-    	          searchLevel(e.pivot, found);
-    	      }
-  	      };
+      if (idx === this.lastEnabled) {
+        var w = target.data("widget");
+        if (!w) {
+          w = new InnerTagWidget({
+            id: faceter.id,
+            color: faceter.color,
+            renderItem: this.renderTag,
+            pivotWidget: this,
+            target: target
+          });
+
+          w.init(this.manager);
+          target.data({ widget: w, id: faceter.id });
+        }
+        else
+          target.children().slice(1).remove();
+
+        w.populate(bucket, true);        
+        elements = [ ];
+      }
+			else if (bucket != null) {
+  			for (var i = 0, fl = bucket.length;i < fl; ++i) {
+  				var f = bucket[i],
+  				    fid = f.val.replace(iDificationRegExp, "_"),
+  				    cont$;
+
+          if (target.children().length > 1) // the input field.
+            cont$ = $("#" + fid, target[0]).show();
+          else {
+				    cont$ = jT.ui.fillTemplate($("#tag-facet"), faceter).attr("id", fid);
+            
+    				f.title = f.val;
+    				f.onMain = this.clickHandler(faceter.id + ":" + f.val);
+    				f.hint = buildValueRange(f);
+  					cont$.append(this.renderTag(f).addClass("category title").addClass(faceter.color));
+            elements.push(cont$);
+          }
+  				    
+					this.traversePivot(cont$, f, idx + 1);
+        }
+      }
       
-			searchLevel(this.manager.response.facet_counts.facet_pivot[this.pivotFields]);
-			return pivots;
-		}		
+      target.append(elements);
+		}
+		
 	};
-	
-	jT.PivotWidget = a$(jT.PivotWidgeting);
 	
 })(Solr, asSys, jQuery, jToxKit);
