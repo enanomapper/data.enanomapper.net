@@ -412,7 +412,7 @@ var Manager,
   		Manager.doRequest();
 		});
 
-		$(".query-left#query").sticky({topSpacing:10});
+		
 	});
 	
 })(Solr, asSys, jQuery, jToxKit);

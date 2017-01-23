@@ -100,6 +100,7 @@ div.query-container>div {
 div.query-container>div.query-left, .sticky-wrapper {
   float: left;
   width: 22%;
+  max-width: 450px;
 }
 
 
