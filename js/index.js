@@ -104,13 +104,8 @@ var	Settings = {
 
 $(document).ready(function(){
 
-	$("#smartmenu" ).smartmenus();
-	$(document).on("click", "ul.tag-group", function (e) { 
-		$(this).toggleClass("folded");
-		$(this).parents(".widget-root").data("refreshPanel").call();
-	});
-  
-  $( "#about-message" ).dialog({
+	$("#smartmenu").smartmenus();
+  $("#about-message").dialog({
     modal: true,
     buttons: {
       Ok: function() {
@@ -118,9 +113,10 @@ $(document).ready(function(){
       }
     }
   });
-  
-  $( "#about-message" ).dialog("close");
+  $("#about-message").dialog("close");
   
   jT.ui.initialize();
-  jT.ui.kit("freetext").addValue($.url().param('search') || '');
+  var needle = $.url().param('search');
+  if (!!needle)
+    jT.ui.kit("freetext").addValue(needle);
 });
