@@ -84,7 +84,6 @@ section.item-list article.item .avatar img {
 div.query-container {
   position: relative;
   width: 100%;
-  height: 100vh;
 }
 
 div.query-container>div:first-child {
