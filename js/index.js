@@ -116,6 +116,7 @@ function initUI() {
     },
     resize: function(e, ui) {
       $( "#accordion" ).accordion( "refresh" );
+      $('#query-sticky-wrapper').width( $("#accordion").width());
       $("#accordion-resizer").width($("#accordion-resizer").width()-7); // minus the total padding of parent elements
       resDiv.width(resSize.width + ui.originalSize.width - ui.size.width );
     }
