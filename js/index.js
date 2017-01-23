@@ -1,130 +1,111 @@
+var	Settings = {
+  	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
+  	//this is test server only    
+   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+//       solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
+//       solrUsername: "nanoreg1",
+      
+// 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/enm_shard1_replica1/',
+    	listingFields: [ 
+        "name:name_hs", 
+        "publicname:publicname_hs", 
+        "owner_name:owner_name_hs",
+        "substanceType:substanceType_hs",
+        "s_uuid:s_uuid_hs",
+        "content:content_hss",
+        "SUMMARY.*"
+      ],
+      summaryRenderers: {
+    		"SIZE": function (val, topic) {
+       		if (!Array.isArray(val) || val.length == 1)
+       		  return val;
+        		  
+        		var min = null, 
+        		    max = null, 
+        		    pattern = null,
+        		    re = /([+-]?[0-9]*[.,]?[0-9]+)/;
+        		
+            for (var i = 0;i < val.length; ++i) {
+              var v, m = val[i].match(re);
+              
+              if (!m) 
+                continue;
+              if (!pattern)
+                pattern = val[i];
+                
+              v = parseFloat(m[1]);
+              if (min == null)
+                max = min = v;
+              else if (v > max)
+                max = v;
+              else if (v < min)
+                min = v;
+            }
+            
+            return { 'topic': topic.toLowerCase(), 'content' : pattern.replace(re, min + "&nbsp;&hellip;&nbsp;" + max) };
+      		}
+      },
+      facets: [ 
+    		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 3 } }, 
+  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
+    		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
+    		{ id: 'species', field: "Species_s", title: "Species", color: "green", facet: { mincount: 2 }, domain: { blockChildren: "type_s:params" } }, 
+    		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2 } }, 
+    		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1 } },
+    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
+    		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2 } },
+  /*
+    		'instruments': 		{ field: "_childDocuments_.params.DATA_GATHERING_INSTRUMENTS" },
+    		'testtype': '_childDocuments_.conditions.Test_type',
+  			'solvent' :	'_childDocuments_.conditions.Solvent',
+  			'route':	'_childDocuments_.params.Route_of_administration',
+  			'genotoxicity':	'_childDocuments_.params.Type_of_genotoxicity'
+  			*/
+    	],
+  		exportFields: "Ambit_InchiKey:s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY",
+  		exportTypes: [
+        { mime: "application/json", icon: "images/types/json64.png"},
+        { mime: "text/csv", icon: "images/types/csv64.png"},
+        { mime: "text/tsv", icon: "images/types/txt64.png"}
+  /*
+        { mime: "chemical/x-cml", icon: "images/types/cml64.png"},
+        { mime: "chemical/x-mdl-sdfile", icon: "images/types/sdf64.png"},
+        { mime: "chemical/x-daylight-smiles", icon: "images/types/smi64.png"},
+        { mime: "chemical/x-inchi", icon: "images/types/inchi64.png"},
+        { mime: "text/uri-list", icon: "images/types/lnk64.png"},
+        { mime: "application/pdf", icon: "images/types/pdf64.png"},
+        { mime: "application/rdf+xml", icon: "images/types/rdf64.png"}
+  */
+      ],
+    	onPreInit: function (manager) {
+      	// ... auto-completed text-search.
+      	var textWidget = new (a$(Solr.Requesting, Solr.Texting, jT.AutocompleteWidget))({
+      		id : 'text',
+      		target : $('#freetext'),
+      		domain: { type: "parent", which: "type_s:substance" },
+      		useJson: true,
+      		groups : this.facets,
+      		SpyManager: a$(Solr.Configuring, Solr.QueryingURL),
+      		lookupMap: lookup
+      	});
+      	
+      	manager.addListeners(textWidget);
 
-function getTitleFromFacet(facet) {
-  facet = facet.replace(/^caNanoLab\./, "").replace(/^http\:\/\/dx\.doi\.org/, "");
-  return (lookup[facet] || facet).replace("NPO_", "").replace(" nanoparticle", "");
-}
+      	// Set some general search machanisms
+      	$(document).on('click', "a.freetext_selector", function (e) {
+      		textWidget.set(this.innerText);
+      		manager.doRequest();
+      	});
+    		
+    		jT.ui.attachKit(textWidget.target, textWidget);
+    	}
+      
+		};
 
-function initUI() {
-	$("#smartmenu" ).smartmenus();
-	$(document).on("click", "ul.tag-group", function (e) { 
-		$(this).toggleClass("folded");
-		$(this).parents(".widget-root").data("refreshPanel").call();
-	});
-			
-	// Now instantiate and things around it.
-	$("#accordion").accordion({
-		heightStyle: "content",
-		collapsible: true,
-		animate: 200,
-		active: false,
-		activate: function( event, ui ) {
-			if (!!ui.newPanel && !!ui.newPanel[0]) {
-				var header = ui.newHeader[0],
-						panel = ui.newPanel[0],
-						filter = $("input.widget-filter", panel),
-						widgetFilterScroll = filter.outerHeight(true),
-						refreshPanel;
-				
-				if (!$("span.ui-icon-search", header).length) {
-					refreshPanel = function () {
-			  		if (panel.scrollHeight > panel.clientHeight || filter.val() != "" || $(header).hasClass("nested-tab") ) {
-							$(panel).scrollTop(widgetFilterScroll);
-							filter.show()
-							$("span.ui-icon-search", header).removeClass("unused");
-						}
-						else {
-							filter.hide();
-							$("span.ui-icon-search", header).addClass("unused");
-						}
-					};
+$(document).ready(function(){
 
-					ui.newPanel.data("refreshPanel", refreshPanel);
-					ui.newHeader.data("refreshPanel", refreshPanel);
-					ui.newHeader.append($('<span class="ui-icon ui-icon-search"></span>').on("click", function (e) {
-						ui.newPanel.animate({ scrollTop: ui.newPanel.scrollTop() > 0 ? 0 : widgetFilterScroll }, 300, function () {
-							if (ui.newPanel.scrollTop() > 0)
-								$("input.widget-filter", panel).blur();
-							else
-								$("input.widget-filter", panel).focus();
-						});
-							
-						e.stopPropagation();
-						e.preventDefault();
-					}));
-				}
-				else
-					refreshPanel = ui.newPanel.data("refreshPanel");
-				
-				filter.val("");
-				refreshPanel();
-	  	}
-		}
-	});
-	
-	// ... and prepare the actual filtering funtion.
-	$(document).on('keyup', "#accordion input.widget-filter", function (e) {
-		var needle = $(this).val().toLowerCase(),
-				div = $(this).parent('div.widget-root'),
-				cnt;
-
-		if ((e.keyCode || e.which) == 27)
-			$(this).val(needle = "");
-		
-		if (needle == "")
-			$('li,ul', div[0]).show();
-		else {
-			$('li>a', div[0]).each( function () {
-				var fold = $(this).parents("ul.tag-group");
-				cnt = fold.data("hidden") || 0;
-				if (this.title.toLowerCase().indexOf(needle) >= 0 || this.innerText.toLowerCase().indexOf(needle) >= 0)
-					$(this).parent().show();
-				else {
-					$(this).parent().hide();
-					++cnt;
-				}
-				
-				if (!!fold.length && !!cnt)
-					fold.data("hidden", cnt);
-			});
-		}
-		
-		// now check if some of the boxes need to be hidden.
-		$("ul.tag-group", div[0]).each(function () {
-  		var me = $(this);
-			cnt = parseInt(me.data("hidden")) || 0;
-			if (me.children().length > cnt)
-				me.show().removeClass("folded");
-			else
-				me.hide().addClass("folded");
-
-			me.data("hidden", null);
-		});
-	});
-		    
-	var resDiv = $("#result-tabs"),
-	    resSize;
-	
-	resDiv.tabs( { } );
-		
-  $("#accordion-resizer").resizable({
-    minWidth: 150,
-    maxWidth: 450,
-    grid: [10, 10],
-    handles: "e",
-    start: function(e, ui) {
-      resSize = { width: resDiv.width(), height: resDiv.height() };
-    },
-    resize: function(e, ui) {
-      $( "#accordion" ).accordion( "refresh" );
-      $('#query-sticky-wrapper').width( $("#accordion").width());
-      $("#accordion-resizer").width($("#accordion-resizer").width()-7); // minus the total padding of parent elements
-      resDiv.width(resSize.width + ui.originalSize.width - ui.size.width );
-    }
-  });
-  
-  $(".query-left#query").sticky({topSpacing:10, widthFromWrapper:false });
-
-  $( "#about-message" ).dialog({
+	$("#smartmenu").smartmenus();
+  $("#about-message").dialog({
     modal: true,
     buttons: {
       Ok: function() {
@@ -132,5 +113,10 @@ function initUI() {
       }
     }
   });
-  $( "#about-message" ).dialog("close");
-}
+  $("#about-message").dialog("close");
+  
+  jT.ui.initialize();
+  var needle = $.url().param('search');
+  if (!!needle)
+    jT.ui.kit("freetext").addValue(needle);
+});
