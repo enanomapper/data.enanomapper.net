@@ -15,6 +15,7 @@ var	Settings = {
         "content:content_hss",
         "SUMMARY.*"
       ],
+      summaryPrimes: [ "SIZE", "RESULTS" ],
       summaryRenderers: {
     		"SIZE": function (val, topic) {
        		if (!Array.isArray(val) || val.length == 1)
