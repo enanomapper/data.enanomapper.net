@@ -50,7 +50,7 @@ var	Settings = {
     		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 3 } }, 
   			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
     		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
-    		{ id: 'species', field: "Species_s", title: "Species", color: "green", facet: { mincount: 2 }, domain: { blockChildren: "type_s:params" } }, 
+    		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
     		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2 } }, 
     		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1 } },
     		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
@@ -94,7 +94,7 @@ var	Settings = {
 
       	// Set some general search machanisms
       	$(document).on('click', "a.freetext_selector", function (e) {
-      		textWidget.set(this.innerText);
+      		textWidget.addValue(this.innerText);
       		manager.doRequest();
       	});
     		
