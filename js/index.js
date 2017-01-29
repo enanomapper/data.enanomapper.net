@@ -2,7 +2,7 @@ var	Settings = {
   	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
   	//this is test server only    
    		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
-      ambitURL: 'https://apps.ideaconsult.net:443/enmtest/',
+      ambitURL: 'https://data.enanomapper.net/',
 //       solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
 //       solrUsername: "nanoreg1",
       
