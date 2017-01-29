@@ -2,6 +2,7 @@ var	Settings = {
   	//solrUrl: 'https://search.data.enanomapper.net/solr/enm_shard1_replica1/',
   	//this is test server only    
    		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+      ambitURL: 'https://apps.ideaconsult.net:443/enmtest/',
 //       solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1ndm_shard1_replica1/',
 //       solrUsername: "nanoreg1",
       
@@ -15,7 +16,6 @@ var	Settings = {
         "content:content_hss",
         "SUMMARY.*"
       ],
-      summaryPrimes: [ "SIZE", "RESULTS" ],
       summaryRenderers: {
     		"SIZE": function (val, topic) {
        		if (!Array.isArray(val) || val.length == 1)
@@ -63,20 +63,22 @@ var	Settings = {
   			'genotoxicity':	'_childDocuments_.params.Type_of_genotoxicity'
   			*/
     	],
-  		exportFields: "Ambit_InchiKey:s_uuid,doc_uuid,topcategory,endpointcategory,guidance,substanceType,name,publicname,reference,reference_owner,interpretation_result,reference_year,content,owner_name,P-CHEM.PC_GRANULOMETRY_SECTION.SIZE,CASRN.CORE,CASRN.COATING,CASRN.CONSTITUENT,CASRN.ADDITIVE,CASRN.IMPURITY,EINECS.CONSTITUENT,EINECS.ADDITIVE,EINECS.IMPURITY,ChemicalName.CORE,ChemicalName.COATING,ChemicalName.CONSTITUENT,ChemicalName.ADDITIVE,ChemicalName.IMPURITY,TradeName.CONSTITUENT,TradeName.ADDITIVE,TradeName.IMPURITY,COMPOSITION.CORE,COMPOSITION.COATING,COMPOSITION.CONSTITUENT,COMPOSITION.ADDITIVE,COMPOSITION.IMPURITY",
-  		exportTypes: [
-        { mime: "application/json", icon: "images/types/json64.png"},
-        { mime: "text/csv", icon: "images/types/csv64.png"},
-        { mime: "text/tsv", icon: "images/types/txt64.png"}
-  /*
-        { mime: "chemical/x-cml", icon: "images/types/cml64.png"},
-        { mime: "chemical/x-mdl-sdfile", icon: "images/types/sdf64.png"},
-        { mime: "chemical/x-daylight-smiles", icon: "images/types/smi64.png"},
-        { mime: "chemical/x-inchi", icon: "images/types/inchi64.png"},
-        { mime: "text/uri-list", icon: "images/types/lnk64.png"},
-        { mime: "application/pdf", icon: "images/types/pdf64.png"},
-        { mime: "application/rdf+xml", icon: "images/types/rdf64.png"}
-  */
+      exportType: [
+        { type: "substance", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs"},
+        { type: "composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] "},
+        { type: "study", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:study ]"},
+        { type: "params", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]"},
+        { type: "conditions", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]"}
+      ],
+  		exportFormats: [
+        { mime: "application/json", name:"json", icon: "images/types/json64.png", server: 'solrUrl'},
+        { mime: "text/csv", name:"csv", icon: "images/types/csv64.png", server: 'solrUrl'},
+        { mime: "text/tsv", name:"tsv", icon: "images/types/txt64.png", server: 'solrUrl'},
+        { mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", name:"xslx", icon: "images/types/xlsx.png", server: 'ambitURL'},
+        { mime: "application/rdf+xml", name:"rdf", icon: "images/types/rdf64.png", server: 'ambitURL'},
+        { mime: "application/ld+json", name:"json-ld", icon: "images/types/json-ld.png", server: 'ambitURL'},
+        { mime: "application/isa+json", name:"isa-json", icon: "images/types/isa.png", server: 'ambitURL'}
+ 
       ],
     	onPreInit: function (manager) {
       	// ... auto-completed text-search.
