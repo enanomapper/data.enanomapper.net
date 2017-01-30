@@ -96,8 +96,8 @@ var	Settings = {
 
       	// Set some general search machanisms
       	$(document).on('click', "a.freetext_selector", function (e) {
-      		textWidget.addValue(this.innerText);
-      		manager.doRequest();
+      		if (textWidget.addValue(this.innerText))
+      		  manager.doRequest();
       	});
     		
     		jT.ui.attachKit(textWidget.target, textWidget);
