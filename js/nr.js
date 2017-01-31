@@ -43,20 +43,18 @@ var	Settings = {
       },
       facets: [ 
     		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 } }, 
+  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
+  			    		
     		{ id: 'cell', field: "E.cell_type_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
     		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-    		
-    		
-  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
-
 	  		{ id: 'interpretation', field: "MEDIUM_s", title: "Medium", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
   		  { id: 'dprotocol', field: "Dispersion protocol_s", title: "Dispersion protocol", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} }, 
-  		    		  		
+ 		    		  		
     		{ id: 'reference_year', field: "reference_year_s", title: "Experiment year", color: "green", facet: { mincount: 1 } },
     		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
     		{ id: 'route', field: "E.exposure_route_s", title: "Exposure route", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:conditions" } }}, 
-  		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 1 } },
-			{ id: 'method', field: "E.method_s", title: "Method", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} } 
+  			{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 1 } },
+				{ id: 'method', field: "E.method_s", title: "Method", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} } 
     	],
       exportType: [
         { type: "substance", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs"},
