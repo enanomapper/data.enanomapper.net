@@ -6803,5 +6803,6 @@ var lookup = {
   "CHEBI_132889" : "graphene oxide",
   "CHEBI_78897" : "trypan blue",
   "CHEBI_8806" : "Resazurin",
-  "ENM_0000044_SECTION" : "Barrier integrity"
+  "ENM_0000044_SECTION" : "Barrier integrity",
+  "CHEBI_133326" : "barium sulfate"
  }		
