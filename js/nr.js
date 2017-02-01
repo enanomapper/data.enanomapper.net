@@ -1,4 +1,5 @@
 var	Settings = {
+      solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
       ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
 		  solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1test_shard1_replica1/',
 
@@ -57,11 +58,12 @@ var	Settings = {
 				{ id: 'method', field: "E.method_s", title: "Method", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} } 
     	],
       exportType: [
-        { type: "substance", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs"},
-        { type: "composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] "},
-        { type: "study", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:study ]"},
-        { type: "params", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]"},
-        { type: "conditions", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]"}
+        { type: "Material, composition and study", fields: "*", formats: "json,csv,tsv,xslx,rdf,json-ld,isa-json"},
+        { type: "Material identifiers", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs", formats: "json,csv,tsv"},
+        { type: "Material composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] ", formats: "json"},
+        { type: "Study results", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:study ]", formats: "json"},
+        { type: "Protocol parameters", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]", formats: "json"},
+        { type: "Study factors", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]", formats: "json"}
       ],
   		exportFormats: [
         { mime: "application/json", name:"json", icon: "images/types/json64.png", server: 'solrUrl'},
