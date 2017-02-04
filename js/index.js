@@ -13,13 +13,11 @@ $(document).ready(function(){
   
   Settings.onPreInit = function (manager) {
   	// ... auto-completed text-search.
-  	var textWidget = new (a$(Solr.Requesting, Solr.Texting, jT.AutocompleteWidget))({
+  	var textWidget = new (a$(Solr.Requesting, Solr.Spying, Solr.Texting, jT.AutocompleteWidget))({
   		id : 'text',
   		target : $('#freetext'),
   		domain: { type: "parent", which: "type_s:substance" },
   		useJson: true,
-  		groups : this.facets,
-  		SpyManager: a$(Solr.Configuring, Solr.QueryingURL),
   		lookupMap: lookup,
   		urlFeed: "search"
   	});
