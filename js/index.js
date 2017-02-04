@@ -12,7 +12,12 @@ $(document).ready(function(){
   $("#about-message").dialog("close");
   
   jT.ui.initialize();
+  
   var needle = $.url().param('search');
-  if (!!needle)
-    jT.ui.kit("freetext").addValue(needle);
+  if (!!needle) {
+    var widget = jT.ui.kit("freetext");
+    if (widget.addValue(needle))
+      widget.doRequest();
+  }
+
 });
