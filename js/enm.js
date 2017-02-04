@@ -67,28 +67,5 @@ var	Settings = {
         { mime: "application/ld+json", name:"json-ld", icon: "images/types/json-ld.png", server: 'ambitURL'},
         { mime: "application/isa+json", name:"isa-json", icon: "images/types/isa.png", server: 'ambitURL'}
  
-      ],
-    	onPreInit: function (manager) {
-      	// ... auto-completed text-search.
-      	var textWidget = new (a$(Solr.Requesting, Solr.Texting, jT.AutocompleteWidget))({
-      		id : 'text',
-      		target : $('#freetext'),
-      		domain: { type: "parent", which: "type_s:substance" },
-      		useJson: true,
-      		groups : this.facets,
-      		SpyManager: a$(Solr.Configuring, Solr.QueryingURL),
-      		lookupMap: lookup
-      	});
-      	
-      	manager.addListeners(textWidget);
-
-      	// Set some general search machanisms
-      	$(document).on('click', "a.freetext_selector", function (e) {
-      		if (textWidget.addValue(this.innerText))
-      		  manager.doRequest();
-      	});
-    		
-    		jT.ui.attachKit(textWidget.target, textWidget);
-    	}
-      
+      ]
 		};
