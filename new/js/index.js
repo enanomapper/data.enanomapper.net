@@ -11,8 +11,27 @@ $(document).ready(function(){
   });
   $("#about-message").dialog("close");
   
+  Settings.onPreInit = function (manager) {
+  	// ... auto-completed text-search.
+  	var textWidget = new (a$(Solr.Requesting, Solr.Spying, Solr.Texting, jT.AutocompleteWidget))({
+  		id : 'text',
+  		target : $('#freetext'),
+  		domain: { type: "parent", which: "type_s:substance" },
+  		useJson: true,
+  		lookupMap: lookup,
+  		urlFeed: "search"
+  	});
+  	
+  	manager.addListeners(textWidget);
+
+  	// Set some general search machanisms
+  	$(document).on('click', "a.freetext_selector", function (e) {
+  		if (textWidget.addValue(this.innerText))
+  		  manager.doRequest();
+  	});
+		
+		jT.ui.attachKit(textWidget.target, textWidget);
+	};
+  
   jT.ui.initialize();
-  var needle = $.url().param('search');
-  if (!!needle)
-    jT.ui.kit("freetext").addValue(needle);
 });

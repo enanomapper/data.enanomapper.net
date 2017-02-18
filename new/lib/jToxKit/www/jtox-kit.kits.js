@@ -313,7 +313,7 @@ jT.FacetedSearch.prototype = {
 	*/
   initComm: function () {
 	var Manager, Basket,
-		PivotWidget = a$(Solr.Requesting, Solr.Pivoting, jT.PivotWidgeting, jT.RangeWidgeting),
+		PivotWidget = a$(Solr.Requesting, Solr.Spying, Solr.Pivoting, jT.PivotWidgeting, jT.RangeWidgeting),
 		TagWidget = a$(Solr.Requesting, Solr.Faceting, jT.AccordionExpansion, jT.TagWidget);
 
 	this.manager = Manager = new (a$(Solr.Management, Solr.Configuring, Solr.QueryingJson, jT.Translation, jT.NestedSolrTranslation))(this);
@@ -377,7 +377,7 @@ jT.FacetedSearch.prototype = {
 				}, f))
 	  
 	  w.afterTranslation = function (data) { 
-		this.populate(this.getFacetCounts(data.facets)); 
+		  this.populate(this.getFacetCounts(data.facets)); 
 	  };
 				
 			Manager.addListeners(w);
@@ -399,9 +399,9 @@ jT.FacetedSearch.prototype = {
 			  { id: "endpointcategory", field: "endpointcategory_s", color: "blue" },
 			  { id: "effectendpoint", field: "effectendpoint_s", color: "green", ranging: true }, 
 			  { id: "unit", field: "unit_s", disabled: true, ranging: true }
-	  ],
-	  statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
-	  slidersTarget: $("#sliders"),
+  	  ],
+  	  statistics: { 'min': "min(loValue_d)", 'max': "max(loValue_d)", 'avg': "avg(loValue_d)" },
+  	  slidersTarget: $("#sliders"),
 			
 			multivalue: true,
 			aggregate: true,
@@ -542,8 +542,7 @@ jT.FacetedSearch.prototype = {
 
 					$("button", ui.newPanel[0]).button("disable").button("option", "label", "No output format selected...");
 
-					var qval = self.manager.getParameter('q'),
-					hasFilter = self.manager.getParameter("json.filter").length > 0;
+					var hasFilter = self.manager.getParameter("json.filter").length > 0;
 
 					$("#selected_data")[0].disabled = self.basket.length < 1;
 					$("#filtered_data")[0].disabled = !hasFilter;
@@ -861,6 +860,16 @@ jT.FacetedSearch.prototype = {
   
 	/** The general wrapper of all parts
   	*/
+  	
+  var defaultParameters = {
+    'facet': true,
+    'rows': 0,
+    'fl': "id",
+    'facet.limit': -1,
+    'facet.mincount': 1,
+    'echoParams': "none"
+  };
+  	
   jT.RangeWidgeting = function (settings) {
     a$.extend(true, this, a$.common(settings, this));
 
@@ -899,8 +908,11 @@ jT.FacetedSearch.prototype = {
             
       a$.pass(this, jT.RangeWidgeting, "afterTranslation", data);
             
-      if (!this.pivotMap)
-        this.pivotMap =  this.buildPivotMap(pivot);
+      if (!this.pivotMap) {
+        var qval = this.manager.getParameter('q').value || "";
+        if ((!qval || qval == "*:*") && !this.manager.getParameter(this.useJson ? "json.filter" : "fq").value)
+          this.pivotMap =  this.buildPivotMap(pivot);
+      }
       else if (!this.updateRequest)
         this.rangeRemove();
       else if (this.rangeWidgets.length > 0) {
@@ -996,6 +1008,68 @@ jT.FacetedSearch.prototype = {
       return outs.join("/") + " <i>(" + info.count + ")</i>";
     },
     
+    ensurePivotMap: function (value) {
+      if (this.pivotMap != null)
+        return true;
+        
+      var fqName = this.useJson ? "json.filter" : "fq",
+          self = this;
+      
+      // We still don't have it - make a separate request
+      this.doSpying(
+        function (man) {
+          man.removeParameters(fqName);
+          man.removeParameters('fl');
+          man.getParameter('q').value = "";
+          man.mergeParameters(defaultParameters);
+        },
+        function (data) {
+          self.pivotMap = self.buildPivotMap(self.getPivotCounts(data.facets));
+          self.openRangers(value);
+        }
+      );
+      
+      return false;
+    },
+    
+    openRangers: function (value) {
+      var entry = this.pivotMap[value],
+          pivotMap = this.lastPivotMap = this.buildPivotMap(this.getPivotCounts()),
+          current = pivotMap[value];
+      
+      this.lastPivotValue = value;
+      this.slidersTarget.empty().parent().addClass("active");
+
+      for (var i = 0, el = entry.length; i < el; ++i) {
+        var all = entry[i],
+            ref = current[i],
+            setup = {}, w,
+            el$ = jT.ui.fillTemplate("#slider-one");
+
+        this.slidersTarget.append(el$);
+
+        setup.id = all.id;
+        setup.targetValue = value;          
+        setup.color = all.color;
+        setup.field = this.field;
+        setup.limits = [ all.min, all.max ];
+        setup.initial = [ ref.min, ref.max ];
+        setup.target = el$;
+        setup.isRange = true;
+        setup.valuePattern = all.pattern + "{{v}}";
+        setup.automatic = true;
+        setup.width = parseInt(this.slidersTarget.width() - $("#sliders-controls").width() - 20) / (Math.min(el, 2) + 0.1);
+        setup.title = this.buildTitle(ref, /^unit[_shd]*|^effectendpoint[_shd]*/);
+        setup.units = ref.id == "unit" ? jT.ui.formatUnits(ref.val) : "";
+        setup.useJson = this.useJson;
+        setup.domain = this.domain;
+        setup.sliderRoot = this;
+          
+        this.rangeWidgets.push(w = new SingleRangeWidget(setup));
+        w.init(this.manager);
+      }
+    },
+    
     auxHandler: function (value) {
       var self = this;
       
@@ -1005,44 +1079,8 @@ jT.FacetedSearch.prototype = {
         self.rangeRemove();
 
         // we've clicked out pivot button - clearing was enough.
-        if (value == self.lastPivotValue)
-          return false;
-
-        var entry = self.pivotMap[value],
-            pivotMap = self.lastPivotMap = self.buildPivotMap(self.getPivotCounts()),
-            current = pivotMap[value];
-        
-        self.lastPivotValue = value;
-        self.slidersTarget.empty().parent().addClass("active");
-
-        for (var i = 0, el = entry.length; i < el; ++i) {
-          var all = entry[i],
-              ref = current[i],
-              setup = {}, w,
-              el$ = jT.ui.fillTemplate("#slider-one");
-
-          self.slidersTarget.append(el$);
-
-          setup.id = all.id;
-          setup.targetValue = value;          
-          setup.color = all.color;
-          setup.field = self.field;
-          setup.limits = [ all.min, all.max ];
-          setup.initial = [ ref.min, ref.max ];
-          setup.target = el$;
-          setup.isRange = true;
-          setup.valuePattern = all.pattern + "{{v}}";
-          setup.automatic = true;
-          setup.width = parseInt(self.slidersTarget.width() - $("#sliders-controls").width() - 20) / (Math.min(el, 2) + 0.1);
-          setup.title = self.buildTitle(ref, /^unit[_shd]*|^effectendpoint[_shd]*/);
-          setup.units = ref.id == "unit" ? jT.ui.formatUnits(ref.val) : "";
-          setup.useJson = self.useJson;
-          setup.domain = self.domain;
-          setup.sliderRoot = self;
-            
-          self.rangeWidgets.push(w = new SingleRangeWidget(setup));
-          w.init(self.manager);
-        }
+        if (value != self.lastPivotValue && self.ensurePivotMap(value))
+          self.openRangers(value);
         
         return false;
       };
@@ -1223,7 +1261,7 @@ jT.ItemListWidget.prototype = {
         a$.each(c, function (v, k) {
           var m = k.match(/^(\w+)_[shd]+$/);
           k = m && m[1] || k;
-          if (k != "type" && k != "id" && k != "component")
+          if (!k.match(/type|id|component/))
             se.push(jT.ui.formatString(htmlLink, { 
               href: "#", 
               hint: "Freetext search on '" + k + "'", 
@@ -1362,12 +1400,13 @@ jToxKit.ui.templates['faceted-search-kit']  =
 "<div style=\"padding-top: 70px;\"></div>" +
 "</div>" +
 "<div id=\"export_tab\">" +
-"<form target=\"_blank\" method=\"post\" data-ambit=\"true\">" +
+"<form target=\"_blank\" method=\"post\">" +
 "<input type=\"hidden\" name=\"q\"/>" +
 "<input type=\"hidden\" name=\"search\"/>" +
 "<input type=\"hidden\" name=\"fq\"/>" +
 "" +
-
+"" +
+"" +
 "<h6>Select dataset to export</h6>" +
 "<div id=\"export_dataset\">" +
 "<input type=\"radio\" value=\"filtered\" name=\"export_dataset\" id=\"filtered_data\" checked=\"checked\"/>" +
@@ -1375,19 +1414,15 @@ jToxKit.ui.templates['faceted-search-kit']  =
 "<input type=\"radio\" value=\"selected\" name=\"export_dataset\" id=\"selected_data\"/>" +
 "<label for=\"selected_data\">Selected entries</label>" +
 "</div>" +
-"" +
 "<h6>Select export type</h6>" +
 "<div id=\"export_type\"></div>" +
+"<br/>" +
 "<h6>Select output format</h6>" +
 "<input type=\"hidden\" name=\"export_format\" id=\"export_format\"/>" +
-"<div class=\"data_formats selected \"></div>" +
-"" +
+"<div class=\"data_formats\"></div>" +
 "<br/>" +
 "<button type=\"submit\" name=\"export_go\" data-prefix=\"Download\">?</button>" +
-"<div class='ui-state-error ui-corner-all warning-message' style='padding: 0 .7em;'>"+
-		"<p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: .3em;'></span>"+
-		"<strong>Warning:</strong>Please either add entries to the selection or specify a query</p>"+
-	"</div>"+
+"<div class=\"ui-state-error ui-corner-all warning-message\" style=\"padding: 0 .7em;\"><p><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: .3em;\"></span><strong>Warning:</strong>Please either add entries to the selection or specify a query</p></div>" +
 "" +
 "</form>" +
 "</div>" +
@@ -1438,7 +1473,7 @@ jToxKit.ui.templates['faceted-search-templates']  =
 "<div id=\"slider-one\">" +
 "<input type=\"hidden\"/>" +
 "</div>" +
-""+
+"" +
 "<div id=\"export-format\">" +
 "<div class=\"jtox-inline jtox-ds-download jtox-fadable\">" +
 "<a target=\"_blank\" data-mime=\"{{mime}}\" data-name=\"{{name}}\" data-url=\"{{server}}\" href=\"#\"><img class=\"borderless\" jt-src=\"{{icon}}\"/></a>" +
