@@ -8,7 +8,7 @@
 
 (function (a$) {
   // Define this as a main object to put everything in
-  Solr = { version: "0.15.0" };
+  Solr = { version: "0.15.1" };
 
   // Now import all the actual skills ...
   // ATTENTION: Kepp them in the beginning of the line - this is how smash expects them.
@@ -961,6 +961,7 @@ Solr.Texting.prototype = {
   
   domain: null,         // Additional attributes to be adde to query parameter.
   customResponse: null, // A custom response function, which if present invokes priavte doRequest.
+  escapeNeedle: false,  // Whether to put a backslash before white spaces
   
   /** Make the initial setup of the manager.
     */
@@ -976,8 +977,9 @@ Solr.Texting.prototype = {
    * @returns {Boolean} Whether the selection changed.
    */
   addValue: function (q) {
-    var before = this.manager.getParameter('q'),
-        res = this.manager.addParameter('q', q, this.domain),
+    var val = this.escapeNeedle && q ? q.replace(/\s+/g, "\\ ") : q,
+        before = this.manager.getParameter('q'),
+        res = this.manager.addParameter('q', val, this.domain);
         after = this.manager.getParameter('q');
     return res && !a$.equal(before, after);
   },

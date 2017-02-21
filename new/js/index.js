@@ -19,7 +19,8 @@ $(document).ready(function(){
   		domain: { type: "parent", which: "type_s:substance" },
   		useJson: true,
   		lookupMap: lookup,
-  		urlFeed: "search"
+  		urlFeed: "search",
+  		escapeNeedle: true
   	});
   	
   	manager.addListeners(textWidget);
