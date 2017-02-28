@@ -4,26 +4,26 @@ body {
 }
 
 h1, h2, h3 {
-	color: #8C0305;
+	color: #0067FE;
 	font-weight: bold; }
 		
 h4, h5, h6 {
-	color: #8C0305;
+	color: #0067FE;
 	font-weight: normal; 
 }
 
 .h1, .h2, .h3 {
-	color: #8C0305;
+	color: #0067FE;
 	font-weight: bold; }
 		
 .h4, .h5, .h6 {
-	color: #8C0305;
+	color: #0067FE;
 	font-weight: normal; }
 	
 .enmhelp {
 	font-size: 0.75em;
 	font-weight: bold italic !important;
-	color: #8C0305;
+	color: #0067FE;
 }	
 
 
