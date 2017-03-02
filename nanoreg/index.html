@@ -35,6 +35,22 @@
 <link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
 <link rel="stylesheet" href="style/sm-mint.css" type="text/css">
 
+<style>
+ul {
+    list-style-type: square;
+}
+.h {
+    font-weight:bold;
+}
+.g {
+    background-color: #00FF00;
+}
+
+.y {
+    background-color: #FFFF00;
+} 
+</style>
+
 </head>
 
 <body>
@@ -63,7 +79,7 @@
 		<div class="row remove-bottom" id="header">
 			<!-- toplinks -->
 		</div>
-		<div class="row bottom">
+		<div class="row half-bottom">
 			<div class="eight columns remove-bottom" style="padding-left: 10px;">
 				<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
 					<h4></h4>
@@ -86,8 +102,72 @@
   	<div class="four columns remove-bottom" style="padding-left: 10px;">&nbsp;</div>	
 		<img src="nrdb_summary.png"/>
   </div>	  
-	</div>
+
 	
+	<div class="row half-bottom" style="margin: 20px 75px 20px 75px;">
+	
+	<h4>NANoREG specific license information</h4>
+	The NANoREG Results Repository and NANoREG database are freely available under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>). 
+
+<br/>
+
+<!-- HOW TO -->
+	<div class="eight columns remove-bottom" style="padding-right: 10px;padding-top: 10px;">
+		
+		<h5>How to acknowledge</h5>
+
+		A good rule of thumb is to use the acronym <span class="h">TASL</span>, which stands for Title, Author, Source, License.
+
+		<ul>
+		<li><span class="h">Title</span> - What is the name of the material?</li>
+		<li><span class="h">Author</span> - Who owns the material? In case of a deliverable the lead beneficiary (organisation) should be mentioned. In case of Factsheets and templates, NANoREG (including a link to the NANoREG Result Repository) should be mentioned</li>
+		<li><span class="h">Source</span> - Where can I find it? You can provide a link to the document in the NANoREG Results Repository or in case of experimental data, the NANoREG - eNanoMapper database </li>
+		<li><span class="h">License</span> - How can I use it?</li>
+		</ul>
+</p>
+
+<h6>Examples:</h6>
+
+<ul>
+<li>Citing Experimental data</li>
+Experimental nanoEHS; <a href="https://search.data.enanomapper.net/nanoreg/">NANoREG - eNanoMapper database</a>; <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
+<br/>
+<li>Citing deliverables</li>
+<span class="g">NANoREG DR [Dx.yy}</span> [year] <span class="y">[acronym lead beneficiary]</span> et al [if applicable] <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
+
+<li>Citing SOPs</li>
+NANoREG SOP <span class="g">[Name of the SOP]</span> [year] <span class="y">[acronym lead beneficiary]</span> et al [if applicable] <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
+</ul>
+<span class='enmhelp'>
+Highlighted green: include a link to the document
+<br/>
+Highlighted yellow: The project office will insert a link to the data base or list of partners
+</span>
+
+</p>
+	</div>
+
+<!-- NC -->
+	<div class="seven columns remove-bottom" style="padding-left: 10px;padding-top: 10px;">
+		<h5>(non) Commercial Use</h5>
+	<p>
+				<span class="h">The NANoREG - eNanoMapper database and NANoREG deliverables, SOPs and other documents [hereinafter: sources]  may be used by individuals, institutions, governments, corporations or other business entities so long as the use itself or any works derived from the use of these sources, are not intended to generate sales or profit.</span>
+<br/>
+				This means you cannot:
+				<ul>
+				<li>Directly sell or profit from these sources or from works derived from the sources</li>
+				<li>Use the sources internally for commercial product development</li>
+				<li>Use the NANoREG - eNanoMapper data base as a component of a product or within software to be made commercially available.</li>
+				</ul>
+
+				If you wish to use the resources for commercial purposes, please contact in case of written documents, 
+				the lead beneficiary mentioned in the document and in case of the NANoREG - eNanoMapper database the NANoREG coordinator <a mailto="pobox@nanoreg.eu">pobox@nanoreg.eu</a>
+</p>
+	</div>
+
+		
+	</div>
+		</div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -105,6 +185,7 @@
     <a href="http://www.nanoreg.eu/"><img src='images/logo.png' title='enanomapper database'> NANoREG</a> 
   </p>
 </div>
+
 
 <script src="lib/jquery-1.10.2.js"></script>
 <script src="lib/jquery-ui-1.10.4.custom.min.js"></script>
