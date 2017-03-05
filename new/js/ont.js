@@ -3231,7 +3231,7 @@ var lookup = {
  	"ENM_0000030": "reproductive toxicity",
  	"ENM_0000050": "developmental toxicity",
  	"NPO_1339": "immunotoxicity",
- 	"NPO_1339_SECTION": "immunotoxicity",
+ 	"NPO_1339_SECTION": "Immunotoxicity",
  	"NPO_1340": "cytotoxicity",
  	"NPO_1341": "drug toxicity",
  	"NPO_1887": "hydrophilic coat",
@@ -6804,5 +6804,10 @@ var lookup = {
   "CHEBI_78897" : "trypan blue",
   "CHEBI_8806" : "Resazurin",
   "ENM_0000044_SECTION" : "Barrier integrity",
-  "CHEBI_133326" : "barium sulfate"
+  "CHEBI_133326" : "barium sulfate",
+  "ENM_0000081_SECTION" : "Batch Dispersion quality",
+	"ENM_8000223_SECTION" : "Aerosol characterisation",
+	"ENM_0000037_SECTION" : "Oxidative Stress",
+	"ENM_0000044_SECTION" : "Barrier integrity",
+	"ENM_0000068_SECTION" : "Cell Viability"
  }		
