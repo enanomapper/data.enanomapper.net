@@ -285,8 +285,8 @@ jT.FacetedSearch.prototype = {
 	});
 			
 	var resDiv = $("#result-tabs"),
-		resSize,
-		self = this;
+		  resSize,
+      self = this;
 	
 	resDiv.tabs( { } );
 		
@@ -321,7 +321,7 @@ jT.FacetedSearch.prototype = {
 	Manager.addListeners(new jT.ResultWidget($.extend(true, {
 			id : 'result',
 			target : $('#docs'),
-		itemId: "s_uuid",
+      itemId: "s_uuid",
 			onClick : function (e, doc, exp, widget) { 
 				if (Basket.findItem(doc.s_uuid) < 0) {
 					Basket.addItem(doc);
@@ -388,7 +388,7 @@ jT.FacetedSearch.prototype = {
 		Manager.addListeners(new PivotWidget({
 			id : "studies",
 			target : this.accordion,
-	  subtarget: "ul",
+      subtarget: "ul",
 			expansionTemplate: "#tab-topcategory",
 			before: "#cell_header",
 			field: "loValue_d",
@@ -413,8 +413,8 @@ jT.FacetedSearch.prototype = {
 	  domain: { type: "parent", "which": "type_s:substance" }
 		}));
 		
-	// ... And finally the current-selection one, and ...
-	Manager.addListeners(new jT.CurrentSearchWidget({
+    // ... And finally the current-selection one, and ...
+    Manager.addListeners(new jT.CurrentSearchWidget({
 			id : 'current',
 			target : $('#selection'),
 			renderItem : tagRender,
@@ -422,11 +422,11 @@ jT.FacetedSearch.prototype = {
 		}));
 				
 		// Now add the basket.
-		this.basket = Basket = new (a$(jT.ListWidget, jT.ItemListWidget))({
+		this.basket = Basket = new (a$(jT.ListWidget, jT.ItemListWidget))($.extend(true, {
 			id : 'basket',
 			target : $('#basket-docs'),
-		summaryRenderers: this.summaryRenderers,
-		itemId: "s_uuid",
+      summaryRenderers: this.summaryRenderers,
+      itemId: "s_uuid",
 			onClick : function (e, doc) {
 				if (Basket.eraseItem(doc.s_uuid) === false) {
 					console.log("Trying to remove from basket an inexistent entry: " + JSON.stringify(doc));
@@ -449,9 +449,9 @@ jT.FacetedSearch.prototype = {
 			onCreated: function (doc) {
 				$("footer", this).addClass("remove");
 			}			
-		});
+		}, this));
 
-	a$.act(this, this.onPreInit, Manager);
+    a$.act(this, this.onPreInit, Manager);
 		Manager.init();
 		
 		// now get the search parameters passed via URL
@@ -572,7 +572,7 @@ jT.FacetedSearch.prototype = {
 				}
 			}
 		});
-  	},
+  },
 	sendAmbitRequest: function(form, fq){
 		var self = this, 
 		ids=[];
@@ -622,10 +622,7 @@ jT.FacetedSearch.prototype = {
 			return false;
 			});
 		}
-
 	},
-
-
 
 	getTypes: function(){
 		var exportEl = $("#export_tab div#export_type"),
@@ -1414,12 +1411,14 @@ jToxKit.ui.templates['faceted-search-kit']  =
 "<input type=\"radio\" value=\"selected\" name=\"export_dataset\" id=\"selected_data\"/>" +
 "<label for=\"selected_data\">Selected entries</label>" +
 "</div>" +
+"" +
 "<h6>Select export type</h6>" +
 "<div id=\"export_type\"></div>" +
-"<br/>" +
+"" +
 "<h6>Select output format</h6>" +
 "<input type=\"hidden\" name=\"export_format\" id=\"export_format\"/>" +
 "<div class=\"data_formats\"></div>" +
+"" +
 "<br/>" +
 "<button type=\"submit\" name=\"export_go\" data-prefix=\"Download\">?</button>" +
 "<div class=\"ui-state-error ui-corner-all warning-message\" style=\"padding: 0 .7em;\"><p><span class=\"ui-icon ui-icon-alert\" style=\"float: left; margin-right: .3em;\"></span><strong>Warning:</strong>Please either add entries to the selection or specify a query</p></div>" +
