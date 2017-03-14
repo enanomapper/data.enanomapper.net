@@ -41,14 +41,14 @@ var	Settings = {
       		}
       },
       facets: [ 
-    		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 450 } }, 
-  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
+    		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 450, domain: { blockChildren: "type_s:params" } } }, 
+  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1, domain: { blockChildren: "type_s:params" } } },
     		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
     		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-    		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2 } }, 
-    		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1 } },
-    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
-    		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2 } },
+    		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
+    		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
+    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
+    		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } },
       	],
       exportType: [
         { type: "Material, composition and study", fields: "*", formats: "json,csv,tsv,xslx,rdf,json-ld,isa-json"},
