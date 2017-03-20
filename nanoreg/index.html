@@ -28,28 +28,12 @@
 <link rel="stylesheet" href="../new/style/skeleton/cssflow.css" type="text/css">
 
 <meta charset="utf-8">
-<title>NANoREG - eNanoMapper database</title>
+<title>eNanoMapper</title>
 
 <link rel="shortcut icon" href="favicon.ico">
 
 <link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
 <link rel="stylesheet" href="style/sm-mint.css" type="text/css">
-
-<style>
-ul {
-    list-style-type: square;
-}
-.h {
-    font-weight:bold;
-}
-.g {
-    background-color: #00FF00;
-}
-
-.y {
-    background-color: #FFFF00;
-} 
-</style>
 
 </head>
 
@@ -66,9 +50,83 @@ ul {
 			<div class="fourteen columns remove-bottom">
 			<ul id='smartmenu' class="sm sm-mint">
 				<li>
-				<a href="http://www.nanoreg.eu" title="Home">&nbsp;</a>
+				<a href="https://apps.ideaconsult.net/nanoreg1/" title="Home">Home</a>
 			</li>
+			<li>
+	<a href="#" title="Search nanomaterials by chemical structure of components">Search</a>
+	<ul>
+		<li ><a href="https://apps.ideaconsult.net/nanoreg1/substance?type=name&search=Silica&page=0&pagesize=20" title="Search for nanomaterials by identifiers or reference">Search nanomaterials by name</a></li>
+		<li ><a href="https://apps.ideaconsult.net/nanoreg1/substance?type=&search=NM100&page=0&pagesize=20" title="Search for nanomaterials by identifiers">Search nanomaterials by identifier</a></li>
+		<li ><a href="https://apps.ideaconsult.net/nanoreg1/substance?type=citation&search=10.1073&page=0&pagesize=20" title="Search for nanomaterials by paper reference">Search nanomaterials by citation</a></li>
+		<li><a href="https://apps.ideaconsult.net/nanoreg1/query/study" title="Search substances by physico-chemical parameters or biological effects">Search nanomaterials by physchem parameters or biological effects</a></li>
+		<li><a href="https://apps.ideaconsult.net/nanoreg1/ui/_search?search=SiO2" title="Search nanomaterials by chemical structure of components">Search nanomaterials by composition</a></li>
+		<!--
+		<li><a href="https://apps.ideaconsult.net/nanoreg1/ontobucket?search=cytotoxicity&type=protocol&qe=true" title="Free text search (experimental)">Free text search</a></li>
+		-->
+		<li><a href="#" title="Free text search"><br/>Free text search</a></li>
+	</ul>
+</li>
+<li>
+	<a href="https://apps.ideaconsult.net/nanoreg1/bundle">Data collections</a>
+<ul id="menu_substance">
+
+	<li ><a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&pagesize=10" title="Nanomaterials">Browse nanomaterials and studies</a></li>
+
+	<li><a href="https://apps.ideaconsult.net/nanoreg1/bundle" title="Data collections">Content</a>
+
+	</li>
+
+</ul>
+
+</li>
+
+<li>
+	<a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&amp;pagesize=100">Data templates</a>
+	<ul>
+		<!--
+			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/uploadsubstance1" title='Excel template with JSON configuration upload'>Spreadsheet upload</a>
+			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/uploadsubstance" title='Upload of several *.i5z , *.rdf or *.csv file'>Multiple files upload</a>
+			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>		
+		</ul>
+-->
+<li>
+				<a href="http://ambit.sf.net/enanomapper/templates" target=_blank title="Templates for data upload">Documentation</a>
+				<a href="https://apps.ideaconsult.net/nanoreg1/datatemplate" target=_blank title="Templates for data upload">Download</a>
+				
+</li>			
+</ul>	
+
+			
+			<li>
+				<a href="#">Help</a>
+					<ul>
+
+
+							<li> <a href="nanoreg-enm-db.pdf">User guide</a>
+							</li>
+							<li><a href='https://github.com/enanomapper/data.enanomapper.net/issues' target='report' title='Found an error? Report here'>Submit an issue <img src='images/logo.png'></a></li>	
+							<li><a href="#">For developers</a>
+							<ul>
+								<li><a href='https://apps.ideaconsult.net/nanoreg1/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
+								<li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a></li>
+							</ul>
+							</li>
+							<li><a href="#" onClick='$( "#about-message" ).dialog("open");'>About</a>
+								<ul>
+									<li><a href="#">Content</a>
 	
+							</li>
+								<li><a href="http://www.enanomapper.net/" target=_blank title="This project has received funding from the European Union's FP7 for research, technological development and demonstration under grant agreement no 604134.">EU FP7 #604134</a></li>
+								<li><a href="http://www.nanoreg.eu/" target=_blank title="NANoREG collaboration">NANoREG collaboration</a>	</li>		
+								<li><a href="http://ambit.sourceforge.net/enanomapper.html" target=_blank title="eNanoMapper database is customized version of AMBIT web services">ambit.sf.net</a>	</li>		
+								<li><a href='#' onClick='$( "#about-message" ).dialog("open");'>About</a></li>
+								</ul>
+							</li>
+						
+						</ul>				
+			</li>			
+							
+			</ul>
 
 
 				
@@ -82,92 +140,27 @@ ul {
 		<div class="row half-bottom">
 			<div class="eight columns remove-bottom" style="padding-left: 10px;">
 				<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
-					<h4></h4>
-					
+					<h4>NANoREG - eNanoMapper database</h4>
+					<h6><a href="http://rivm.nl/en/About_RIVM/International/International_Projects/Completed/NANoREG/NANoREG_specific_license_information" target=_blank>NANoREG specific license information</a></h6>	
+					<!-- content as of TNO database dump 23.01.2017  -->
 				</div>
 			</div>
-			
+			<div class="one column remove-bottom"
+				title='(press ESC to close suggestions)'>
+				<h5>Search</h5>
+			</div>
+			<div class="five columns remove-bottom jtox-widget" id="freetext" data-kit="AutocompleteWidget" data-manual-init="true">
+				<input type="text" autocomplete="off" title='(press ESC to close suggestions)'>
+			</div>
+
 		</div>
+		
+	
+    <div id="search-ui" class="jtox-kit" data-kit="FacetedSearch" data-configuration="Settings" data-solr-url="https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/" data-base-url="https://apps.ideaconsult.net/nanoreg1/substance/" data-lookup-map="lookup"/>
 
   <!-- container -->
-  <div class="row half-bottom">
-  	<div class="four columns remove-bottom" style="padding-left: 10px;">&nbsp;</div>	
-  	<h3>NANoREG - eNanoMapper database</h3>	
-  </div>	
-  <div class="row half-bottom">
-  	<div class="four columns remove-bottom" style="padding-left: 10px;">&nbsp;</div>	
-		<h4>Coming soon!</h4>
-  </div>	  	
-  <div class="row half-bottom">
-  	<div class="four columns remove-bottom" style="padding-left: 10px;">&nbsp;</div>	
-		<img src="nrdb_summary.png"/>
-  </div>	  
-
+	</div>
 	
-	<div class="row half-bottom" style="margin: 20px 75px 20px 75px;">
-	
-	<h4>NANoREG specific license information</h4>
-	The NANoREG Results Repository and NANoREG database are freely available under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>). 
-
-<br/>
-
-<!-- HOW TO -->
-	<div class="eight columns remove-bottom" style="padding-right: 10px;padding-top: 10px;">
-		
-		<h5>How to acknowledge</h5>
-
-		A good rule of thumb is to use the acronym <span class="h">TASL</span>, which stands for Title, Author, Source, License.
-
-		<ul>
-		<li><span class="h">Title</span> - What is the name of the material?</li>
-		<li><span class="h">Author</span> - Who owns the material? In case of a deliverable the lead beneficiary (organisation) should be mentioned. In case of Factsheets and templates, NANoREG (including a link to the NANoREG Result Repository) should be mentioned</li>
-		<li><span class="h">Source</span> - Where can I find it? You can provide a link to the document in the NANoREG Results Repository or in case of experimental data, the NANoREG - eNanoMapper database </li>
-		<li><span class="h">License</span> - How can I use it?</li>
-		</ul>
-</p>
-
-<h6>Examples:</h6>
-
-<ul>
-<li>Citing Experimental data</li>
-Experimental nanoEHS; <a href="https://search.data.enanomapper.net/nanoreg/">NANoREG - eNanoMapper database</a>; <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
-<br/>
-<li>Citing deliverables</li>
-<span class="g">NANoREG DR [Dx.yy}</span> [year] <span class="y">[acronym lead beneficiary]</span> et al [if applicable] <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
-
-<li>Citing SOPs</li>
-NANoREG SOP <span class="g">[Name of the SOP]</span> [year] <span class="y">[acronym lead beneficiary]</span> et al [if applicable] <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target=_license>CC BY-NC-SA 4.0</a> 
-</ul>
-<span class='enmhelp'>
-Highlighted green: include a link to the document
-<br/>
-Highlighted yellow: The project office will insert a link to the data base or list of partners
-</span>
-
-</p>
-	</div>
-
-<!-- NC -->
-	<div class="seven columns remove-bottom" style="padding-left: 10px;padding-top: 10px;">
-		<h5>(non) Commercial Use</h5>
-	<p>
-				<span class="h">The NANoREG - eNanoMapper database and NANoREG deliverables, SOPs and other documents [hereinafter: sources]  may be used by individuals, institutions, governments, corporations or other business entities so long as the use itself or any works derived from the use of these sources, are not intended to generate sales or profit.</span>
-<br/>
-				This means you cannot:
-				<ul>
-				<li>Directly sell or profit from these sources or from works derived from the sources</li>
-				<li>Use the sources internally for commercial product development</li>
-				<li>Use the NANoREG - eNanoMapper data base as a component of a product or within software to be made commercially available.</li>
-				</ul>
-
-				If you wish to use the resources for commercial purposes, please contact in case of written documents, 
-				the lead beneficiary mentioned in the document and in case of the NANoREG - eNanoMapper database the NANoREG coordinator <a mailto="pobox@nanoreg.eu">pobox@nanoreg.eu</a>
-</p>
-	</div>
-
-		
-	</div>
-		</div>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -181,11 +174,10 @@ Highlighted yellow: The project office will insert a link to the data base or li
 
 <div id="about-message" title="eNanoMapper search">
   <p>
-    <h4>NANoREG - eNanoMapper database</h4> 
+    <h4>NANoREG database</h4> 
     <a href="http://www.nanoreg.eu/"><img src='images/logo.png' title='enanomapper database'> NANoREG</a> 
   </p>
 </div>
-
 
 <script src="../new/lib/jquery-1.10.2.js"></script>
 <script src="../new/lib/jquery-ui-1.10.4.custom.min.js"></script>
@@ -204,7 +196,7 @@ Highlighted yellow: The project office will insert a link to the data base or li
 
 <script src="../new/js/ont.js"></script>
 <script src="../new/js/index.js"></script>
-
+<script src="js/nr.js"></script>
 
 </body>
 </html>
