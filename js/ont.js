@@ -6779,6 +6779,6 @@ var lookup = {
  	"NPO_755": "metalloid",
  	"CHEBI_60027": "polymer",
  	"CHEBI_82297": "carbon_black",
- 	"CHEBI_133349" : "Nanofibrillar cellulose"
+ 	"CHEBI_133349" : "Nanofibrillar cellulose",
  	"CHEBI_133340" : "nickel-zinc ferrite"
  }		
