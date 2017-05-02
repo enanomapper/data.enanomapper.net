@@ -1,7 +1,7 @@
 var	Settings = {
       ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
-      //solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1test_shard1_replica1/',
-      solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
+      solrUrl: 'https://solr.ideaconsult.net/solr/calibrate_shard1_replica1/',
+      //solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
 
     	listingFields: [ 
         "name:name_hs", 
