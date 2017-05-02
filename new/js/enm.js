@@ -1,7 +1,8 @@
 var	Settings = {
    		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
       ambitURL: 'https://data.enanomapper.net/',
-    	listingFields: [ 
+    	listingFields: [
+        "dbtag_hss",
         "name:name_hs", 
         "publicname:publicname_hs", 
         "owner_name:owner_name_hs",
@@ -10,6 +11,23 @@ var	Settings = {
         "content:content_hss",
         "SUMMARY.*"
       ],
+      dbs: {
+        "NNRG": {
+          "server": "https://apps.ideaconsult.net/nanoreg1/",
+          "icon": "http://www.nanoreg.eu/images/NANoREG_Logo_short.jpg"
+        },
+        "MRNA": {
+          "server": "https://apps.ideaconsult.net/marina/"
+        },
+        "ENM": {
+          "server": "https://data.enanomapper.net",
+          "icon": "enmlogo.png"
+        },
+        "CANANOLAB": {
+          "server": "https://apps.ideaconsult.net/enmtest/",
+          "icon": "anotherlogo.png"
+        }
+      },
       summaryRenderers: {
     		"SIZE": function (val, topic) {
        		if (!Array.isArray(val) || val.length == 1)
