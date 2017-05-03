@@ -4,6 +4,7 @@ var	Settings = {
       solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
 
     	listingFields: [ 
+    	  "dbtag_hss",    	
         "name:name_hs", 
         "publicname:publicname_hs", 
         "owner_name:owner_name_hs",
@@ -12,6 +13,14 @@ var	Settings = {
         "content:content_hss",
         "SUMMARY.*"
       ],
+
+      dbs: {
+        "NNRG": {
+          "server": "https://apps.ideaconsult.net/nanoreg1/",
+          "icon": "http://www.nanoreg.eu/images/NANoREG_Logo_short.jpg"
+        }
+      },      
+            
       summaryRenderers: {
     		"SIZE": function (val, topic) {
        		if (!Array.isArray(val) || val.length == 1)
@@ -43,7 +52,7 @@ var	Settings = {
       		}
       },
       facets: [ 
-    		{ id: 'owner_name', field: "reference_owner_s", title: "Study providers", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
+    		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
   			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
   			    		
     		{ id: 'cell', field: "E.cell_type_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
