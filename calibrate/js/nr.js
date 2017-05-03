@@ -6,7 +6,8 @@ var	Settings = {
     	listingFields: [ 
         "name:name_hs", 
         "publicname:publicname_hs", 
-        "owner_name:owner_name_hs",
+        "reference_owner:reference_owner_s",
+        "owner_name:owner_name_s",
         "substanceType:substanceType_hs",
         "s_uuid:s_uuid_hs",
         "content:content_hss",
@@ -43,7 +44,8 @@ var	Settings = {
       		}
       },
       facets: [ 
-    		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
+        { id: 'owner_name', field: "owner_name_s", title: "Projects", color: "blue", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} }, 
+    		{ id: 'reference_owner', field: "reference_owner_s", title: "Study providers", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
   			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
   			    		
     		{ id: 'cell', field: "E.cell_type_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
