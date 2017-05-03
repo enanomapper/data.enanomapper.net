@@ -4,6 +4,7 @@ var	Settings = {
       //solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
 
     	listingFields: [ 
+        "dbtag_hss",    	
         "name:name_hs", 
         "publicname:publicname_hs", 
         "reference_owner:reference_owner_s",
@@ -13,6 +14,16 @@ var	Settings = {
         "content:content_hss",
         "SUMMARY.*"
       ],
+      dbs: {
+        "NNRG": {
+          "server": "https://apps.ideaconsult.net/nanoreg1/",
+          "icon": "http://www.nanoreg.eu/images/NANoREG_Logo_short.jpg"
+        },
+        "MRNA": {
+          "server": "https://apps.ideaconsult.net/marina/"
+        }
+      },      
+      
       summaryRenderers: {
     		"SIZE": function (val, topic) {
        		if (!Array.isArray(val) || val.length == 1)
