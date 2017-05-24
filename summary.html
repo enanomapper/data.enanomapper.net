@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="enm/style/skeleton/table.css" type="text/css">
     <link rel="stylesheet" href="enm/style/skeleton/cssflow.css" type="text/css">
 
-    <link rel="stylesheet" href="enm/style/jquery.dataTables.css" type="text/css">
     <meta charset="utf-8">
 
 
@@ -38,6 +37,8 @@
 
     <title>Summary</title>
 
+
+
     <!-- SCRIPTS
   ================================================== -->
     <script src="enm/js/ont.js"></script>
@@ -45,11 +46,29 @@
     <script src="enm/js/facets/facetquery.js"></script>
     -->
     <script type='text/javascript' charset='utf8' src="enm/lib/jquery-1.10.2.js"></script>
-    <script type='text/javascript' charset='utf8' src='enm/lib/jquery.dataTables-1.9.4.min.js'></script>
+
 
     <script type='text/javascript' charset='utf8' src='enm/lib/jquery-ui-1.10.4.custom.min.js'></script>
 
     <script src="enm/lib/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+
+
+    <!-- datatable
+  ================================================== -->
+<!-- old   
+    <link rel="stylesheet" href="enm/style/jquery.dataTables.css" type="text/css">
+        <script type='text/javascript' charset='utf8' src='enm/lib/jquery.dataTables-1.9.4.min.js'></script>
+        
+        -->
+<link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="js/DataTables/buttons.dataTables.min.css"/>
+ 
+<script type="text/javascript" src="js/DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="js/DataTables/dataTables.buttons.min.js"></script>
+
+
+    <!-- facets
+  ================================================== -->
 
     <script src="enm/js/facets/parsefacets.js"></script>
 
@@ -57,7 +76,7 @@
         $(document).ready(function() {
 
             var solrFacets = new SolrFacets("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select");
-            solrFacets.createTable('#summary', "topcategory_s:\"P\-CHEM\"");
+            solrFacets.createTable_1_10('#summary', "topcategory_s:\"P\-CHEM\"");
 
         });
     </script>

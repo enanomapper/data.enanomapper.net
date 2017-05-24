@@ -70,6 +70,8 @@ function SolrFacets(solrurl, keys) {
 				.DataTable(
 						{
 							"bDestroy" : true,
+							"oButtons" : [ 'copy', 'csv', 'excel', 'pdf',
+									'print' ],
 							"sDom" : '<"helpremove-bottom"i><"help"p>Trt<"help"lf>',
 							"bJQueryUI" : true,
 							"bPaginate" : true,
@@ -221,7 +223,175 @@ function SolrFacets(solrurl, keys) {
 									},
 
 									{
-										"sTitle" : "Number of studies",
+										"sTitle" : "# studies",
+										aTargets : [ 12 ],
+										"mDataProp" : "count",
+										"sDefaultContent" : ""
+									} ]
+
+						});
+	}
+
+	this.createTable_1_10 = function(tableid, filter) {
+		self = this;
+		$(tableid)
+				.DataTable(
+						{
+							"bDestroy" : true,
+							"buttons" : [ 'csv', 'excel' ],
+							//"sDom" : '<"helpremove-bottom"i><"help"p>Trt<"help"lf>',
+							dom: 'Bfrtip',
+							"bJQueryUI" : true,
+							"bPaginate" : true,
+							"sPaginationType" : "full_numbers",
+							"sPaginate" : ".dataTables_paginate _paging",
+							"bDeferRender" : true,
+							"bSearchable" : true,
+							"bSortable" : true,
+							"sAjaxDataProp" : "facets",
+							"bProcessing" : true,
+							"sAjaxSource" : self.url,
+							"fnServerData" : function(sSource, aoData,
+									fnCallback, oSettings) {
+								fq = JSON.stringify(FacetQuery.createDefault());
+								// console.log(fq);
+								oSettings.jqXHR = $
+										.ajax({
+											"dataType" : 'json',
+											"type" : "POST",
+											"url" : sSource,
+											"cache" : false,
+											"data" : "rows=0&wt=json&fq="
+													+ filter
+													+ "&q={!parent which=type_s:study}&json.facet="
+													+ fq,
+											"success" : function(result) {
+												// console.log(result);
+												self.parse(result.facets, 0, {
+													level : "0"
+												});
+												fnCallback({
+													"facets" : self.flatfacets
+												});
+
+											},
+										});
+							},
+							aoColumnDefs : [
+									{
+										"sTitle" : "Type",
+										aTargets : [ 0 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[0]),
+										"mRender" : function(data, type, full) {
+											return (data === undefined || data == "") ? ""
+													: lookup[data];
+										},
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "ID",
+										aTargets : [ 1 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[1]),
+										"sDefaultContent" : "",
+
+										"mRender" : function(data, type, full) {
+											var href = self.ambiturl
+													+ "substance?type=name&search="
+													+ data;
+											return "<a href='" + href
+													+ "' target='ambit'>"
+													+ data + "</a>";
+										},
+
+									},
+									{
+										"sTitle" : "Name",
+										aTargets : [ 2 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[2]),
+
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Study type",
+										aTargets : [ 3 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[4]),
+										"mRender" : function(data, type, full) {
+											return (data === undefined || data == "") ? ""
+													: lookup[data];
+										},
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Method",
+										aTargets : [ 4 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[5]),
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Cell type",
+										aTargets : [ 5 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[6]),
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Time",
+										aTargets : [ 6 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[7]),
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Parameter",
+										aTargets : [ 7 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[8]),
+										"sDefaultContent" : ""
+									},
+
+									{
+										"sTitle" : "Min",
+										aTargets : [ 8 ],
+										"mDataProp" : "min",
+										"mRender" : function(data, type, full) {
+											return Number(data).toFixed(3);
+										},
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "p50",
+										aTargets : [ 9 ],
+										"mDataProp" : "p50",
+										"mRender" : function(data, type, full) {
+											return Number(data).toFixed(3);
+										},
+										"sDefaultContent" : ""
+									},
+
+									{
+										"sTitle" : "Max",
+										aTargets : [ 10 ],
+										"mDataProp" : "max",
+										"mRender" : function(data, type, full) {
+											return Number(data).toFixed(3);
+										},
+										"sDefaultContent" : ""
+									},
+									{
+										"sTitle" : "Unit",
+										aTargets : [ 11 ],
+										"mDataProp" : FacetQuery
+												.getFacetname(self.keys[9]),
+										"sDefaultContent" : ""
+									},
+
+									{
+										"sTitle" : "# studies",
 										aTargets : [ 12 ],
 										"mDataProp" : "count",
 										"sDefaultContent" : ""
@@ -238,13 +408,13 @@ SolrFacets.doSummary = function(url, topcategory) {
 			bRetrieve : true,
 			paging : false
 		});
-		//console.log(table);
-		//if (table!= null && table != undefined) 	table.fnDestroy();
+		// console.log(table);
+		//if (table!= null && table != undefined) table.fnDestroy();
 	} catch (err) {
 
 	}
 	var solrFacets = new SolrFacets(url);
-	solrFacets.createTable(tableid, "topcategory_s:" + topcategory);
+	solrFacets.createTable_1_10(tableid, "topcategory_s:" + topcategory);
 }
 
 function FacetQuery(field, type, domain, missing, facet) {
