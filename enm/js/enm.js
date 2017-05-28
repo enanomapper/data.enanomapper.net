@@ -1,5 +1,5 @@
 var	Settings = {
-   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
+   		solrUrl: 'https://solr.ideaconsult.net/solr/enm_shard1_replica1/',
       ambitURL: 'https://data.enanomapper.net/',
     	listingFields: [ 
         "name:name_hs", 
