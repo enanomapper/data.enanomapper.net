@@ -1,7 +1,9 @@
 var	Settings = {
       ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
       //solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1test_shard1_replica1/',
-      solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg2_shard1_replica1/',
+//      solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg2_shard1_replica1/',
+	 solrUrl: 'https://apps.ideaconsult.net/marina/solr/nanoreg2/',
+
 
     	listingFields: [ 
     	  "dbtag_hss",    	

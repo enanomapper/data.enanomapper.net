@@ -7,186 +7,215 @@
 <!--<![endif]-->
 
 <head>
+    <script src="../enm/lib/jquery-1.10.2.js"></script>
+    <script src="../js/a.js"></script>
 
-<!-- CSS
+
+    <script>
+        $(document).ready(function() {
+            var uri = "https://apps.ideaconsult.net/marina/";
+            //var uri = "http://localhost:9090/ambit2/";
+            var u = new AmbitUser(uri, function(data) {
+                $('#myaccount_a').attr('href', u.myaccountAction());
+                $('#myaccount_a').attr('title', (u.firstname + " " + u.lastname));
+                $('#myaccount_a').text("[" + u.username + "]");
+
+                var da = u.deleteAction(window.location.href);
+                $('#logoutForm').attr('action', da);
+                $('#uname').val(u.username);
+
+            }, function(jqxhr, textStatus, e) {
+                $('#myaccount_a').text("Log in");
+                $('#myaccount_a').attr('href', "login.html");
+                $('#myaccount_a').attr('title', "Click to log in");
+                $('#logout_a').hide();
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+
+    <!-- CSS
   ================================================== -->
-<link rel="stylesheet" href="style/skeleton/base.css" type="text/css">
-<link rel="stylesheet" href="../enm/style/skeleton/skeleton-fluid.css" type="text/css">
-<link rel="stylesheet" href="../enm/style/skeleton/layout.css" type="text/css">
+    <link rel="stylesheet" href="style/skeleton/base.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/skeleton-fluid.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/layout.css" type="text/css">
 
 
-<link rel="stylesheet" href="../enm/style/query.css">
-<link rel="stylesheet" href="../enm/lib/jToxKit/www/jtox-kit.css">
+    <link rel="stylesheet" href="../enm/style/query.css">
+    <link rel="stylesheet" href="../enm/lib/jToxKit/www/jtox-kit.css">
 
-<link rel="stylesheet" href="../enm/style/jquery-ui-1.10.4.custom.min.css">
-<link rel="stylesheet" href="../enm/style/jquery.ui.theme.css">
-<link rel="stylesheet" href="../enm/style/jquery.range.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/jquery-ui-1.10.4.custom.min.css">
+    <link rel="stylesheet" href="../enm/style/jquery.ui.theme.css">
+    <link rel="stylesheet" href="../enm/style/jquery.range.css" type="text/css">
 
-<link rel="stylesheet" href="style/skeleton/ambit2.css" type="text/css">
-<link rel="stylesheet" href="../enm/style/skeleton/toplinks.css" type="text/css">
-<link rel="stylesheet" href="../enm/style/skeleton/table.css" type="text/css">
-<link rel="stylesheet" href="../enm/style/skeleton/cssflow.css" type="text/css">
+    <link rel="stylesheet" href="style/skeleton/ambit2.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/toplinks.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/table.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/cssflow.css" type="text/css">
 
-<meta charset="utf-8">
-<title>NanoReg2 database</title>
 
-<link rel="shortcut icon" href="favicon.ico">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>NanoReg2 database</title>
 
-<link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
-<link rel="stylesheet" href="style/sm-mint.css" type="text/css">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
+    <link rel="stylesheet" href="style/sm-mint.css" type="text/css">
 
 </head>
 
 <body>
 
 
-	<div class="container" style="margin: 0; padding: 0;">
+    <div class="container" style="margin: 0; padding: 0;">
 
-		<!-- banner -->
-		<div class="row half-bottom" id="header" style="padding-top: 5px">
-			<div class="two columns">
-				<a href="https://search.data.enanomapper.net/"><img class='scale-with-grid' border='0' src='images/nr_logo.png' title='Home' alt='Home'></a>
-			</div>
-			<div class="fourteen columns remove-bottom">
-			<ul id='smartmenu' class="sm sm-mint">
-				<li>
-				<a href="https://search.data.enanomapper.net/" title="Home">Home</a>
-			</li>
-			<li>
-	<a href="#" title="Search nanomaterials by chemical structure of components">Search</a>
-	
-</li>
-<li>
-	<a href="https://apps.ideaconsult.net/nanoreg1/bundle">Data collections</a>
-	<ul id="menu_substance">
+        <!-- banner -->
+        <div class="row half-bottom" id="header" style="padding-top: 5px">
+            <div class="two columns">
+                <a href="https://search.data.enanomapper.net/"><img class='scale-with-grid' border='0' src='images/nr_logo.png' title='Home' alt='Home'>
+                </a>
+            </div>
+            <div class="fourteen columns remove-bottom">
+                <ul id='smartmenu' class="sm sm-mint">
+                    <li>
+                        <a href="https://search.data.enanomapper.net/" title="Home">Home</a>
+                    </li>
+                    <li>
+                        <a href="https://apps.ideaconsult.net/nanoreg1/bundle">Data collections</a>
+                        <ul id="menu_substance">
 
-	<li ><a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&pagesize=10" title="Nanomaterials">NANoREG</a></li>
-	<li ><a href="https://apps.ideaconsult.net/nanotest/substance?page=0&pagesize=10" title="Nanomaterials">NanoTest</a></li>
-	<li ><a href="https://apps.ideaconsult.net/nanogenotox/substance?page=0&pagesize=10" title="Nanomaterials">NanoGenotox</a></li>
-	<li ><a href="https://apps.ideaconsult.net/marina/substance?page=0&pagesize=10" title="Nanomaterials">MARINA</a></li>
+                            <li><a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&pagesize=10" title="Nanomaterials">NANoREG</a>
+                            </li>
+                            <li><a href="https://apps.ideaconsult.net/nanotest/substance?page=0&pagesize=10" title="Nanomaterials">NanoTest</a>
+                            </li>
+                            <li><a href="https://apps.ideaconsult.net/nanogenotox/substance?page=0&pagesize=10" title="Nanomaterials">NanoGenotox</a>
+                            </li>
+                            <li><a href="https://apps.ideaconsult.net/marina/substance?page=0&pagesize=10" title="Nanomaterials">MARINA</a>
+                            </li>
+                        </ul>
 
-	<li><a href="https://search.data.enanomapper.net/about_nanoreg2.html" >About</a>
+                    </li>
 
-	</li>
+                    <li>
+                        <a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&amp;pagesize=100">Data templates</a>
+                        <ul>
+                            <li>
+                                <a href="http://ambit.sf.net/enanomapper/templates" target=_blank title="Templates for data upload">Documentation</a>
+                            </li>
+                        </ul>
+                    </li>
 
-</ul>
+                    <li>
+                        <a href="#">Help</a>
+                        <ul>
+                            <li> <a href="nanoreg-enm-db.pdf">User guide</a>
+                            </li>
+                            <li><a href='https://search.data.enanomapper.net/support.html'>Support</a>
+                            </li>
+                            <li><a href="#">For developers</a>
+                                <ul>
+                                    <li><a href='https://apps.ideaconsult.net/nanoreg1/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a>
+                                    </li>
+                                    <li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="logout_li">
+                                <a id="logout_a" title='Click here to log out.' href='#' onClick='document.forms["logoutForm"].submit(); return false;'>Log out</a>&nbsp;
+                            </li>
 
-</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id='myaccount_a' target='blank' title='My account' href='login.html'>Log in</a>
+                    </li>
 
-<li>
-	<a href="https://apps.ideaconsult.net/nanoreg1/substance?page=0&amp;pagesize=100">Data templates</a>
-	<ul>
-		<!--
-			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/uploadsubstance1" title='Excel template with JSON configuration upload'>Spreadsheet upload</a>
-			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/uploadsubstance" title='Upload of several *.i5z , *.rdf or *.csv file'>Multiple files upload</a>
-			<li ><a href="https://apps.ideaconsult.net/nanoreg1/ui/updatesubstancei5">Retrieve substance(s) from IUCLID5 server</a>		
-		</ul>
--->
-<li>
-				<a href="http://ambit.sf.net/enanomapper/templates" target=_blank title="Templates for data upload">Documentation</a>
-				<!--
-				<a href="https://apps.ideaconsult.net/nanoreg1/datatemplate" target=_blank title="Templates for data upload">Download</a>
-				-->
-				
-</li>			
-</ul>	
-
-			
-			<li>
-				<a href="#">Help</a>
-					<ul>
-
-
-							<li> <a href="nanoreg-enm-db.pdf">User guide</a>
-							</li>
-							<li><a href='https://search.data.enanomapper.net/support.html'>Support</a></li>	
-							<li><a href="#">For developers</a>
-							<ul>
-								<li><a href='https://apps.ideaconsult.net/nanoreg1/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a></li>
-								<li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a></li>
-							</ul>
-							</li>
-							<li><a href="https://search.data.enanomapper.net/about_nanoreg2.html" >About</a>	</li>
-						
-						</ul>				
-			</li>			
-							
-			</ul>
+                </ul>
 
 
-				
-			</div>
 
-		</div>
+            </div>
 
-		<div class="row remove-bottom" id="header">
-			<!-- toplinks -->
-		</div>
-		<div class="row half-bottom">
-			<div class="eight columns remove-bottom" style="padding-left: 10px;">
-				<div id="breadCrumb" class="breadCrumb module remove-bottom h5">
-					<h4>NanoReg2 database</h4>
-					<h6>License information: 
+        </div>
+
+        <div class="row remove-bottom" id="header">
+            <!-- toplinks -->
+        </div>
+        <div class="row half-bottom">
+            <div class="eight columns remove-bottom" style="padding-left: 10px;">
+                <div id="breadCrumb" class="breadCrumb module remove-bottom h5">
+                    <h4>NanoReg2 database</h4>
+                    <h6>License information: 
 					<a href="https://search.data.enanomapper.net/nanoreg_about.html" target=_blank>FP7 NANoREG</a> | 
 					<a href="https://search.data.enanomapper.net/marina_about.html" target=_blank>FP7 MARINA</a> | 
 					<a href="https://search.data.enanomapper.net/nanotest_about.html" target=_blank>FP7 NanoTest</a> | 						
 					<a href="https://search.data.enanomapper.net/nanogenotox_about.html" target=_blank>FP7 NanoGenotox</a> | 						
 					<a href="https://search.data.enanomapper.net/about_nanoreg2.html" style="align:right;">About</a></h6>
-				</div>
-			</div>
-			<div class="one column remove-bottom"
-				title='(press ESC to close suggestions)'>
-				<h5>Search</h5>
-			</div>
-			<div class="five columns remove-bottom jtox-widget" id="freetext" data-kit="AutocompleteWidget" data-manual-init="true">
-				<input type="text" autocomplete="off" title='(press ESC to close suggestions)'>
-			</div>
+                </div>
+            </div>
+            <div class="one column remove-bottom" title='(press ESC to close suggestions)'>
+                <h5>Search</h5>
+            </div>
+            <div class="five columns remove-bottom jtox-widget" id="freetext" data-kit="AutocompleteWidget" data-manual-init="true">
+                <input type="text" autocomplete="off" title='(press ESC to close suggestions)'>
+            </div>
 
-		</div>
-		
-	
-    <div id="search-ui" class="jtox-kit" data-kit="FacetedSearch" data-configuration="Settings" data-solr-url="https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/" data-base-url="https://apps.ideaconsult.net/nanoreg1/substance/" data-lookup-map="lookup"/>
+        </div>
 
-  <!-- container -->
-  
-	</div>
-	
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-32347361-5', 'auto');
-  ga('send', 'pageview');
+        <div id="search-ui" class="jtox-kit" data-kit="FacetedSearch" data-configuration="Settings" data-solr-url="https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/" data-base-url="https://apps.ideaconsult.net/nanoreg1/substance/" data-lookup-map="lookup" />
 
-</script>
+        <!-- container -->
 
-<div id="about-message" title="eNanoMapper search">
-  <p>
-    <h4>NANoREG database</h4> 
-    <a href="http://www.nanoreg.eu/"><img src='images/logo.png' title='enanomapper database'> NANoREG</a> 
-  </p>
-</div>
+    </div>
 
-<script src="../enm/lib/jquery-1.10.2.js"></script>
-<script src="../enm/lib/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="../enm/lib/purl.js"></script>
-<script src="../enm/lib/jquery.range-min.js"></script>
-<script src="../enm/lib/jquery.sticky.js"></script>
+  <!-- Google Analytics -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-32347361-5']);
+        _gaq.push(['_trackPageview']);
 
-<script src="../enm/lib/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
 
-<script src="../enm/lib/asSys/as-sys.js"></script>
-<script src="../enm/lib/SolrJsX/solr-jsx.js"></script>
-<script src="../enm/lib/SolrJsX/solr-jsx.widgets.js"></script>
-<script src="../enm/lib/jToxKit/www/jtox-kit.js"></script>
-<script src="../enm/lib/jToxKit/www/jtox-kit.widgets.js"></script>
-<script src="../enm/lib/jToxKit/www/jtox-kit.kits.js"></script>
 
-<script src="../enm/js/ont.js"></script>
-<script src="../enm/js/index.js"></script>
-<script src="js/nr.js"></script>
+    <div id="about-message" title="eNanoMapper search">
+        <p>
+            <h4>NANoREG database</h4>
+            <a href="http://www.nanoreg.eu/"><img src='images/logo.png' title='enanomapper database'> NANoREG</a>
+        </p>
+    </div>
+
+    <script src="../enm/lib/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="../enm/lib/purl.js"></script>
+    <script src="../enm/lib/jquery.range-min.js"></script>
+    <script src="../enm/lib/jquery.sticky.js"></script>
+
+    <script src="../enm/lib/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+
+    <script src="../enm/lib/asSys/as-sys.js"></script>
+    <script src="../enm/lib/SolrJsX/solr-jsx.js"></script>
+    <script src="../enm/lib/SolrJsX/solr-jsx.widgets.js"></script>
+    <script src="../enm/lib/jToxKit/www/jtox-kit.js"></script>
+    <script src="../enm/lib/jToxKit/www/jtox-kit.widgets.js"></script>
+    <script src="../enm/lib/jToxKit/www/jtox-kit.kits.js"></script>
+
+    <script src="../enm/js/ont.js"></script>
+    <script src="../enm/js/index.js"></script>
+    <script src="js/nr.js"></script>
+
+    <form style='display:none;' id='logoutForm' name='logoutForm' action='login.html' method='POST'>
+        < input type='hidden' id="uname" value="">
+            < /input>
+                < /form>
 
 </body>
+
 </html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!--<![endif]-->
+
+<head>
+    <!-- CSS
+  ================================================== -->
+    <link rel="stylesheet" href="style/skeleton/base.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/skeleton-fluid.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/layout.css" type="text/css">
+
+
+    <link rel="stylesheet" href="../enm/style/query.css">
+    <link rel="stylesheet" href="../enm/lib/jToxKit/www/jtox-kit.css">
+
+    <link rel="stylesheet" href="../enm/style/jquery-ui-1.10.4.custom.min.css">
+    <link rel="stylesheet" href="../enm/style/jquery.ui.theme.css">
+    <link rel="stylesheet" href="../enm/style/jquery.range.css" type="text/css">
+
+    <link rel="stylesheet" href="style/skeleton/ambit2.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/toplinks.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/table.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/cssflow.css" type="text/css">
+
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>NanoReg 2 database</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
+    <link rel="stylesheet" href="style/sm-mint.css" type="text/css">
+
+    <script src="../enm/lib/jquery-1.10.2.js"></script>
+    <script src="../enm/lib/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+    <script>
+        $(document).ready(function() {
+            //
+            var prefix = "https://apps.ideaconsult.net/marina/";
+
+            $('#loginform').attr('action', prefix + 'provider/signin');
+
+            $('#registerlink').attr('href', prefix + 'register');
+
+            $('#forgottenlink').attr('href', prefix + 'forgotten');
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="container" style="margin:0;padding:0;">
+
+        <div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;">
+            <a href="https://search.data.enanomapper.net/"><img class='scale-with-grid' border='0' src='images/nr_logo.png' title='Home' alt='Home'>
+            </a>
+        </div>
+
+        <div class="fourteen columns remove-bottom">
+            <ul id='smartmenu' class="sm sm-mint">
+                <li>
+                    <a href="https://search.data.enanomapper.net/" title="Home">Home</a>
+                </li>
+                <li>
+                    <a href="#">Help</a>
+                    <ul>
+                        <li> <a href="nanoreg-enm-db.pdf">User guide</a>
+                        </li>
+                        <li><a href='https://search.data.enanomapper.net/support.html'>Support</a>
+                        </li>
+                        <li><a href="#">For developers</a>
+                            <ul>
+                                <li><a href='https://apps.ideaconsult.net/nanoreg1/api-docs' target=_blank title="API documentation in Swagger JSON format">API Documentation</a>
+                                </li>
+                                <li><a href='http://enanomapper.github.io/API/' target=_blank title="API documentation in Swagger JSON format">API Documentation (eNanoMapper services)</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="logout_li">
+                            <a id="logout_a" title='Click here to log out.' href='#' onClick='document.forms["logoutForm"].submit(); return false;'>Log out</a>&nbsp;
+                        </li>
+
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="row add-bottom">&nbsp;</div>
+
+        <div class="two columns" style="padding:0 2px 2px 2px 0;margin-right:0;">&nbsp;</div>
+
+        <div class="twelve columns remove-bottom" style="padding:0;">
+
+            <div class="row remove-bottom ui-widget-header ui-corner-top">&nbsp;Sign In</div>
+            <div class="ui-widget-content ui-corner-bottom">
+                <div style='margin:5px;padding:5px;'>
+                    <form method='post' id='loginform' action='https://apps.ideaconsult.net/marina/provider/signin' autocomplete='off'>
+
+                        <div class="row half-bottom"> &nbsp;
+                            <label class='eight columns alpha'>&nbsp;</label>
+                            <div class='three columns omega'>&nbsp;</div>
+                            <div class='five columns omega'>
+                                <a title='AMBIT registration' id="registerlink" target=_blank href='https://apps.ideaconsult.net/marina/register' class='h5'>Create an account</a>
+                            </div>
+                        </div>
+
+
+                        <div class="row remove-bottom">
+                            <label class='three columns alpha'>User name</label>
+                            <input class='five columns omega' type='text' size='40' name='login' value=''>
+                        </div>
+
+                        <div class="row remove-bottom">
+                            <label class='three columns alpha'>Password</label>
+                            <input class='five columns omega' type='password' size='40' name='password' value=''>
+                            <div class='three columns omega'>&nbsp;</div>
+                            <div class='five columns omega'><a href="https://apps.ideaconsult.net/marina/forgotten" id="forgottenlink" title='Click to request one time password reset'>Forgotten password?</a>
+                            </div>
+                        </div>
+
+                        <div class="row remove-bottom">
+                            <label class='five columns alpha'>&nbsp;</label>
+                            <input class='three columns omega' type="submit" value="Log in">
+                            <a href='#' class='chelp loginhelp'></a>
+                            <input type='hidden' size='40' name='targetUri' id='targetUri' value='https://apps.ideaconsult.net/nanodata/nanoreg2/index.html'>
+                        </div>
+
+
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</body>
+
+</html>

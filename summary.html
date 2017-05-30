@@ -74,7 +74,9 @@
 
     <script>
         $(document).ready(function() {
-
+			/* partial key list
+ 			keys = [ "substanceType_s", "publicname_s",	"name_s", "topcategory_s", "endpointcategory_s", "guidance_s","E.cell_type_s", "E.exposure_time_s" ];
+ 			*/
             var solrFacets = new SolrFacets("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select");
             solrFacets.createTable_1_10('#summary', "topcategory_s:\"P\-CHEM\"");
 

@@ -86,7 +86,7 @@ function SolrFacets(solrurl, keys) {
 							"fnServerData" : function(sSource, aoData,
 									fnCallback, oSettings) {
 								fq = JSON.stringify(FacetQuery.createDefault());
-								// console.log(fq);
+								console.log(fq);
 								oSettings.jqXHR = $
 										.ajax({
 											"dataType" : 'json',
@@ -254,7 +254,7 @@ function SolrFacets(solrurl, keys) {
 							"fnServerData" : function(sSource, aoData,
 									fnCallback, oSettings) {
 								fq = JSON.stringify(FacetQuery.createDefault());
-								// console.log(fq);
+								console.log(fq);
 								oSettings.jqXHR = $
 										.ajax({
 											"dataType" : 'json',
@@ -413,7 +413,7 @@ SolrFacets.doSummary = function(url, topcategory) {
 	} catch (err) {
 
 	}
-	var solrFacets = new SolrFacets(url);
+	var solrFacets = new SolrFacets(url,this.keys);
 	solrFacets.createTable_1_10(tableid, "topcategory_s:" + topcategory);
 }
 
@@ -432,7 +432,7 @@ function FacetQuery(field, type, domain, missing, facet) {
 	}
 }
 FacetQuery.getFacetname = function(field) {
-	return ("f_" + field.replace("_s", "").replace("\.", "_").replace("_", "")
+	return field===undefined?null:("f_" + field.replace("_s", "").replace("\.", "_").replace("_", "")
 			.toLowerCase());
 }
 FacetQuery.createStudyDomain = function() {

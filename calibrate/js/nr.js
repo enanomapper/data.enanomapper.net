@@ -1,7 +1,8 @@
 var	Settings = {
       ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
-      solrUrl: 'https://solr.ideaconsult.net/solr/calibrate_shard1_replica1/',
-      //solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
+      //solrUrl: 'https://solr.ideaconsult.net/solr/calibrate_shard1_replica1/',
+      solrUrl: 'https://apps.ideaconsult.net/marina/solr/calibrate/',
+      //solrUrl: 'http://localhost:9090/ambit2/solr/calibrate/',
 
     	listingFields: [ 
         "dbtag_hss",    	
