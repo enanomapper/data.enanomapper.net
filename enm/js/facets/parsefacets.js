@@ -1,12 +1,11 @@
 function SolrFacets(solrurl, keys) {
+	this.topcategory = "TOX";
 	this.flatfacets = [];
 	this.url = solrurl === undefined ? "https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select"
 			: solrurl;
 	this.ambiturl = "https://apps.ideaconsult.net/nanoreg1/";
 
-	this.keys = keys === undefined ? [ "substanceType_s", "publicname_s",
-			"name_s", "topcategory_s", "endpointcategory_s", "guidance_s",
-			"E.cell_type_s", "E.exposure_time_s", "effectendpoint_s", "unit_s" ]
+	this.keys = keys === undefined ? FacetQuery.createKeys()[this.topcategory]
 			: keys;
 
 	this.parse = function(facets, level, item) {
@@ -64,174 +63,6 @@ function SolrFacets(solrurl, keys) {
 		return citem;
 	};
 
-	this.createTable = function(tableid, filter) {
-		self = this;
-		$(tableid)
-				.DataTable(
-						{
-							"bDestroy" : true,
-							"oButtons" : [ 'copy', 'csv', 'excel', 'pdf',
-									'print' ],
-							"sDom" : '<"helpremove-bottom"i><"help"p>Trt<"help"lf>',
-							"bJQueryUI" : true,
-							"bPaginate" : true,
-							"sPaginationType" : "full_numbers",
-							"sPaginate" : ".dataTables_paginate _paging",
-							"bDeferRender" : true,
-							"bSearchable" : true,
-							"bSortable" : true,
-							"sAjaxDataProp" : "facets",
-							"bProcessing" : true,
-							"sAjaxSource" : self.url,
-							"fnServerData" : function(sSource, aoData,
-									fnCallback, oSettings) {
-								fq = JSON.stringify(FacetQuery.createDefault());
-								console.log(fq);
-								oSettings.jqXHR = $
-										.ajax({
-											"dataType" : 'json',
-											"type" : "POST",
-											"url" : sSource,
-											"cache" : false,
-											"data" : "rows=0&wt=json&fq="
-													+ filter
-													+ "&q={!parent which=type_s:study}&json.facet="
-													+ fq,
-											"success" : function(result) {
-												// console.log(result);
-												self.parse(result.facets, 0, {
-													level : "0"
-												});
-												fnCallback({
-													"facets" : self.flatfacets
-												});
-
-											},
-										});
-							},
-							aoColumnDefs : [
-									{
-										"sTitle" : "Type",
-										aTargets : [ 0 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[0]),
-										"mRender" : function(data, type, full) {
-											return (data === undefined || data == "") ? ""
-													: lookup[data];
-										},
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "ID",
-										aTargets : [ 1 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[1]),
-										"sDefaultContent" : "",
-
-										"mRender" : function(data, type, full) {
-											var href = self.ambiturl
-													+ "substance?type=name&search="
-													+ data;
-											return "<a href='" + href
-													+ "' target='ambit'>"
-													+ data + "</a>";
-										},
-
-									},
-									{
-										"sTitle" : "Name",
-										aTargets : [ 2 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[2]),
-
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Study type",
-										aTargets : [ 3 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[4]),
-										"mRender" : function(data, type, full) {
-											return (data === undefined || data == "") ? ""
-													: lookup[data];
-										},
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Method",
-										aTargets : [ 4 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[5]),
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Cell type",
-										aTargets : [ 5 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[6]),
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Time",
-										aTargets : [ 6 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[7]),
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Parameter",
-										aTargets : [ 7 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[8]),
-										"sDefaultContent" : ""
-									},
-
-									{
-										"sTitle" : "Min",
-										aTargets : [ 8 ],
-										"mDataProp" : "min",
-										"mRender" : function(data, type, full) {
-											return Number(data).toFixed(3);
-										},
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "p50",
-										aTargets : [ 9 ],
-										"mDataProp" : "p50",
-										"mRender" : function(data, type, full) {
-											return Number(data).toFixed(3);
-										},
-										"sDefaultContent" : ""
-									},
-
-									{
-										"sTitle" : "Max",
-										aTargets : [ 10 ],
-										"mDataProp" : "max",
-										"mRender" : function(data, type, full) {
-											return Number(data).toFixed(3);
-										},
-										"sDefaultContent" : ""
-									},
-									{
-										"sTitle" : "Unit",
-										aTargets : [ 11 ],
-										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[9]),
-										"sDefaultContent" : ""
-									},
-
-									{
-										"sTitle" : "# studies",
-										aTargets : [ 12 ],
-										"mDataProp" : "count",
-										"sDefaultContent" : ""
-									} ]
-
-						});
-	}
-
 	this.createTable_1_10 = function(tableid, filter) {
 		self = this;
 		$(tableid)
@@ -239,8 +70,9 @@ function SolrFacets(solrurl, keys) {
 						{
 							"bDestroy" : true,
 							"buttons" : [ 'csv', 'excel' ],
-							//"sDom" : '<"helpremove-bottom"i><"help"p>Trt<"help"lf>',
-							dom: 'Bfrtip',
+							// "sDom" :
+							// '<"helpremove-bottom"i><"help"p>Trt<"help"lf>',
+							dom : 'Bfrtip',
 							"bJQueryUI" : true,
 							"bPaginate" : true,
 							"sPaginationType" : "full_numbers",
@@ -251,38 +83,49 @@ function SolrFacets(solrurl, keys) {
 							"sAjaxDataProp" : "facets",
 							"bProcessing" : true,
 							"sAjaxSource" : self.url,
+							"fnServerParams" : function(data) {
+								//data['order'][5]['column'] = "XXXX";
+								console.log(data);
+							},
 							"fnServerData" : function(sSource, aoData,
 									fnCallback, oSettings) {
-								fq = JSON.stringify(FacetQuery.createDefault());
-								console.log(fq);
-								oSettings.jqXHR = $
-										.ajax({
-											"dataType" : 'json',
-											"type" : "POST",
-											"url" : sSource,
-											"cache" : false,
-											"data" : "rows=0&wt=json&fq="
-													+ filter
-													+ "&q={!parent which=type_s:study}&json.facet="
-													+ fq,
-											"success" : function(result) {
-												// console.log(result);
-												self.parse(result.facets, 0, {
-													level : "0"
-												});
-												fnCallback({
-													"facets" : self.flatfacets
-												});
+								facet = JSON
+										.stringify(FacetQuery
+												.createReverse(filter["topcategory_s"]));
+								// fq =
+								// JSON.stringify(FacetQuery.createDefault());
+								fq = SolrFacets.createFilterQuery(filter);
 
-											},
+								var dataquery = "rows=0&wt=json"
+										+ fq
+										+ "&q={!parent which=type_s:study}&json.facet="
+										+ facet;
+								console.log(dataquery);
+
+								oSettings.jqXHR = $.ajax({
+									"dataType" : 'json',
+									"type" : "POST",
+									"url" : sSource,
+									"cache" : false,
+									"data" : dataquery,
+									"success" : function(result) {
+
+										self.parse(result.facets, 0, {
+											level : "0"
 										});
+										fnCallback({
+											"facets" : self.flatfacets
+										});
+
+									},
+								});
 							},
 							aoColumnDefs : [
 									{
 										"sTitle" : "Type",
 										aTargets : [ 0 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[0]),
+												.getFacetname(self.keys[2]),
 										"mRender" : function(data, type, full) {
 											return (data === undefined || data == "") ? ""
 													: lookup[data];
@@ -293,7 +136,7 @@ function SolrFacets(solrurl, keys) {
 										"sTitle" : "ID",
 										aTargets : [ 1 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[1]),
+												.getFacetname(self.keys[3]),
 										"sDefaultContent" : "",
 
 										"mRender" : function(data, type, full) {
@@ -310,7 +153,7 @@ function SolrFacets(solrurl, keys) {
 										"sTitle" : "Name",
 										aTargets : [ 2 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[2]),
+												.getFacetname(self.keys[4]),
 
 										"sDefaultContent" : ""
 									},
@@ -318,10 +161,15 @@ function SolrFacets(solrurl, keys) {
 										"sTitle" : "Study type",
 										aTargets : [ 3 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[4]),
+												.getFacetname(self.keys[6]),
 										"mRender" : function(data, type, full) {
-											return (data === undefined || data == "") ? ""
+
+											var out = full[FacetQuery
+													.getFacetname(self.keys[5])]
+													+ "/ ";
+											out += (data === undefined || data == "") ? ""
 													: lookup[data];
+											return out;
 										},
 										"sDefaultContent" : ""
 									},
@@ -329,21 +177,21 @@ function SolrFacets(solrurl, keys) {
 										"sTitle" : "Method",
 										aTargets : [ 4 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[5]),
+												.getFacetname(self.keys[7]),
 										"sDefaultContent" : ""
 									},
 									{
-										"sTitle" : "Cell type",
+										"sTitle" : "Medium/Species/Cell type",
 										aTargets : [ 5 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[6]),
+												.getFacetname(self.keys[0]),
 										"sDefaultContent" : ""
 									},
 									{
-										"sTitle" : "Time",
+										"sTitle" : "Time / Dispersion protocol",
 										aTargets : [ 6 ],
 										"mDataProp" : FacetQuery
-												.getFacetname(self.keys[7]),
+												.getFacetname(self.keys[1]),
 										"sDefaultContent" : ""
 									},
 									{
@@ -401,7 +249,24 @@ function SolrFacets(solrurl, keys) {
 	}
 }
 
-SolrFacets.doSummary = function(url, topcategory) {
+SolrFacets.createFilterQuery = function(filter) {
+	if (filter === undefined)
+		return "";
+	var fq = "(";
+	var d = "";
+	var r = 0;
+	$.each(filter, function(key, value) {
+		fq += d;
+		fq += key + ":" + value.replace("-", "\-");
+		d = " AND ";
+		r++;
+	});
+	fq += ")";
+	return r == 0 ? "" : ("&fq=" + fq);
+
+}
+SolrFacets.doSummary = function(url, filter) {
+
 	tableid = '#summary';
 	try {
 		table = $(tableid).DataTable({
@@ -409,12 +274,17 @@ SolrFacets.doSummary = function(url, topcategory) {
 			paging : false
 		});
 		// console.log(table);
-		//if (table!= null && table != undefined) table.fnDestroy();
+		// if (table!= null && table != undefined) table.fnDestroy();
 	} catch (err) {
 
 	}
-	var solrFacets = new SolrFacets(url,this.keys);
-	solrFacets.createTable_1_10(tableid, "topcategory_s:" + topcategory);
+	this.topcategory = (filter === undefined || filter['topcategory_s'] === undefined) ? "TOX"
+			: filter['topcategory_s'];
+	var fields = FacetQuery.createKeys();
+	var keys = fields[this.topcategory];
+
+	var solrFacets = new SolrFacets(url, keys);
+	solrFacets.createTable_1_10(tableid, filter);
 }
 
 function FacetQuery(field, type, domain, missing, facet) {
@@ -432,8 +302,8 @@ function FacetQuery(field, type, domain, missing, facet) {
 	}
 }
 FacetQuery.getFacetname = function(field) {
-	return field===undefined?null:("f_" + field.replace("_s", "").replace("\.", "_").replace("_", "")
-			.toLowerCase());
+	return field === undefined ? null : ("f_" + field.replace("_s", "")
+			.replace("\.", "_").replace("_", "").toLowerCase());
 }
 FacetQuery.createStudyDomain = function() {
 	return {
@@ -447,7 +317,77 @@ FacetQuery.createParamsDomain = function() {
 	};
 }
 
-FacetQuery.createDefault = function() {
+FacetQuery.getHeader = function(topcategory, field) {
+	return createHeaders[topcategory === undefined ? "TOX" : topcategory, field];
+}
+FacetQuery.createHeaders = function() {
+	return {
+		"TOX" : {
+			"E.cell_type_s" : "Cell",
+			"E.exposure_time_hour_s" : "Time"
+		},
+		"P-CHEM" : {
+			"MEDIUM_s" : "Medium",
+			"Dispersion protocol_s" : "Dispersion protocol"
+		},
+		"ECOTOX" : {
+			"E.animal_model_s" : "Species",
+			"E.exposure_time_s" : "Exposure time"
+		}
+
+	};
+}
+
+FacetQuery.createKeys = function() {
+	return {
+		"TOX" : [ "E.cell_type_s", "E.exposure_time_hour_s", "substanceType_s",
+				"publicname_s", "name_s", "topcategory_s",
+				"endpointcategory_s", "guidance_s", "effectendpoint_s",
+				"unit_s" ],
+		"P-CHEM" : [ "MEDIUM_s", "Dispersion protocol_s", "substanceType_s",
+				"publicname_s", "name_s", "topcategory_s",
+				"endpointcategory_s", "guidance_s", "effectendpoint_s",
+				"unit_s" ],
+		"ECOTOX" : [ "E.animal_model_s", "E.exposure_time_s",
+				"substanceType_s", "publicname_s", "name_s", "topcategory_s",
+				"endpointcategory_s", "guidance_s", "effectendpoint_s",
+				"unit_s" ]
+	};
+}
+
+// see T166
+FacetQuery.createReverse = function(topcategory) {
+	var facet_substance = FacetQuery.createSubstanceFacet();
+
+	if ("TOX" == topcategory) {
+		var facet_time = new FacetQuery("E.exposure_time_hour_s", "terms",
+				FacetQuery.createParamsDomain(), true, facet_substance);
+
+		var facet_cell = new FacetQuery("E.cell_type_s", "terms", FacetQuery
+				.createParamsDomain(), true, facet_time.createFacet());
+
+		return facet_cell.createFacet();
+	} else if ("P-CHEM" == topcategory) {
+		var facet_disp = new FacetQuery("Dispersion protocol_s", "terms",
+				FacetQuery.createParamsDomain(), true, facet_substance);
+
+		var facet_medium = new FacetQuery("MEDIUM_s", "terms", FacetQuery
+				.createParamsDomain(), true, facet_disp.createFacet());
+		return facet_medium.createFacet();
+	} else if ("ECOTOX" == topcategory) {
+		var facet_time = new FacetQuery("E.exposure_time_s", "terms",
+				FacetQuery.createParamsDomain(), true, facet_substance);
+
+		var facet_animal = new FacetQuery("E.animal_model_s", "terms",
+				FacetQuery.createParamsDomain(), true, facet_time.createFacet());
+
+		return facet_animal.createFacet();
+	} else
+		return facet_substance;
+
+}
+
+FacetQuery.createSubstanceFacet = function() {
 	facet_unit = new FacetQuery("unit_s", "terms", FacetQuery
 			.createStudyDomain(), true, {
 		minv : "min(loValue_d)",
@@ -456,38 +396,25 @@ FacetQuery.createDefault = function() {
 	});
 
 	facet_endpoint = new FacetQuery("effectendpoint_s", "terms", FacetQuery
-			.createStudyDomain(), false, facet_unit.createFacet());
+			.createStudyDomain(), true, facet_unit.createFacet());
 
-	facet_time = new FacetQuery("E.exposure_time_s", "terms", FacetQuery
-			.createParamsDomain(), true, facet_endpoint.createFacet());
-
-	facet_cell = new FacetQuery("E.cell_type_s", "terms", FacetQuery
-			.createParamsDomain(), true, facet_time.createFacet());
-
-	facet_guidance = new FacetQuery("guidance_s", "terms", undefined,
-			undefined, facet_cell.createFacet());
+	facet_guidance = new FacetQuery("guidance_s", "terms", FacetQuery
+			.createStudyDomain(), true, facet_endpoint.createFacet());
 
 	facet_endpointcategory = new FacetQuery("endpointcategory_s", "terms",
-			undefined, undefined, facet_guidance.createFacet());
+			FacetQuery.createStudyDomain(), true, facet_guidance.createFacet());
 
-	facet_topcategory = new FacetQuery("topcategory_s", "terms", undefined,
-			undefined, facet_endpointcategory.createFacet());
-
-	/*
-	 * doesn't work yet facet_topcategory = new FacetQuery("topcategory_s",
-	 * "query", undefined, undefined, facet_endpointcategory.createFacet());
-	 * facet_topcategory["q"] = "topcategory_s:TOX";
-	 */
+	facet_topcategory = new FacetQuery("topcategory_s", "terms", FacetQuery
+			.createStudyDomain(), true, facet_endpointcategory.createFacet());
 
 	facet_name = new FacetQuery("name_s", "terms", FacetQuery
-			.createStudyDomain(), undefined, facet_topcategory.createFacet());
+			.createStudyDomain(), true, facet_topcategory.createFacet());
 
 	facet_pname = new FacetQuery("publicname_s", "terms", FacetQuery
-			.createStudyDomain(), undefined, facet_name.createFacet());
+			.createStudyDomain(), true, facet_name.createFacet());
 
 	var facet_substance = new FacetQuery("substanceType_s", "terms", FacetQuery
-			.createStudyDomain(), undefined, facet_pname.createFacet());
+			.createStudyDomain(), true, facet_pname.createFacet());
 
-	// console.log(JSON.stringify(facet_substance.createFacet()));
 	return facet_substance.createFacet();
 }

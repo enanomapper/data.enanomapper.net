@@ -74,11 +74,11 @@
 
     <script>
         $(document).ready(function() {
-			/* partial key list
- 			keys = [ "substanceType_s", "publicname_s",	"name_s", "topcategory_s", "endpointcategory_s", "guidance_s","E.cell_type_s", "E.exposure_time_s" ];
- 			*/
+			
+ 			//keys = [ "substanceType_s", "publicname_s",	"name_s", "topcategory_s", "endpointcategory_s", "guidance_s","effectendpoint_s", "unit_s"];
             var solrFacets = new SolrFacets("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select");
-            solrFacets.createTable_1_10('#summary', "topcategory_s:\"P\-CHEM\"");
+            solrFacets.createTable_1_10('#summary', {"topcategory_s":"P-CHEM"});
+            SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s":"P-CHEM"});
 
         });
     </script>
@@ -105,9 +105,9 @@
                     <li>
                         <a href="#">Summary</a>
                         <ul id="menu_summary">
-                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","P\-CHEM"); return false;' title="Summary">P-CHEM</a></li>
-                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","ECOTOX"); return false;' title="Summary">ECOTOX</a></li>
-                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","TOX"); return false;' title="Summary">TOX</a></li>
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","P-CHEM"}); return false;' title="Summary">P-CHEM</a></li>
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","ECOTOX"}); return false;' title="Summary">ECOTOX</a></li>
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","TOX"}); return false;' title="Summary">TOX</a></li>
 
                         </ul>
 
@@ -132,9 +132,10 @@
                 </div>
                 <div class="five columns remove-bottom jtox-widget" id="freetext" data-kit="AutocompleteWidget" data-manual-init="true">
                     <h5>
-                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","P\-CHEM"); return false;' title="Summary">P-CHEM</a> |
-                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","ECOTOX"); return false;' title="Summary">ECOTOX</a> |
-                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select","TOX"); return false;' title="Summary">TOX</a>
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s":"P-CHEM"}); return false;' title="Summary">P-CHEM</a> |
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s":"ECOTOX"}); return false;' title="Summary">ECOTOX</a> |
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s" :"TOX"}); return false;' title="Summary">TOX</a> |
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s" :"TOX","publicname_s": "NM-220"}); return false;' title="Summary">test</a>
                     </h5>
                 </div>
 
@@ -143,6 +144,7 @@
             <div class="row half-bottom" id="header" style="padding-top: 5px;margin:20px;">
 
                 <table id="summary" width="100%"></table>
+                
 
             </div>
 
