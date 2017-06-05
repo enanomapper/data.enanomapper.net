@@ -1,6 +1,8 @@
 var	Settings = {
    		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
       ambitURL: 'https://data.enanomapper.net/',
+      multipleSelection: true,
+      keepAllFacets: true,
     	listingFields: [ 
         "name:name_hs", 
         "publicname:publicname_hs", 
