@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en" xmlns="http://www.w3.org/1999/xhtml"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!--<![endif]-->
+
+<head>
+    <script src="../enm/lib/jquery-1.10.2.js"></script>
+    <script src="../js/a.js"></script>
+
+	<script>
+        $(document).ready(function() {
+            var uri = "https://apps.ideaconsult.net/marina/";
+            var u = new AmbitUser(uri, function(data) {
+                $('#myaccount_a').attr('href', u.myaccountAction());
+                $('#myaccount_a').attr('title', (u.firstname + " " + u.lastname));
+                $('#myaccount_a').text("[" + u.username + "]");
+
+                var da = u.deleteAction(window.location.href);
+                $('#logoutForm').attr('action', da);
+                $('#uname').val(u.username);
+
+            }, function(jqxhr, textStatus, e) {
+                $('#myaccount_a').text("Log in");
+                $('#myaccount_a').attr('href', "login.html");
+                $('#myaccount_a').attr('title', "Click to log in");
+                $('#logout_a').hide();
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+    <!-- CSS
+  ================================================== -->
+    <link rel="stylesheet" href="../enm/style/skeleton/base.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/skeleton-fluid.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/layout.css" type="text/css">
+
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="../enm/style/query.css">
+    <link rel="stylesheet" href="../enm/lib/jToxKit/www/jtox-kit.css">
+
+    <link rel="stylesheet" href="../enm/style/jquery-ui-1.10.4.custom.min.css">
+    <link rel="stylesheet" href="../enm/style/jquery.ui.theme.css">
+
+    <link rel="stylesheet" href="../enm/style/jquery.range.css" type="text/css">
+    <link rel="stylesheet" href="style/skeleton/ambit2.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/toplinks.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/table.css" type="text/css">
+    <link rel="stylesheet" href="../enm/style/skeleton/cssflow.css" type="text/css">
+
+    <meta charset="utf-8">
+
+
+    <link rel="stylesheet" href="style/sm-core-css.css" type="text/css">
+    <link rel="stylesheet" href="style/sm-mint.css" type="text/css">
+
+    <title>Summary</title>
+
+
+
+    <!-- SCRIPTS
+  ================================================== -->
+    <script src="../enm/js/ont.js"></script>
+    <!-- demo query, now generated with code
+    <script src="../enm/js/facets/facetquery.js"></script>
+    -->
+
+    <script type='text/javascript' charset='utf8' src='../enm/lib/jquery-ui-1.10.4.custom.min.js'></script>
+
+    <script src="../enm/lib/jquery.smartmenus.min.js" type="text/javascript" language="JavaScript"></script>
+
+
+    <!-- datatable
+  ================================================== -->
+<!-- old   
+    <link rel="stylesheet" href="../enm/style/jquery.dataTables.css" type="text/css">
+        <script type='text/javascript' charset='utf8' src='../enm/lib/jquery.dataTables-1.9.4.min.js'></script>
+        
+        -->
+<link rel="stylesheet" type="text/css" href="../js/DataTables/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="../js/DataTables/buttons.dataTables.min.css"/>
+ 
+<script type="text/javascript" src="../js/DataTables/datatables.min.js"></script>
+<script type="text/javascript" src="../js/DataTables/dataTables.buttons.min.js"></script>
+
+
+    <!-- facets
+  ================================================== -->
+
+    <script src="../enm/js/facets/parsefacets.js"></script>
+
+    <script>
+        $(document).ready(function() {
+			
+ 			//keys = [ "substanceType_s", "publicname_s",	"name_s", "topcategory_s", "endpointcategory_s", "guidance_s","effectendpoint_s", "unit_s"];
+            var solrFacets = new SolrFacets("https://apps.ideaconsult.net/marina/solr/nanoreg2/select");
+            solrFacets.createTable_1_10('#summary', {"topcategory_s":"P-CHEM"});
+            SolrFacets.doSummary("https://apps.ideaconsult.net/marina/solr/nanoreg2/select",{"topcategory_s":"P-CHEM"});
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="container" style="margin: 0; padding: 0;">
+
+        <!-- banner -->
+        <div class="row half-bottom" id="header" style="padding-top: 5px">
+            <div class="two columns">
+                <a href="https://search.data.enanomapper.net/"><img class='scale-with-grid' border='0' src='images/nr_logo.png' title='Home' alt='Home'></a>
+            </div>
+            <div class="fourteen columns add-bottom">
+                <ul id='smartmenu' class="sm sm-mint">
+                    <li>
+                        <a href="https://search.data.enanomapper.net/" title="Home">Home</a>
+                    </li>
+                    <li>
+                        <a href="https://search.data.enanomapper.net/nanoreg2" title="Search">Search</a>
+                    </li>
+                    <li>
+                        <a href="https://search.data.enanomapper.net/nanoreg2/summary.html" title="Summary">Summary</a>
+                    </li>                      
+                    <li>
+                        <a href="#">Summary</a>
+                        <ul id="menu_summary">
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","P-CHEM"}); return false;' title="Summary">P-CHEM</a></li>
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","ECOTOX"}); return false;' title="Summary">ECOTOX</a></li>
+                            <li><a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s","TOX"}); return false;' title="Summary">TOX</a></li>
+
+                        </ul>
+
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="row add-bottom" id="header">
+                <!-- toplinks -->
+            </div>
+
+            <div class="row half-bottom">
+                <div class="eight columns remove-bottom" style="padding-left: 10px;">
+                    <div id="breadCrumb" class="breadCrumb module remove-bottom h5">
+                        <h4>NanoReg2 database : summary</h4>
+                       <h6>License information: 
+					<a href="https://search.data.enanomapper.net/nanoreg_about.html" target=_blank>FP7 NANoREG</a> | 
+					<a href="https://search.data.enanomapper.net/marina_about.html" target=_blank>FP7 MARINA</a> | 
+					<a href="https://search.data.enanomapper.net/nanotest_about.html" target=_blank>FP7 NanoTest</a> | 						
+					<a href="https://search.data.enanomapper.net/nanogenotox_about.html" target=_blank>FP7 NanoGenotox</a> | 						
+					<a href="https://search.data.enanomapper.net/about_nanoreg2.html" style="align:right;">About</a></h6>
+                    </div>
+                </div>
+                <div class="one column remove-bottom" title='(press ESC to close suggestions)'>
+                </div>
+                <div class="five columns remove-bottom jtox-widget" id="freetext" data-kit="AutocompleteWidget" data-manual-init="true">
+                    <h5>
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s":"P-CHEM"}); return false;' title="Summary">P-CHEM</a> |
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s":"ECOTOX"}); return false;' title="Summary">ECOTOX</a> |
+                        <a href="#" onclick='SolrFacets.doSummary("https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/select",{"topcategory_s" :"TOX"}); return false;' title="Summary">TOX</a> 
+                    </h5>
+                </div>
+
+            </div>
+
+            <div class="row half-bottom" id="header" style="padding-top: 5px;margin:20px;">
+
+                <table id="summary" width="100%"></table>
+                
+
+            </div>
+
+        </div>
+
+        <script>
+            (function(i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function() {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-32347361-5', 'auto');
+            ga('send', 'pageview');
+        </script>
+
+</body>
+
+</html>
