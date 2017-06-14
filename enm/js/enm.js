@@ -54,7 +54,7 @@ var	Settings = {
         { type: "Material, composition and study", fields: "*", formats: "json,csv,tsv,xslx,rdf,json-ld,isa-json"},
         { type: "Material identifiers", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs", formats: "json,csv,tsv"},
         { type: "Material composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] ", formats: "json"},
-        { type: "Study results", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:study ]", formats: "json"},
+        { type: "Study results", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs,[child parentFilter=type_s:substance limit=10000]", formats: "json"},
         { type: "Protocol parameters", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]", formats: "json"},
         { type: "Study factors", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]", formats: "json"}
       ],
