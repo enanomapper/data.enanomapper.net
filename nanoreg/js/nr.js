@@ -1,8 +1,10 @@
 var	Settings = {
       ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
       //solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1test_shard1_replica1/',
-      solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
-
+      //solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
+      solrUrl: 'https://sandbox.ideaconsult.net/solr/nanoreg1test_shard1_replica1/',
+      multipleSelection: true,
+			keepAllFacets: true,
     	listingFields: [ 
     	  "dbtag_hss",    	
         "name:name_hs", 
@@ -51,6 +53,7 @@ var	Settings = {
             return { 'topic': topic.toLowerCase(), 'content' : pattern.replace(re, min + "&nbsp;&hellip;&nbsp;" + max) };
       		}
       },
+
       facets: [ 
     		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
   			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
@@ -71,6 +74,7 @@ var	Settings = {
         { type: "Material identifiers", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs", formats: "json,csv,tsv"},
         { type: "Material composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] ", formats: "json"},
         { type: "Study results", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs,[child parentFilter=type_s:substance limit=10000]", formats: "json"},
+        { type: "Experimental", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs,[child parentFilter=type_s:substance childFilter=\"type_s:study\" limit=10000]", formats: "json"},
         { type: "Protocol parameters", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]", formats: "json"},
         { type: "Study factors", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]", formats: "json"}
       ],
