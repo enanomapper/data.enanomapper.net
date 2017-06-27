@@ -43,7 +43,8 @@
   ================================================== -->
     <script src="enm/js/ont.js"></script>
 	<script src="js/export.js"></script>
-
+	<script src="enm/js/parsefacets.js"></script>
+	
     <script type='text/javascript' charset='utf8' src="enm/lib/jquery-1.10.2.js"></script>
 
 
@@ -73,8 +74,7 @@
         $(document).ready(function() {
         console.log(_exportSettings);
             var solrExport = new SolrExport(_exportSettings.serverURL);
-            solrExport.createTable('#exporttable',_exportSettings.params);
-            //solrExport.dataquery()
+            solrExport.createTable('#exporttable',solrExport.dataquery());
 			
         });
     </script>
