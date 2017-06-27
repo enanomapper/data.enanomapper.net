@@ -3,6 +3,7 @@ var	Settings = {
       ambitURL: 'https://data.enanomapper.net/',
       multipleSelection: true,
       keepAllFacets: true,
+      aggregateFacets: false,
     	listingFields: [ 
         "name:name_hs", 
         "publicname:publicname_hs", 
