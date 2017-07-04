@@ -1,6 +1,6 @@
 var	Settings = {
-   		solrUrl: 'https://sandbox.ideaconsult.net/solr/enanondm_shard1_replica1/',
-      ambitURL: 'https://data.enanomapper.net/',
+   		solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
+      ambitURL: 'https://apps.ideaconsult.net/nanoreg1/',
       multipleSelection: true,
       keepAllFacets: true,
     	listingFields: [ 
