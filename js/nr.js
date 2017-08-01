@@ -42,34 +42,64 @@ var	Settings = {
       		}
       },
       pivot: [ 
-			  { id: "topcategory", field: "topcategory_s", disabled: true, facet: { domain: { blockChildren: "type_s:params" } } },
+			  { id: "topcategory", field: "topcategory_s", disabled: true, facet: { domain: { blockChildren: "type_s:substance" } } },
 			  { id: "endpointcategory", field: "endpointcategory_s", color: "blue" },
 			  { id: "effectendpoint", field: "effectendpoint_s", color: "green", ranging: true }, 
 			  { id: "unit", field: "unit_s", disabled: true, ranging: true }
   	  ],
       facets: [ 
-    		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" } } }, 
-  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
+    		{ id: 'owner_name', field: "reference_owner_s", title: "Data sources", color: "green", facet: { mincount: 1 } }, 
+  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 1 } },
   			    		
-    		{ id: 'cell', field: "E.cell_type_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
-    		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-	  		{ id: 'interpretation', field: "MEDIUM_s", title: "Medium", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
-  		  { id: 'dprotocol', field: "Dispersion protocol_s", title: "Dispersion protocol", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} }, 
- 		    		  		
-    		{ id: 'reference_year', field: "reference_year_s", title: "Experiment year", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} },
-    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 , domain: { blockChildren: "type_s:params" }} }, 
-    		{ id: 'route', field: "E.exposure_route_s", title: "Exposure route", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:conditions" } }}, 
-  			{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} },
-				{ id: 'method', field: "E.method_s", title: "Method", color: "green", facet: { mincount: 1 , domain: { blockChildren: "type_s:params" }} } 
+    		{ id: 'cell', field: "E.cell_type_s", title: "Cell", color: "green", facet: { mincount: 1 } },
+    		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2 } }, 
+	  		{ id: 'interpretation', field: "MEDIUM_s", title: "Medium", color: "green", facet: { mincount: 1 } },
+  		  { id: 'dprotocol', field: "Dispersion protocol_s", title: "Dispersion protocol", color: "green", facet: { mincount: 1 } }, 
+    		{ id: 'reference_year', field: "reference_year_s", title: "Experiment year", color: "green", facet: { mincount: 1 } },
+    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
+    		{ id: 'route', field: "E.exposure_route_s", title: "Exposure route", color: "green", facet: { mincount: 1 } }, 
+  			{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 1 } },
+				{ id: 'method', field: "E.method_s", title: "Method", color: "green", facet: { mincount: 1 } } 
     	],
-      studyInnerFields: "topcategory_s, endpointcategory_s, guidance_s",
+    	exportLevels: {
+      	'study': {
+          domain: { type: 'parent', which: "study" },
+          fieldsRegExp: /(guidance_s|loValue_d|E.cell_type_s|Species_s|E.exposure_route_s|E.method_s|Dispersion protocol_s|MEDIUM_s):/
+      	}
+    	},
       exportTypes: [
-        { name: "Material, composition and study", fields: "*", formats: "json,csv,tsv,xslx,rdf,json-ld,isa-json"},
-        { name: "Material identifiers", fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs", formats: "json,csv,tsv"},
-        { name: "Material composition", fields: "substance_uuid:s_uuid_hs,[childFilter=type_s:composition limit=100] ", formats: "json"},
-        { name: "Study results", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:study ]", formats: "json"},
-        { name: "Protocol parameters", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:params ]", formats: "json"},
-        { name: "Study factors", fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:conditions]", formats: "json"}
+        { 
+          name: "Material, composition and study",
+          fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs,[child parentFilter=type_s:substance childFilter=\"{{filter}} OR type_s:composition\" limit=10000]",
+          defaultFilter:"type_s:study",
+          formats: "json,csv,tsv,xslx,rdf,json-ld,isa-json",
+        }, { 
+          name: "Material identifiers",
+          fields: "substance_uuid:s_uuid_hs,name:name_hs,publicname:publicname_hs,supplier:owner_name_hs,substanceType:substanceType_hs",
+          formats: "json,csv,tsv"
+        }, { 
+          name: "Material composition",
+          fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:substance childFilter=type_s:composition limit=1000]",
+          formats: "json,csv,tsv"
+        }, { 
+          name: "Study results",
+          fields: "*,[child parentFilter=type_s:study limit=10000]",
+          extraParams: [ "group.field=s_uuid_s" ],
+          formats: "json,csv,tsv",
+          exportLevel: 'study'
+        }, { 
+          name: "Protocol parameters",
+          fields: "*,[child parentFilter=type_s:study childFilter=type_s:params]",
+          extraParams: [ "group.field=s_uuid_s" ],
+          formats: "json,csv,tsv",
+          exportLevel: 'study'
+        }, { 
+          name: "Study factors",
+          fields: "*,[child parentFilter=type_s:study childFilter=type_s:conditions]",
+          extraParams: [ "group.field=s_uuid_s" ],
+          formats: "json,csv,tsv",
+          exportLevel: 'study'
+        }
       ],
   		exportFormats: [
         { mime: "application/json", name:"json", icon: "images/types/json64.png", server: 'solrUrl'},
@@ -79,6 +109,6 @@ var	Settings = {
         { mime: "application/rdf+xml", name:"rdf", icon: "images/types/rdf64.png", server: 'ambitUrl'},
         { mime: "application/ld+json", name:"json-ld", icon: "images/types/json-ld.png", server: 'ambitUrl'},
         { mime: "application/isa+json", name:"isa-json", icon: "images/types/isa.png", server: 'ambitUrl'}
- 
-      ]
+      ],
+      exportMaxRows: 999999
 		};

@@ -54,22 +54,27 @@ var	Settings = {
       		}
       },
       pivot: [ 
-			  { id: "topcategory", field: "topcategory_s", disabled: true, facet: { domain: { blockChildren: "type_s:(params conditions)" } } },
+			  { id: "topcategory", field: "topcategory_s", disabled: true, facet: { domain: { blockChildren: "type_s:substance" } } },
 			  { id: "endpointcategory", field: "endpointcategory_s", color: "blue" },
 			  { id: "effectendpoint", field: "effectendpoint_s", color: "green", ranging: true }, 
 			  { id: "unit", field: "unit_s", disabled: true, ranging: true }
   	  ],
       facets: [ 
-    		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 450, domain: { blockChildren: "type_s:params" } } }, 
-  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1, domain: { blockChildren: "type_s:params" } } },
-    		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
-    		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-    		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-    		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1, domain: { blockChildren: "type_s:params" } } },
-    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } }, 
-    		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2, domain: { blockChildren: "type_s:params" } } },
+    		{ id: 'owner_name', field: "owner_name_s", title: "Data sources", color: "green", facet: { mincount: 450 } }, 
+  			{ id: 'substanceType', field: "substanceType_s", title: "Nanomaterial type", facet: { mincount: 2, limit: -1 } },
+    		{ id: 'cell', field: "Cell line_s", title: "Cell", color: "green", facet: { mincount: 1 } },
+    		{ id: 'species', field: "Species_s", title: "Species", color: "blue", facet: { mincount: 2 } }, 
+    		{ id: 'interpretation', field: "interpretation_result_s", title: "Results", facet: { mincount: 2 } }, 
+    		{ id: 'reference_year', field: "reference_year_s", title: "References Years", color: "green", facet: { mincount: 1 } },
+    		{ id: 'reference', field: "reference_s", title: "References", facet: { mincount: 2 } }, 
+    		{ id: 'protocol', field: "guidance_s", title: "Protocols", color: "blue", facet: { mincount: 2 } },
       	],
-      studyInnerFields: "topcategory_s,endpointcategory_s,guidance_s",
+    	exportLevels: {
+      	'study': {
+          domain: { type: 'parent', which: "study" },
+          fieldsRegExp: /(guidance_s|loValue_d|unit_s|Species_s|Cell line_s):/
+      	}
+    	},
       exportTypes: [
         { 
           name: "Material, composition and study",
@@ -89,19 +94,19 @@ var	Settings = {
           fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:study limit=10000]",
           extraParams: [ "group.field=s_uuid_s" ],
           formats: "json,csv,tsv",
-          nestLevel: "study"
+          exportLevel: 'study'
         }, { 
           name: "Protocol parameters",
           fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:study childFilter=type_s:params]",
           extraParams: [ "group.field=s_uuid_s" ],
           formats: "json,csv,tsv",
-          nestLevel: "study"
+          exportLevel: "study"
         }, { 
           name: "Study factors",
           fields: "substance_uuid:s_uuid_hs,[child parentFilter=type_s:study childFilter=type_s:conditions]",
           extraParams: [ "group.field=s_uuid_s" ],
           formats: "json,csv,tsv",
-          nestLevel: "study"
+          exportLevel: "study"
         }
       ],
   		exportFormats: [
