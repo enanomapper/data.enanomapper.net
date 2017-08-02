@@ -72,7 +72,7 @@ var	Settings = {
     	exportLevels: {
       	'study': {
           domain: { type: 'parent', which: "study" },
-          fieldsRegExp: /(guidance_s|loValue_d|unit_s|Species_s|Cell line_s):/
+          fieldsRegExp: /(loValue_d|unit_s|Species_s|Cell\\ line_s):/
       	}
     	},
       exportTypes: [

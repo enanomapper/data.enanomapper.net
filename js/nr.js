@@ -63,8 +63,8 @@ var	Settings = {
     	],
     	exportLevels: {
       	'study': {
-          domain: { type: 'parent', which: "study" },
-          fieldsRegExp: /(guidance_s|loValue_d|E.cell_type_s|Species_s|E.exposure_route_s|E.method_s|Dispersion protocol_s|MEDIUM_s):/
+          domain: { type: 'parent', which: "type_s:study" },
+          fieldsRegExp: /(loValue_d|E.cell_type_s|Species_s|E.exposure_route_s|E.method_s|Dispersion\\ protocol_s|MEDIUM_s):/
       	}
     	},
       exportTypes: [
