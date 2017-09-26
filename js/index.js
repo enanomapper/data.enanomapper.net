@@ -24,6 +24,7 @@ $(document).ready(function(){
   	});
   	
   	manager.addListeners(textWidget);
+    manager.addListeners(jT.ui.Logging.prototype.__kits[0]);
 
   	// Set some general search machanisms
   	$(document).on('click', "a.freetext_selector", function (e) {
