@@ -1,6 +1,9 @@
 var	Settings = {
       ambitUrl: 'https://apps.ideaconsult.net/nanoreg1/',
       solrUrl: 'https://solr.ideaconsult.net/solr/nanoreg_shard1_replica1/',
+      multipleSelection: true,
+      keepAllFacets: true,
+      aggregateFacets: true,
 
     	listingFields: [ 
         "name:name_hs", 
